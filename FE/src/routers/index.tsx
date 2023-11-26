@@ -4,6 +4,10 @@ import { isUserLoggedIn } from '@/utils/index';
 import SingInPage from '@/features/auth/singIn';
 import SingUpPage from '@/features/auth/singUp';
 import AdminLayout from '@/layouts/AdminLayout';
+
+import PublicLayoutUser from '@/layouts/PublicLayoutUser';
+import MainPage from '@/features/user/main';
+
 import NotFound from '@/features/misc/NotFound';
 import Admin from '@/features/admin';
 // import Shops from './features/shops';
@@ -11,9 +15,19 @@ import Admin from '@/features/admin';
 
 function RouterComponent() {
   const router = createBrowserRouter([
+    // {
+    //   path: "/",
+    //   element: !isUserLoggedIn() ? <Navigate to='/login' /> : <Navigate to='/admin' />,
+    // },
     {
       path: "/",
-      element: !isUserLoggedIn() ? <Navigate to='/login' /> : <Navigate to='/admin' />,
+      element: <PublicLayoutUser />,
+      children: [
+        {
+          index: true,
+          element: <MainPage />
+        }
+      ]
     },
     {
       path: "/login",

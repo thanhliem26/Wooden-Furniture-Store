@@ -1,0 +1,112 @@
+.main__page {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  :global {
+    .main__page-banner {
+      width: 1400px;
+      max-width: 100%;
+
+      .carousel__img {
+        .img__content {
+          height: 630px;
+          color: #fff;
+          background: #364d79;
+          background-repeat: no-repeat;
+          background-size: cover;
+          position: relative;
+
+          .img__content-text {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 5%;
+            width: 90%;
+
+            h2 {
+              font-size: 2.9rem;
+              text-transform: uppercase;
+              color: white;
+              line-height: 100%;
+            }
+
+            p {
+              font-size: 1.5rem;
+              margin: 14px 0;
+            }
+
+            button {
+              background-color: transparent;
+              border-color: 1px solid white;
+              border: 2px solid white;
+              text-transform: uppercase;
+              color: white;
+              font-weight: bold;
+              padding: 10px 20px;
+              font-size: 1em;
+
+              &:hover {
+                background-color: white;
+                color: #666;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    @media screen and (min-width: 768px) and (max-width: 1000px) {
+      .main__page-banner {
+  
+        .carousel__img {
+          .img__content {
+            height: 345px;
+  
+            .img__content-text {
+              h2 {
+                font-size: 2rem;
+              }
+
+              p {
+                font-size: 1rem;
+              }
+
+              button {
+                padding: 7px 15px;
+                font-size: 0.8rem;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      .main__page-banner {
+  
+        .carousel__img {
+          .img__content {
+            height: 200px;
+  
+            .img__content-text {
+              h2 {
+                font-size: 1.5rem;
+                width: 70%;
+              }
+
+              p {
+                font-size: 0.8rem;
+              }
+
+              button {
+                padding: 6px 12px;
+                font-size: 0.6rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

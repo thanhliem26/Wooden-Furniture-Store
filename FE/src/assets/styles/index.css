@@ -23,7 +23,6 @@
 .root_component {
   width: 100%;
   min-height: 100vh;
-  background: #f8f8f8;
 }
 
 .logo__admin-vertical {
@@ -225,6 +224,7 @@ sup {
 
 img {
   border-style: none;
+  vertical-align: middle;
 }
 
 /* Forms
