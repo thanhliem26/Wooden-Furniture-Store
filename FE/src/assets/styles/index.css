@@ -8,6 +8,16 @@
   src: local("Poppins"), url("../font/Poppins/Poppins-Bold.ttf");
 }
 
+@font-face {
+  font-family: "Montserrat";
+  src: local("Montserrat"), url("../font/Montserrat/static/Montserrat-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Montserrat_bold";
+  src: local("Montserrat"), url("../font/Montserrat/static/Montserrat-Bold.ttf");
+}
+
 :root {
   font-family: Poppins, Poppins_bold, Inter, system-ui, Avenir, Helvetica, Arial,
     sans-serif;
