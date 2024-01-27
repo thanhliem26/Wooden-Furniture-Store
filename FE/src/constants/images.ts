@@ -49,6 +49,12 @@ import Benefit1 from '@/assets/images/default/benefit1.jpg';
 //Introduce
 import Introduce from '@/assets/images/default/introduce.jpg';
 
+//Forbidden
+import BatBody from '@/assets/images/default/bat-body.png';
+import BatWing from '@/assets/images/default/bat-wing.png';
+import HauntedHouseForeground from '@/assets/images/default/HauntedHouseForeground.png'
+import HauntedHouseBackground from '@/assets/images/default/HauntedHouseBackground.png'
+
 //Icons
 import CarSide from '@/assets/images/icons/car_side.svg';
 import Pig from '@/assets/images/icons/pig.svg';
@@ -56,6 +62,8 @@ import Gift from '@/assets/images/icons/gift.svg';
 import Agenda from '@/assets/images/icons/agenda.png';
 import SmartPhone from '@/assets/images/icons/smartphone.png';
 import Mail from '@/assets/images/icons/mail.png';
+
+
 
 export default {
     SingIn,
@@ -108,5 +116,10 @@ export default {
     Banghe7,
     Banghe8,
     //introduce
-    Introduce
+    Introduce,
+    //Forbidden
+    BatBody,
+    BatWing,
+    HauntedHouseForeground,
+    HauntedHouseBackground,
 }

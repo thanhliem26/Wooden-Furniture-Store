@@ -94,8 +94,10 @@ class AccessService {
   };
 
   static login = async ({ email, password, refreshToken = null }) => {
+    console.log("🚀 ~ email:", email)
     //check exits email
     const foundUser = await db.User.findOne({ where: { email }, raw: true });
+    console.log("🚀 ~ foundUser:", foundUser)
     if (!foundUser) throw new BadRequestError("User not registered");
 
     // //check match password

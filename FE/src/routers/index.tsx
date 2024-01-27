@@ -11,6 +11,7 @@ import MainPage from '@/features/user/main';
 import NotFound from '@/features/misc/NotFound';
 import Admin from '@/features/admin';
 import Introduce from '@/features/user/introduce';
+import Forbidden from '@/features/misc/Forbidden';
 // import Shops from './features/shops';
 // import Users from './features/users';
 
@@ -69,6 +70,10 @@ function RouterComponent() {
         //   element: <Shops />
         // },
       ]
+    },
+    {
+      path: "/Forbidden",
+      element: <Forbidden />
     },
     {
       path: "*",

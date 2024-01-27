@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Form } from "antd";
 import InputComponent from "@/components/form/inputComponent";
-import ButtonComponent from "@/components/buttonComponent";
+import ButtonComponent from "@/components/form/buttonComponent";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { schema, FormData } from "./constant";
 import authApi from "@/api/auth";

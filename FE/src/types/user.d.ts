@@ -8,7 +8,6 @@ interface UserState {
     phoneNumber: string,
     role_user: string,
     sex: string,
-    work_id: number | null,
 }
 interface metadataUser extends baseInstance{
     metadata: UserState

@@ -69,8 +69,8 @@ email	char(255)		no
 phoneNumber	int		no	
 address	char(255)		yes	
 dateOfBirth	date		yes	
-role_user	tinyint(1, 2, 3)	1: Admin, 2: Staf, 3: Customer	no	3
-work_id	int			
+sex tinyint(1, 2, 3) 1: Male, 2: Female, 3: Other
+role_user	tinyint(1, 2, 3)	1: Admin, 2: User, 3: shipper	no			
 created_at	date		no	
 update_at	date		no	
 

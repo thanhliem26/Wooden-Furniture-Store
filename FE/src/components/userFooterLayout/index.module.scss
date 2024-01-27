@@ -2,6 +2,8 @@
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
 
   :global {
     .layout__footer-main {
@@ -11,10 +13,11 @@
       margin: 15px 0;
       padding: 15px 0;
       overflow: hidden;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
       .border__item {
         border-left: 1px solid rgba(0, 0, 0, 0.1);
-    border-right: 1px solid rgba(0, 0, 0, 0.1);
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
       }
 
       .layout__footer-contain {
@@ -93,8 +96,8 @@
 
           .aboutMe__content-field {
             text-align: center;
-            margin-bottom: 1.3rem;
-            padding: 0 15px;
+            margin-bottom: 1rem;
+            padding: 0 10px;
             max-width: 100%;
 
             p {
@@ -113,12 +116,16 @@
       }
     }
 
-    @media screen and (max-width: 576px) {
+    .layout__footer-introduce {
+      margin: 15px 0;
+    }
+
+    @media screen and (max-width: 768px) {
       .border__item {
         border-top: 1px solid rgba(0, 0, 0, 0.1);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    border-left: none !important;
-    border-right: none !important;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-left: none !important;
+        border-right: none !important;
       }
     }
   }

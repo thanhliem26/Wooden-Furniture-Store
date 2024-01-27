@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Layout } from "antd";
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet, Navigate, redirect, useLocation, useNavigate } from "react-router-dom";
 import { isUserLoggedIn } from "@/utils/index";
 import SideBar from "@/components/sideBarComponent";
 import NavbarComponent from "@/components/navbarComponent";
 import { fetchUserInfo } from '@/store/user';
-import { useAppDispatch } from '@/store/index';
+import { useAppDispatch, useAppSelector } from '@/store/index';
 
 const AdminLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState<boolean>(false);
-  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
+  const dispatch = useAppDispatch();
+  const userInfo = useAppSelector<UserState>((state) => state.user)
 
   if (!isUserLoggedIn()) {
     return <Navigate to="/login" />;
@@ -18,6 +21,12 @@ const AdminLayout: React.FC = () => {
   useEffect(() => {
     dispatch(fetchUserInfo())
   }, [])
+
+  useEffect(() => {
+    if (!!userInfo.role_user && +userInfo.role_user !== 1) {
+      navigate('/forbidden')
+    }
+  }, [userInfo.role_user])
 
   return (
     <Layout className="layout__admin-private">

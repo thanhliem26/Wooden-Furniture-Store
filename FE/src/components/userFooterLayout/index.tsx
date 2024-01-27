@@ -10,16 +10,19 @@ const UserFooterLayout = () => {
     <div className={styled["layout__footer"]}>
       <div className="layout__footer-main">
         <Row gutter={[16, 16]}>
-          <Col sm={8} xs={24}>
+          <Col md={6} span={24}>
             <Directional /> 
           </Col>
-          <Col sm={8} xs={24} className="border__item">
+          <Col md={12} span={24} className="border__item">
             <Advertisement />
           </Col>
-          <Col sm={8} xs={24}>
+          <Col md={6} span={24}>
             <AboutMe /> 
           </Col>
         </Row>
+      </div>
+      <div className="layout__footer-introduce">
+        <p>© All rights reserved. Thiết kế website TL</p>
       </div>
     </div>
   );

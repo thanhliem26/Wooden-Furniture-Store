@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { useDispatch } from 'react-redux';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 //reducer
 import counterReducer from './counter/index';
@@ -18,4 +18,6 @@ export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
 
 //dispatch async thunk
-export const useAppDispatch = () => useDispatch<typeof store.dispatch>()
+export const useAppDispatch = () => useDispatch<AppDispatch>()
+//get state async thunk
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
