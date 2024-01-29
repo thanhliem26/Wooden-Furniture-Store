@@ -9,7 +9,7 @@ const {
   AuthFailureError,
   ForbiddenError,
 } = require("../core/error.response");
-import { findById } from "./user.service";
+import { findById } from "../models/repository/user.repo";
 import db from "../models";
 import { validateUser, createNewUser } from "../models/repository/user.repo";
 import { menu } from "../constants";
@@ -23,26 +23,6 @@ const RoleShop = {
 };
 
 class AccessService {
-  static handleGetUserInfo = async (userId) => {
-    const userInfo = await findById(userId);
-
-    return removeElement({
-      object: userInfo,
-      field: ["createdAt", "updatedAt", "password", "createdAt"],
-    });
-  };
-
-  static handleGetMenu = async (roleUser) => {
-    return menu.reduce((current, next) => {
-      if (next.role.includes(Number(roleUser))) {
-        current.push(
-          getInfoData({ field: ["id", "href", "icon", "label"], object: next })
-        );
-      }
-
-      return current;
-    }, []);
-  };
 
   static handleRefreshToken = async (refreshToken) => {
     const foundToken = await tokenService.findByRefreshTokenUsed(refreshToken);
@@ -94,11 +74,9 @@ class AccessService {
   };
 
   static login = async ({ email, password, refreshToken = null }) => {
-    console.log("🚀 ~ email:", email)
     //check exits email
     const foundUser = await db.User.findOne({ where: { email }, raw: true });
-    console.log("🚀 ~ foundUser:", foundUser)
-    if (!foundUser) throw new BadRequestError("User not registered");
+    if (!foundUser || foundUser.deleteFlg !== 0) throw new BadRequestError("User not registered");
 
     // //check match password
     const match = await bcrypt.compare(password, foundUser.password);

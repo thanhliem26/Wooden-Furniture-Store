@@ -1,5 +1,5 @@
 "use strict";
-const { AuthFailureError, NotFoundError } = require("../core/error.response");
+const { AuthFailureError, NotFoundError, ForbiddenError } = require("../core/error.response");
 const asyncHandler = require("../helpers/asyncHandler");
 const JWT = require("jsonwebtoken");
 const { findByUserId } = require("../services/token.service");
@@ -104,6 +104,39 @@ const authenticationV2 = asyncHandler(async (req, res, next) => {
   }
 });
 
+const isAdmin = asyncHandler(async (req, res, next) => {
+  const userId = req.headers[HEADER.CLIENT_ID];
+  if (!userId) throw new AuthFailureError("Invalid Request user_id!");
+
+  const keyStore = await findByUserId(userId);
+  if (!keyStore) throw new NotFoundError("Not Found keyStore");
+
+  const accessToken = req.headers[HEADER.AUTHORIZATION];
+  if (!accessToken) throw new AuthFailureError("Inavlid Request access token");
+
+  const isTokenValidate = await validateToken({
+    accessToken,
+    publicKey: keyStore.publicKey,
+  });
+  if (isTokenValidate?.message && isTokenValidate?.message === "jwt expired") {
+    throw new AuthFailureError(isTokenValidate?.message);
+  }
+
+  try {
+    const decodeUser = await JWT.verify(accessToken, keyStore.publicKey);
+    if(+decodeUser.role_user === 1) {
+      return next();
+    } 
+    
+    throw new ForbiddenError("You don't have permission!")
+    
+  } catch (error) {
+    console.log("error::::::::::::", error);
+    throw error;
+  }
+});
+
+
 const verifyJWT = async (token, keySecret) => {
   return await JWT.verify(token, keySecret);
 };
@@ -113,4 +146,5 @@ module.exports = {
   authentication,
   verifyJWT,
   authenticationV2,
+  isAdmin,
 };

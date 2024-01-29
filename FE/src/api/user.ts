@@ -5,10 +5,10 @@ const userApi = {
     //     const url = '/user/create';
     //     return axiosService.post(url, body);
     // },
-    // getUsers() {
-    //     const url = '/get-all-user';
-    //     return axiosService.get(url)
-    // },
+    getUsers(): Promise<metadataAllUser> {
+        const url = '/v1/api/user/list';
+        return axiosService.get(url)
+    },
     getMenu(): Promise<typeMenu> {
         const url = '/v1/api/user/menu';
         return axiosService.get(url);

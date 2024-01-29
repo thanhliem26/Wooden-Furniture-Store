@@ -22,7 +22,6 @@ const SideBar = ({collapsed, setCollapsed}: Props) => {
       breakpoint={resize.width < 1200 ? "xxl" : undefined}
       collapsedWidth={resize.width < 1200 ? "0" : undefined}
       onBreakpoint={(broken) => {
-        console.log("trigger1", broken);
         setCollapsed((collapse) => !collapse);
       }}
       onCollapse={(collapsed, type) => {

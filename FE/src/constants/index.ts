@@ -23,13 +23,11 @@ export const HEADER = {
   REFRESHTOKEN: "x-rtoken-id",
 };
 
-// export const ROlE = {
-//     1: 'Admin',
-//     2: 'Quản lý tổng',
-//     3: 'Quản lý vùng',
-//     4: 'Cửa hàng trưởng',
-//     5: 'Nhân viên'
-// }
+export const ROlE = {
+    1: 'ADMIN',
+    2: 'USER',
+    3: 'SHIPPER',
+}
 
 // export const roles = {
 //     admin: 1,

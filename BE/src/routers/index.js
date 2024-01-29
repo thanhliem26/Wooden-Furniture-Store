@@ -8,8 +8,8 @@ const router = express.Router();
 // router.use(permission('0000'))
 
 //router handle
-router.use('/v1/api', require('./user'))
-router.use('/v1/api', require('./access'))
+router.use('/v1/api/user', require('./user'))
+router.use('/v1/api/access', require('./access'))
 
 router.get('/', (req, res, next) => {
     return res.status(200).json({

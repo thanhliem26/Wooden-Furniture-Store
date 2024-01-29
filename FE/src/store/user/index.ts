@@ -20,6 +20,7 @@ const initialState: UserState = {
     phoneNumber: '',
     role_user: '',
     sex: '',
+    deleteFlg: 0,
 }
 
 export const userSlice = createSlice({

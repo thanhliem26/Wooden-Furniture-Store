@@ -14,7 +14,17 @@ const createNewUser = async (payload) => {
   });
 };
 
+const findByEmail = async ({ email }) => {
+  return await db.User.findOne({ where: { email }, raw: true });
+};
+
+const findById = async (id) => {
+  return await db.User.findOne({ where: { id }, raw: true });
+};
+
 module.exports = {
   validateUser,
-  createNewUser
+  createNewUser,
+  findByEmail,
+  findById
 };

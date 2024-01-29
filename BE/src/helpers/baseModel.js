@@ -2,7 +2,7 @@ const { Model } = require('sequelize');
 import { isEmpty } from 'lodash';
 import { NotFoundError } from '../core/error.response';
 class BaseModel extends Model {
-  static async findOneAndUpdate(filter = {}, values = {}, options = {}) {
+  static async findOneAndUpdate({filter : {}, values : {}, options : {} }) {
     try {
     const instance = await this.findOne({where: {...filter}});
     if(!instance && isEmpty(options) && !options?.upsert) return null;

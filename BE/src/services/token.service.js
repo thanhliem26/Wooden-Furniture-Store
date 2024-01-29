@@ -11,7 +11,7 @@ class keyTokenService {
             const update = { publicKey: publicKey, privateKey: privateKey, refreshTokenUsed: JSON.stringify([]), refreshToken: refreshToken};
             const options = { upsert: true }
 
-            const tokens = await db.Token.findOneAndUpdate(filter, update, options);
+            const tokens = await db.Token.findOneAndUpdate({filter, update, options});
  
             return tokens ? tokens.publicKey : null;
         } catch(error) {

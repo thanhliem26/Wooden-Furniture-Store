@@ -1,15 +1,57 @@
-'use strict'
-import db from '../models';
+("use strict");
+import { findById } from "../models/repository/user.repo";
+import db from "../models";
+import { menu } from "../constants";
+import { getInfoData, removeElement } from "../utils";
+import { where } from "sequelize";
 
-const findByEmail = async ({email}) => {
-    return await db.User.findOne({where: {email}, raw: true});
+class UserService {
+  static handleGetUserInfo = async (userId) => {
+    const userInfo = await findById(userId);
+
+    return removeElement({
+      object: userInfo,
+      field: ["createdAt", "updatedAt", "password", "createdAt"],
+    });
+  };
+
+  static handleGetMenu = async (roleUser) => {
+    return menu.reduce((current, next) => {
+      if (next.role.includes(Number(roleUser))) {
+        current.push(
+          getInfoData({ field: ["id", "href", "icon", "label"], object: next })
+        );
+      }
+
+      return current;
+    }, []);
+  };
+
+  static getAllUser = async () => {
+    return await db.User.findAll({ where: {deleteFlg: 0}, attributes: { exclude: ["password"] } });
+  };
+
+  static updateUser = async ({ userId, dataUser }) => {
+    return await db.User.update(
+      { ...dataUser },
+      {
+        where: {
+          id: userId,
+        },
+      }
+    );
+  };
+
+  static deleteUser = async (userId) => {
+    return await db.User.update(
+      { deleteFlg: 1 },
+      {
+        where: {
+          id: userId,
+        },
+      }
+    );
+  };
 }
 
-const findById = async (id) => {
-    return await db.User.findOne({where: {id}, raw: true})
-} 
-
-module.exports = {
-    findByEmail,
-    findById
-}
+module.exports = UserService;

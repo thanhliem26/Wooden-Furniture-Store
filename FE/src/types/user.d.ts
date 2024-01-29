@@ -8,10 +8,12 @@ interface UserState {
     phoneNumber: string,
     role_user: string,
     sex: string,
+    deleteFlg: number,
 }
 interface metadataUser extends baseInstance{
     metadata: UserState
 }
+
 interface infoUser {
     id: number,
     fullName: string,

@@ -1,103 +1,95 @@
 import React from "react";
 import { Space, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
+import { ROlE } from "@/constants/index";
+import moment from "moment";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import images from "@/constants/images";
 
-interface DataType {
-  key: React.Key;
-  firstName: string;
-  lastName: string;
-  age: number;
-  address: string;
-  tags: string[];
-}
-
-const data: DataType[] = [
+const columns: ColumnsType<UserState> = [
   {
-    key: "1",
-    firstName: "John",
-    lastName: "Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"],
-  },
-  {
-    key: "2",
-    firstName: "Jim",
-    lastName: "Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    tags: ["loser"],
-  },
-  {
-    key: "3",
-    firstName: "Joe",
-    lastName: "Black",
-    age: 32,
-    address: "Sydney No. 1 Lake Park",
-    tags: ["cool", "teacher"],
-  },
-];
-
-const columns: ColumnsType<DataType> = [
-  {
-    title: "TYPE CONTRACT",
-    dataIndex: "firstName",
-    key: "firstName",
-    fixed: "left",
+    title: "NAME",
+    dataIndex: "fullName",
+    key: "fullName",
     width: 130,
+    render: (name: string, row: UserState) => {
+      return (
+        <div className="content__name">
+          <div className="content__name-image">
+            <img src={images.HauntedHouseForeground} alt="image description" />
+          </div>
+          <div className="content__name-info">
+            <h5>{name}</h5>
+            <span>{row.email}</span>
+          </div>
+        </div>
+      );
+    },
   },
   {
-    title: "NUMBER CONTRACT",
-    dataIndex: "lastName",
-    key: "lastName",
-    fixed: "left",
-    sorter: true,
-    width: 170,
-  },
-  {
-    title: "CUSTOMER NAME",
-    dataIndex: "firstName",
-    key: "firstName",
+    title: "ADDRESS",
+    dataIndex: "address",
+    key: "address",
     width: 140,
   },
-  { title: "PACKAGE", dataIndex: "firstName", key: "firstName", width: 100 },
-  { title: "PAID", dataIndex: "age", key: "age", width: 100 },
   {
-    title: "PRICE CONTRACT",
-    dataIndex: "tags",
-    key: "8",
-    render: (tags: string[]) => (
+    title: "DATE OF BIRTH",
+    dataIndex: "dateOfBirth",
+    key: "dateOfBirth",
+    sorter: true,
+    width: 100,
+    render: (date: string) => {
+      return <> {moment(date).format("DD-MM-YYYY")}</>;
+    },
+  },
+  {
+    title: "PHONE NUMBER",
+    dataIndex: "phoneNumber",
+    key: "phoneNumber",
+    width: 70,
+  },
+  {
+    title: "ROLE",
+    dataIndex: "role_user",
+    key: "role_user",
+    width: 30,
+    render: (role: string) => {
+      return ROlE[role];
+    },
+  },
+  {
+    title: "ACTION",
+    dataIndex: "action",
+    key: "action",
+    width: 100,
+    render: () => (
       <>
-        {tags.map((tag) => (
-          <Tag color="blue" key={tag}>
-            {tag}
-          </Tag>
-        ))}
+        <Tag color="blue" className="tag__action">
+          <EditOutlined /> EDIT
+        </Tag>
+        <Tag color="red" className="tag__action">
+          <DeleteOutlined /> DELETE
+        </Tag>
       </>
     ),
   },
-  {
-    title: "LINK IMAGE",
-    key: "operation",
-    fixed: "right",
-    render: (_: any, record: DataType) => (
-      <Space size="middle">
-        <a>Invite {record.lastName}</a>
-        <a>Delete</a>
-      </Space>
-    ),
-  },
 ];
 
-const TableSaleContractManage: React.FC = () => (
+interface Props {
+  loading?: boolean;
+  userList: UserState[];
+}
+
+const TableSaleContractManage = ({ loading = false, userList = [] }: Props) => (
   <div className="table__sale-contract">
     <div className="table__title">
       <h4>Sale Contract</h4>
     </div>
     <Table
       // size="large"
+      loading={loading}
       columns={columns}
-      dataSource={data}
+      dataSource={userList}
       scroll={{ x: 1000 }}
     />
   </div>

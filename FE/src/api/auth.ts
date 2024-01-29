@@ -7,15 +7,15 @@ const authApi = {
         return axiosService.get(url);
     },
     singUp(data: formDataSingUp): Promise<responseSingUp> {
-        const url = '/v1/api/user/signup';
+        const url = '/v1/api/access/signup';
         return axiosService.post(url, data);
     },
     login(body: formDataSingIn): Promise<responseToken> {
-        const url = '/v1/api/user/login';
+        const url = '/v1/api/access/login';
         return axiosService.post(url, body);
     },
     reFreshToken(refreshToken: string): Promise<responseToken> {
-        const url = '/v1/api/user/handleRefreshToken';
+        const url = '/v1/api/access/handleRefreshToken';
         return axiosService.post(url, undefined, {headers: {[HEADER.REFRESHTOKEN]: refreshToken}});
     },
 }
