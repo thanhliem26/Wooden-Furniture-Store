@@ -1,19 +1,19 @@
 import { Controller } from "react-hook-form";
-import { Form, Input } from "antd";
-import { InputProps } from "antd";
+import { DatePicker, Form, Input } from "antd";
+import { DatePickerProps } from "antd";
 
-interface typeInputComponent extends InputProps {
-  name: string,
-  control: any,
-  errors?: any,
-  label?: string,
-  placeholder?: string,
-  className?: string,
-  icon?: React.ReactNode,
-  type?: string,
+type typeInputDateComponent = DatePickerProps & {
+    name: string,
+    control: any,
+    errors?: any,
+    label?: string,
+    placeholder?: string,
+    className?: string,
+    icon?: React.ReactNode,
+    type?: string,
 }
 
-const InputComponent = ({
+const InputDateComponent = ({
   name,
   control,
   errors,
@@ -23,18 +23,16 @@ const InputComponent = ({
   icon,
   type = "text",
   ...props
-}: typeInputComponent) => {
+}: typeInputDateComponent ) => {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field }) => (
         <Form.Item label={label} className={className}>
-          <Input
+          <DatePicker
             {...field}
             placeholder={placeholder}
-            prefix={icon}
-            type={type}
             {...props}
           />
           {errors?.[name] && (
@@ -48,4 +46,4 @@ const InputComponent = ({
   );
 };
 
-export default InputComponent;
+export default InputDateComponent;

@@ -3,9 +3,18 @@ import { findById } from "../models/repository/user.repo";
 import db from "../models";
 import { menu } from "../constants";
 import { getInfoData, removeElement } from "../utils";
-import { where } from "sequelize";
+const bcrypt = require("bcrypt");
 
 class UserService {
+  static findUserById = async (userId) => {
+    const userInfo = await findById(userId);
+
+    return removeElement({
+      object: userInfo,
+      field: ["createdAt", "updatedAt", "password", "createdAt"],
+    });
+  };
+
   static handleGetUserInfo = async (userId) => {
     const userInfo = await findById(userId);
 
@@ -52,6 +61,20 @@ class UserService {
       }
     );
   };
+
+  static changePassword = async ({userId, password}) => {
+    //create password hash
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    return await db.User.update(
+      { password: passwordHash },
+      {
+        where: {
+          id: userId,
+        },
+      }
+    );
+  }
 }
 
 module.exports = UserService;

@@ -1,19 +1,18 @@
 import { Controller } from "react-hook-form";
-import { Form, Input } from "antd";
-import { InputProps } from "antd";
+import { Form, Input, Select } from "antd";
+import { SelectProps } from "antd";
 
-interface typeInputComponent extends InputProps {
-  name: string,
-  control: any,
-  errors?: any,
-  label?: string,
-  placeholder?: string,
-  className?: string,
-  icon?: React.ReactNode,
-  type?: string,
+interface typeInputSelectComponent extends SelectProps {
+  name: string;
+  control: any;
+  errors?: any;
+  label?: string;
+  placeholder?: string;
+  className?: string;
+  icon?: React.ReactNode;
 }
 
-const InputComponent = ({
+const SelectComponent = ({
   name,
   control,
   errors,
@@ -21,20 +20,17 @@ const InputComponent = ({
   placeholder = "",
   className = "",
   icon,
-  type = "text",
   ...props
-}: typeInputComponent) => {
+}: typeInputSelectComponent) => {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field }) => (
         <Form.Item label={label} className={className}>
-          <Input
+          <Select
             {...field}
             placeholder={placeholder}
-            prefix={icon}
-            type={type}
             {...props}
           />
           {errors?.[name] && (
@@ -48,4 +44,4 @@ const InputComponent = ({
   );
 };
 
-export default InputComponent;
+export default SelectComponent;

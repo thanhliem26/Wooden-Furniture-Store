@@ -10,7 +10,6 @@ const AdminComponent = () => {
   const disptach = useAppDispatch();
 
   const userList = useAppSelector((state) => state.manageUser.userList);
-  console.log("🚀 ~ userList:", userList)
   const loading = useAppSelector((state) => state.manageUser.loading);
 
   useEffect(() => {

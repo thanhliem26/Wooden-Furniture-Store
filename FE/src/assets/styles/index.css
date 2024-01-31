@@ -90,6 +90,10 @@
   min-height: 100vh;
 }
 
+.required {
+  color: red !important;
+}
+
 .fill {
   position: absolute;
   top: 0;

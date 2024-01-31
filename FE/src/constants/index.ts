@@ -29,22 +29,10 @@ export const ROlE = {
     3: 'SHIPPER',
 }
 
-// export const roles = {
-//     admin: 1,
-//     departmentManager: 2,
-//     areaManager: 3,
-//     shopManager: 4,
-//     staff: 5
-// }
-
-// export const typesTimesheet = {
-//     work: 1,
-//     sick: 2,
-//     absence: 3,
-// }
-
-// export const typesTimesheetLabel = {
-//     [typesTimesheet.work]: 'Đi Làm',
-//     [typesTimesheet.sick]: 'Nghỉ Ốm',
-//     [typesTimesheet.absence]: 'Nghỉ Phép',
-// }
+export const statusCode = {
+  SUCCESS: 200,
+  CREATED: 201,
+  UPDATED: 201,
+  DELETED: 201,
+  NO_CONTENT: 204,
+}

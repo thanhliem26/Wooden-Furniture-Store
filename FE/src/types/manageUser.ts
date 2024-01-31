@@ -5,4 +5,5 @@ interface metadataAllUser extends baseInstance {
 interface state_reducer_manageUser {
     userList: UserState[],
     loading: boolean,
+    userSelected: null | UserState
 }

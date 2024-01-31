@@ -12,11 +12,16 @@ router.use(authentication);
 
 router.get('/me', asyncHandler(UserController.userInfo));
 router.get('/menu',  asyncHandler(UserController.menu));
-router.put('/update', asyncHandler(UserController.updateUser));
+router.put('/update/:id', asyncHandler(UserController.updateUser));
+router.put('/changePassword', asyncHandler(UserController.changePassword));
 
+//role admin
 router.use(isAdmin);
+
 router.get('/list', asyncHandler(UserController.getAllUser));
+router.get('/:id', asyncHandler(UserController.getUserById));
 router.put('/delete/:id', asyncHandler(UserController.deleteUser));
+
 
 
 //authentication refreshToken

@@ -5,8 +5,19 @@ import { ROlE } from "@/constants/index";
 import moment from "moment";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import images from "@/constants/images";
+import ModalEdit from "./modalEdit";
+import { useAppDispatch } from "@/store/index";
+import { setUserSelected } from "@/store/manageUser";
 
-const columns: ColumnsType<UserState> = [
+interface Props {
+  loading?: boolean;
+  userList: UserState[];
+}
+
+const TableSaleContractManage = ({ loading = false, userList = [] }: Props) => {
+  const dispatch = useAppDispatch();
+
+  const columns: ColumnsType<UserState> = [
   {
     title: "NAME",
     dataIndex: "fullName",
@@ -62,11 +73,18 @@ const columns: ColumnsType<UserState> = [
     dataIndex: "action",
     key: "action",
     width: 100,
-    render: () => (
+    render: (action: unknown, row: UserState) => (
       <>
-        <Tag color="blue" className="tag__action">
-          <EditOutlined /> EDIT
-        </Tag>
+        <ModalEdit
+          destroyOnClose={true}
+          title="Edit user"
+          width={800}
+          content={
+            <Tag color="blue" className="tag__action" onClick={() =>dispatch(setUserSelected(row))}>
+              <EditOutlined /> EDIT
+            </Tag>
+          }
+        />
         <Tag color="red" className="tag__action">
           <DeleteOutlined /> DELETE
         </Tag>
@@ -75,24 +93,20 @@ const columns: ColumnsType<UserState> = [
   },
 ];
 
-interface Props {
-  loading?: boolean;
-  userList: UserState[];
-}
-
-const TableSaleContractManage = ({ loading = false, userList = [] }: Props) => (
-  <div className="table__sale-contract">
-    <div className="table__title">
-      <h4>Sale Contract</h4>
+  return (
+    <div className="table__sale-contract">
+      <div className="table__title">
+        <h4>Sale Contract</h4>
+      </div>
+      <Table
+        // size="large"
+        loading={loading}
+        columns={columns}
+        dataSource={userList}
+        scroll={{ x: 1000 }}
+      />
     </div>
-    <Table
-      // size="large"
-      loading={loading}
-      columns={columns}
-      dataSource={userList}
-      scroll={{ x: 1000 }}
-    />
-  </div>
-);
+  );
+};
 
 export default TableSaleContractManage;

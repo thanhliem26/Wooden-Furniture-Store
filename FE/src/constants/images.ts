@@ -62,8 +62,8 @@ import Gift from '@/assets/images/icons/gift.svg';
 import Agenda from '@/assets/images/icons/agenda.png';
 import SmartPhone from '@/assets/images/icons/smartphone.png';
 import Mail from '@/assets/images/icons/mail.png';
-
-
+import AvatarSupporting from '@/assets/images/avatar_support.jpg';
+import AvatarDefault from '@/assets/images/avatar_default.jpg';
 
 export default {
     SingIn,
@@ -122,4 +122,7 @@ export default {
     BatWing,
     HauntedHouseForeground,
     HauntedHouseBackground,
+    //avatar
+    AvatarSupporting,
+    AvatarDefault
 }

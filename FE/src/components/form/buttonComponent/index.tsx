@@ -1,5 +1,11 @@
-import { Button, Form } from "antd";
-import { typeButtonComponent } from './constant';
+import { Button, Form, ButtonProps } from "antd";
+interface typeButtonComponent extends ButtonProps {
+  wrapperCol?: any,
+  type?: "link" | "text" | "primary" | "default" | "dashed",
+  htmlType?: 'button' | 'submit' | 'reset',
+  label?: string,
+  className?: string,
+}
 
 const ButtonComponent = ({
   wrapperCol = { offset: 8, span: 16 },
@@ -8,10 +14,11 @@ const ButtonComponent = ({
   label,
   className = '',
   loading = false,
+  ...props
 }: typeButtonComponent) => {
   return (
     <Form.Item wrapperCol={wrapperCol} className={className}>
-      <Button type={type} htmlType={htmlType} loading={loading}>
+      <Button type={type} htmlType={htmlType} loading={loading} {...props}>
         {label}
       </Button>
     </Form.Item>

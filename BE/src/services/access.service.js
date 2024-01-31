@@ -93,12 +93,13 @@ class AccessService {
       privateKey
     );
 
-    await tokenService.createKeyToken({
+   await tokenService.createKeyToken({
       userId: foundUser.id,
       publicKey,
       privateKey,
       refreshToken: tokens.refreshToken,
     });
+
 
     return {
       user: getInfoData({

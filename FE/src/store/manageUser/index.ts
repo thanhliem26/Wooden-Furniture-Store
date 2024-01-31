@@ -14,15 +14,27 @@ export const fetchAllUser = createAsyncThunk(
 const initialState: state_reducer_manageUser = {
     userList: [],
     loading: true,
+    userSelected: null
 }
 
 export const manageUserSlice = createSlice({
     name: 'manage_user',
     initialState,
     reducers: {
-        // setUserInfo: (state, action: PayloadAction<UserState>) => {
-        //     state = { ...state, ...action.payload }
-        // },
+        setUserSelected: (state, action: PayloadAction<UserState>) => {
+            state.userSelected = action.payload;
+        },
+        setUserList: (state, action: PayloadAction<UserStateEdit>) => {
+            const {id, ...value} = action.payload;
+            
+            state.userList = state.userList.map((user: UserState) => {
+                if(user.id === id) {
+                    user = {...user, ...value}
+                }
+
+                return user;
+            })
+        }
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
@@ -44,5 +56,5 @@ export const manageUserSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-// export const { setUserInfo } = manageUserSlice.actions
+export const { setUserSelected, setUserList } = manageUserSlice.actions
 export default manageUserSlice.reducer
