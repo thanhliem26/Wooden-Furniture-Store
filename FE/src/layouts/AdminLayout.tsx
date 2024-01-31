@@ -14,19 +14,19 @@ const AdminLayout: React.FC = () => {
   const dispatch = useAppDispatch();
   const userInfo = useAppSelector<UserState>((state) => state.user)
 
-  // if (!isUserLoggedIn()) {
-  //   return <Navigate to="/login" />;
-  // }
+  if (!isUserLoggedIn()) {
+    return <Navigate to="/login" />;
+  }
 
-  // useEffect(() => {
-  //   dispatch(fetchUserInfo())
-  // }, [])
+  useEffect(() => {
+    dispatch(fetchUserInfo())
+  }, [])
 
-  // useEffect(() => {
-  //   if (!!userInfo.role_user && +userInfo.role_user !== 1) {
-  //     navigate('/forbidden')
-  //   }
-  // }, [userInfo.role_user])
+  useEffect(() => {
+    if (!!userInfo.role_user && +userInfo.role_user !== 1) {
+      navigate('/forbidden')
+    }
+  }, [userInfo.role_user])
 
   return (
     <Layout className="layout__admin-private">

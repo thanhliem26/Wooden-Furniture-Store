@@ -34,7 +34,14 @@ export const manageUserSlice = createSlice({
 
                 return user;
             })
-        }
+        },
+        deleteUser: (state, action: PayloadAction<number>) => {
+            const id = action.payload;
+            
+            state.userList = state.userList.filter((user: UserState) => {
+               return user.id !== id;
+            })
+        },
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
@@ -56,5 +63,5 @@ export const manageUserSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setUserSelected, setUserList } = manageUserSlice.actions
+export const { setUserSelected, setUserList, deleteUser } = manageUserSlice.actions
 export default manageUserSlice.reducer

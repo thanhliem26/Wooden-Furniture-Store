@@ -25,22 +25,14 @@ const userApi = {
         const url = `/v1/api/user/update/${id}`
         return axiosService.put(url, body)
     },
-    // deleteUser(id, body) {
-    //     const url = `/user/delete/${id}`
-    //     return axiosService.put(url, body)
-    // },
+    deleteUser(id): Promise<typeDeleteUser> {
+        const url = `/v1/api/user/delete/${id}`
+        return axiosService.put(url)
+    },
     changePassword(body): Promise<typeEditUser> {
         const url = '/v1/api/user/changePassword'
         return axiosService.put(url, body)
     },
-    // getUsersOfStore(id) {
-    //     const url = `/get-users-of-store/${id}`
-    //     return axiosService.get(url)
-    // },
-    // changePasswordUser(id, body) {
-    //     const url = `/change-other-password/${id}`
-    //     return axiosService.put(url, body)
-    // },
 }
 
 export default userApi;

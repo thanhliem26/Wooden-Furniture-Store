@@ -49,3 +49,7 @@ interface typeEditUser extends baseInstance {
     metadata: number[]
 }
 
+interface typeDeleteUser extends baseInstance {
+    metadata: number[]
+}
+
