@@ -1,12 +1,16 @@
 import { axiosService } from "./axiosService";
 
 const userApi = {
-    // createUser(body) {
-    //     const url = '/user/create';
-    //     return axiosService.post(url, body);
-    // },
+    createUser(body): Promise<typeCreateUser> {
+        const url = '/v1/api/user/create-user';
+        return axiosService.post(url, body);
+    },
     getUsers(): Promise<metadataAllUser> {
         const url = '/v1/api/user/list';
+        return axiosService.get(url)
+    },
+    searchUser(search: string): Promise<metadataAllUser> {
+        const url = `/v1/api/user/list/${search}`;
         return axiosService.get(url)
     },
     getMenu(): Promise<typeMenu> {

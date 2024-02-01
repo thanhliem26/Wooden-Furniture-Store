@@ -23,7 +23,7 @@ const BaseModal = ({
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
+  const handleSubmit = () => {
     setIsModalOpen(false);
   };
 
@@ -33,7 +33,7 @@ const BaseModal = ({
 
   //handle event emitter
   useEffect(() => {
-    eventEmitter.on('submit_modal', handleOk);
+    eventEmitter.on('submit_modal', handleSubmit);
     eventEmitter.on('cancel_modal', handleCancel);
   }, [])
 
@@ -43,14 +43,14 @@ const BaseModal = ({
       <Modal
         title={title}
         open={isModalOpen}
-        onOk={handleOk}
+        onOk={handleSubmit}
         onCancel={handleCancel}
         {...props}
         footer={props?.footer ? props?.footer : [
           <Button key="Cancel" onClick={handleCancel}>
             Cancel
           </Button>,
-          <Button key="Save Changes" onClick={handleCancel} type="primary">
+          <Button key="Save Changes" onClick={handleSubmit} type="primary">
             Save Changes
           </Button>,
         ]}

@@ -8,7 +8,7 @@ interface typeButtonComponent extends ButtonProps {
 }
 
 const ButtonComponent = ({
-  wrapperCol = { offset: 8, span: 16 },
+  wrapperCol,
   type = "primary",
   htmlType = "button",
   label,

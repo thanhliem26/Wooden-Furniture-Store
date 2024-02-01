@@ -52,6 +52,20 @@ class UserController {
             metadata: await UserService.changePassword({userId: req.body.id, password: req.body.password}),
         }).send(res)
     }
+
+    searchUser = async (req, res, next) => {
+        new SuccessResponse({
+            message: 'get user list success!',
+            metadata: await UserService.searchUser(req.params.search),
+        }).send(res)
+    }
+
+    createNewUser = async (req, res, next) => {
+        new CREATED({
+            message: 'create a new user success!',
+            metadata: await UserService.createNewUser(req.body),
+        }).send(res)
+    }
 }
 
 module.exports = new UserController

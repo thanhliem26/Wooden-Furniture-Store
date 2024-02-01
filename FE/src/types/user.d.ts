@@ -53,3 +53,6 @@ interface typeDeleteUser extends baseInstance {
     metadata: number[]
 }
 
+interface typeCreateUser extends baseInstance {
+    metadata: UserState
+}

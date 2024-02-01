@@ -12,7 +12,7 @@ import ModalConfirm from "@/components/confirm";
 import userApi from "@/api/user";
 import { eventEmitter } from "@/utils/index";
 import Notification from "@/components/notificationSend";
-
+import SearchUser from "./searchUser";
 interface Props {
   loading?: boolean;
   userList: UserState[];
@@ -132,7 +132,7 @@ const TableSaleContractManage = ({ loading = false, userList = [] }: Props) => {
   return (
     <div className="table__sale-contract">
       <div className="table__title">
-        <h4>Sale Contract</h4>
+        <SearchUser />
       </div>
       <Table
         // size="large"

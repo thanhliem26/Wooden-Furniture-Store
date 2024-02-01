@@ -11,6 +11,14 @@ export const fetchAllUser = createAsyncThunk(
     }
 )
 
+export const searchUser = createAsyncThunk(
+    'users/searchUser',
+    async (search: string): Promise<UserState[]> => {
+        const { metadata } = await userApi.searchUser(search);
+        return metadata;
+    }
+)
+
 const initialState: state_reducer_manageUser = {
     userList: [],
     loading: true,
@@ -21,7 +29,7 @@ export const manageUserSlice = createSlice({
     name: 'manage_user',
     initialState,
     reducers: {
-        setUserSelected: (state, action: PayloadAction<UserState>) => {
+        setUserSelected: (state, action: PayloadAction<UserState | null>) => {
             state.userSelected = action.payload;
         },
         setUserList: (state, action: PayloadAction<UserStateEdit>) => {
@@ -42,6 +50,9 @@ export const manageUserSlice = createSlice({
                return user.id !== id;
             })
         },
+        addUser: (state, action: PayloadAction<UserState>) => {
+            state.userList = [...state.userList, action.payload]
+        },
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
@@ -58,10 +69,25 @@ export const manageUserSlice = createSlice({
 
             return state;
         }) 
+
+
+        builder.addCase(searchUser.fulfilled, (state, action) => {
+            state = { ...state, loading: false, userList: action.payload.map((item, index) => ({...item, key: index})) }
+
+            return state;
+        }).addCase(searchUser.pending, (state, action) => {
+            state = { ...state, loading: true }
+
+            return state;
+        }).addCase(searchUser.rejected, (state, action) => {
+            state = { ...state, loading: true }
+
+            return state;
+        }) 
        
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { setUserSelected, setUserList, deleteUser } = manageUserSlice.actions
+export const { setUserSelected, setUserList, deleteUser, addUser } = manageUserSlice.actions
 export default manageUserSlice.reducer

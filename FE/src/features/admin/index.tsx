@@ -4,6 +4,7 @@ import styled from './index.module.scss';
 import userApi from '@/api/user';
 import { useAppDispatch, useAppSelector } from '@/store/index';
 import { fetchAllUser } from '@/store/manageUser';
+import AddUser from './addUser';
 
 const AdminComponent = () => {
 
@@ -19,7 +20,7 @@ const AdminComponent = () => {
 
   return (
     <div className={styled["sale_contract_manage"]}>
-      Manage User
+      <AddUser />
       <TableSaleContractManage loading={loading} userList={userList}/>
     </div>
   )

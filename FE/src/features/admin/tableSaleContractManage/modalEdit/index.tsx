@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Modal from "@/components/modal";
 import {
-  AndroidOutlined,
-  AppleOutlined,
   FileProtectOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { Tabs } from "antd";
 import styled from "./index.module.scss";
-import InformationTab from "./informationTab";
 import ChangePassword from "./changePassword";
+import ContentInfoChange from "@/components/modal/modalChangeInfoUser/content";
 
 interface Props {
   content: any;
@@ -39,7 +37,7 @@ const ModalEdit = ({ ...props }: Props) => {
                 Profile
               </>
             ),
-            children: <InformationTab />,
+            children: <ContentInfoChange isEdit={true} />,
           },
           {
             key: "2",

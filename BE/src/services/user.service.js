@@ -4,6 +4,9 @@ import db from "../models";
 import { menu } from "../constants";
 import { getInfoData, removeElement } from "../utils";
 const bcrypt = require("bcrypt");
+const { Op } = require("sequelize");
+import { validateUser, createNewUser } from "../models/repository/user.repo";
+import { BadRequestError } from "../core/error.response";
 
 class UserService {
   static findUserById = async (userId) => {
@@ -74,6 +77,62 @@ class UserService {
         },
       }
     );
+  }
+
+  /**
+   * 
+   * @param {*} valueSearch: fullName, email, telephone
+   */
+  static searchUser = async (valueSearch) => {
+    return await db.User.findAll({ where: {[Op.or]: [
+      { fullName: {[Op.like]: `%${valueSearch}%`} },
+      { email: {[Op.like]: `%${valueSearch}%`} },
+      { phoneNumber: {[Op.like]: `%${valueSearch}%`} },
+    ]}, attributes: { exclude: ["password"] } })
+  } 
+
+  static createNewUser = async (data) => {
+     //step1: check email exists
+     const validateField = await validateUser({ ...data });
+     if (!validateField.status) {
+       throw new Error(validateField.message);
+     }
+ 
+     const { email, password } = data;
+     //step2: check email exists
+     const holderUser = await db.User.findOne({ raw: true, where: { email } });
+ 
+     if (holderUser) {
+       throw new BadRequestError("Error: Email already registered");
+     }
+ 
+     //step3: encode password
+     const passwordHash = await bcrypt.hash(password, 10);
+ 
+     //step4: create user
+ 
+     const newUser = await createNewUser({ ...data, password: passwordHash });
+ 
+     if (newUser) {
+      const infoUser = getInfoData({
+        field: [
+          "id",
+          "fullName",
+          "email",
+          "phoneNumber",
+          "address",
+          "dateOfBirth",
+          "sex",
+          "role_user",
+          'deleteFlg',
+        ],
+        object: newUser,
+      });
+       //step5: response data
+       return infoUser
+     }
+ 
+     return null
   }
 }
 

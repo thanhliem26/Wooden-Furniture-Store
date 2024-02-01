@@ -1,38 +1,48 @@
-import { Col, Row, Form } from "antd";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import styled from "../index.module.scss";
+import { Col, Row, Form } from "antd";
+import { useForm, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { schema, FormData } from "./constant";
-import Notification from "@/components/notificationSend";
-import styled from "./index.module.scss";
+import * as yup from "yup";
+import {
+  handleGetSchema,
+  handleSubmitCreate,
+  handleSubmitEdit,
+} from "../constant";
 import { RangePickerProps } from "antd/es/date-picker";
 import moment from "moment";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/index";
-import userApi from "@/api/user";
-import { statusCode } from "@/constants/index";
-import { setUserList } from "@/store/manageUser";
+import { setUserSelected } from "@/store/manageUser";
 import dayjs from "dayjs";
 import { eventEmitter } from "@/utils/index";
-import images from '@/constants/images';
-//form
+import images from "@/constants/images";
 import {
-  InputDateComponent,
   ButtonComponent,
+  CheckboxComponent,
   InputComponent,
+  InputDateComponent,
   SelectComponent,
 } from "@/components/form";
 
-const InformationTab = () => {
-  const [loading, setLoading] = useState<boolean>(false);
+interface Props {
+  isEdit?: boolean;
+}
 
-  const dispatch = useAppDispatch();
+const ContentInfoChange = ({ isEdit }: Props) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const userSelected = useAppSelector(
     (state: RootState) => state.manageUser.userSelected
   );
 
+  const dispatch = useAppDispatch();
+
+  const schema = handleGetSchema({ isEdit: isEdit });
+  type FormData = yup.InferType<typeof schema>;
+
   const {
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm<FormData>({
     // use resolver to validate with yup
@@ -42,7 +52,7 @@ const InformationTab = () => {
       fullName: userSelected?.fullName,
       role_user: userSelected?.role_user,
       address: userSelected?.address,
-      // @ts-ignore
+      // @ts-ignores
       dateOfBirth: dayjs(userSelected?.dateOfBirth),
       phoneNumber: userSelected?.phoneNumber,
       sex: userSelected?.sex,
@@ -56,22 +66,19 @@ const InformationTab = () => {
     return current && current > today;
   };
 
+  //@ts-ignore
+  const showPassword = useWatch({
+    control,
+    name: "show",
+    defaultValue: false,
+  });
+
   const onSubmit = async (data: FormData) => {
     try {
       setLoading(true);
-      const { id, ...body } = data;
-      const { message, status } = await userApi.editUser(id, body);
-
-      if (status === statusCode.UPDATED) {
-        dispatch(setUserList(data as UserStateEdit));
-
-        eventEmitter.emit("submit_modal");
-
-        Notification({
-          message: message,
-          description: "Update user success",
-        });
-      }
+      isEdit
+        ? handleSubmitEdit(data, dispatch, eventEmitter)
+        : handleSubmitCreate(data, dispatch, eventEmitter);
     } catch (error: unknown) {
       throw error;
     } finally {
@@ -84,6 +91,7 @@ const InformationTab = () => {
   };
 
   const handleClose = () => {
+    dispatch(setUserSelected(null));
     eventEmitter.emit("cancel_modal");
   };
 
@@ -94,7 +102,6 @@ const InformationTab = () => {
           name="change_information"
           onFinish={handleSubmit(onSubmit)}
           onFinishFailed={onFinishFailed}
-          // autoComplete="off"
         >
           <div className="information__tab-image">
             <div className="tab__image-avatarSupport">
@@ -115,7 +122,7 @@ const InformationTab = () => {
                 errors={errors}
                 placeholder="Email"
                 className="remove__border"
-                disabled
+                disabled={isEdit}
               />
             </Col>
             <Col md={6} span={24}>
@@ -191,7 +198,7 @@ const InformationTab = () => {
               <SelectComponent
                 name="sex"
                 control={control}
-                //   errors={errors}
+                errors={errors}
                 placeholder="sex"
                 className="remove__border"
                 options={[
@@ -201,6 +208,49 @@ const InformationTab = () => {
                 ]}
               />
             </Col>
+
+            {!isEdit ? (
+              <>
+                <Col md={6} span={24}>
+                  New Password <span className="required">*</span>
+                </Col>
+                <Col md={18} span={24}>
+                  <InputComponent
+                    name="password"
+                    control={control}
+                    errors={errors}
+                    placeholder="Your name"
+                    className="remove__border"
+                    type={showPassword ? "text" : "password"}
+                  />
+                </Col>
+                <Col md={6} span={24}>
+                  Confirm New Password <span className="required">*</span>
+                </Col>
+                <Col md={18} span={24}>
+                  <InputComponent
+                    name="re_password"
+                    control={control}
+                    errors={errors}
+                    placeholder="Your name"
+                    className="remove__border"
+                    type={showPassword ? "text" : "password"}
+                  />
+                </Col>
+                <Col md={6} span={0}></Col>
+                <Col md={18} span={24}>
+                  <CheckboxComponent
+                    name="show"
+                    control={control}
+                    errors={errors}
+                    className="remove__border"
+                    setValue={setValue}
+                  >
+                    Show password
+                  </CheckboxComponent>
+                </Col>
+              </>
+            ) : null}
           </Row>
           <div className="button__footer">
             <ButtonComponent
@@ -223,4 +273,4 @@ const InformationTab = () => {
   );
 };
 
-export default InformationTab;
+export default ContentInfoChange;
