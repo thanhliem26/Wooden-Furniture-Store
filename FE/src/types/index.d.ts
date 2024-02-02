@@ -5,6 +5,16 @@ interface baseInstance {
     options?: responseOptionBase,
 }
 
+interface basePagination {
+    current?: number,
+    pageSize?: number,
+}
+
+interface paginationQuery {
+    page?: number,
+    limit?: number,
+}
+
 interface responseOptionBase {
     limit: number,
 }

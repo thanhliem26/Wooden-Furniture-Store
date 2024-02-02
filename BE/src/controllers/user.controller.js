@@ -14,7 +14,10 @@ class UserController {
     getAllUser = async (req, res, next) => {
         new SuccessResponse({
             message: 'Get user list success!',
-            metadata: await UserService.getAllUser(),
+            metadata: await UserService.getAllUser(req.query),
+            options: {
+                ...req.query
+            }
         }).send(res)
     }
 
@@ -56,7 +59,10 @@ class UserController {
     searchUser = async (req, res, next) => {
         new SuccessResponse({
             message: 'get user list success!',
-            metadata: await UserService.searchUser(req.params.search),
+            metadata: await UserService.searchUser(req.params.search, req.query),
+            options: {
+                ...req.query
+            }
         }).send(res)
     }
 

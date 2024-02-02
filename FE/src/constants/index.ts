@@ -29,6 +29,12 @@ export const ROlE = {
     3: 'SHIPPER',
 }
 
+export const TAG_ROLE = {
+  1: 'cyan',
+  2: 'blue',
+  3: 'magenta'
+}
+
 export const statusCode = {
   SUCCESS: 200,
   CREATED: 201,

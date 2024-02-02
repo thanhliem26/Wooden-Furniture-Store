@@ -39,8 +39,16 @@ class UserService {
     }, []);
   };
 
-  static getAllUser = async () => {
-    return await db.User.findAll({ where: {deleteFlg: 0}, attributes: { exclude: ["password"] } });
+  static getAllUser = async (query) => {
+    const page = +query.page || 1;
+    const limit = +query.limit || 10;
+
+    return await db.User.findAndCountAll({
+      where: { deleteFlg: 0 },
+      attributes: { exclude: ["password"] },
+      limit: limit,
+      offset: (page - 1) * limit,
+    });
   };
 
   static updateUser = async ({ userId, dataUser }) => {
@@ -65,7 +73,7 @@ class UserService {
     );
   };
 
-  static changePassword = async ({userId, password}) => {
+  static changePassword = async ({ userId, password }) => {
     //create password hash
     const passwordHash = await bcrypt.hash(password, 10);
 
@@ -77,43 +85,53 @@ class UserService {
         },
       }
     );
-  }
+  };
 
   /**
-   * 
+   *
    * @param {*} valueSearch: fullName, email, telephone
    */
-  static searchUser = async (valueSearch) => {
-    return await db.User.findAll({ where: {[Op.or]: [
-      { fullName: {[Op.like]: `%${valueSearch}%`} },
-      { email: {[Op.like]: `%${valueSearch}%`} },
-      { phoneNumber: {[Op.like]: `%${valueSearch}%`} },
-    ]}, attributes: { exclude: ["password"] } })
-  } 
+  static searchUser = async (valueSearch, query) => {
+    const page = +query.page || 1;
+    const limit = +query.limit || 10;
+
+    return await db.User.findAndCountAll({
+      where: {
+        [Op.or]: [
+          { fullName: { [Op.like]: `%${valueSearch}%` } },
+          { email: { [Op.like]: `%${valueSearch}%` } },
+          { phoneNumber: { [Op.like]: `%${valueSearch}%` } },
+        ],
+      },
+      attributes: { exclude: ["password"] },
+      limit: limit,
+      offset: (page - 1) * limit,
+    });
+  };
 
   static createNewUser = async (data) => {
-     //step1: check email exists
-     const validateField = await validateUser({ ...data });
-     if (!validateField.status) {
-       throw new Error(validateField.message);
-     }
- 
-     const { email, password } = data;
-     //step2: check email exists
-     const holderUser = await db.User.findOne({ raw: true, where: { email } });
- 
-     if (holderUser) {
-       throw new BadRequestError("Error: Email already registered");
-     }
- 
-     //step3: encode password
-     const passwordHash = await bcrypt.hash(password, 10);
- 
-     //step4: create user
- 
-     const newUser = await createNewUser({ ...data, password: passwordHash });
- 
-     if (newUser) {
+    //step1: check email exists
+    const validateField = await validateUser({ ...data });
+    if (!validateField.status) {
+      throw new Error(validateField.message);
+    }
+
+    const { email, password } = data;
+    //step2: check email exists
+    const holderUser = await db.User.findOne({ raw: true, where: { email } });
+
+    if (holderUser) {
+      throw new BadRequestError("Error: Email already registered");
+    }
+
+    //step3: encode password
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    //step4: create user
+
+    const newUser = await createNewUser({ ...data, password: passwordHash });
+
+    if (newUser) {
       const infoUser = getInfoData({
         field: [
           "id",
@@ -124,16 +142,16 @@ class UserService {
           "dateOfBirth",
           "sex",
           "role_user",
-          'deleteFlg',
+          "deleteFlg",
         ],
         object: newUser,
       });
-       //step5: response data
-       return infoUser
-     }
- 
-     return null
-  }
+      //step5: response data
+      return infoUser;
+    }
+
+    return null;
+  };
 }
 
 module.exports = UserService;

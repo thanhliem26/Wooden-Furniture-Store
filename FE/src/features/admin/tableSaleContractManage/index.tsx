@@ -1,13 +1,13 @@
 import React from "react";
 import { Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { ROlE, statusCode } from "@/constants/index";
+import { ROlE, TAG_ROLE, statusCode } from "@/constants/index";
 import moment from "moment";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import images from "@/constants/images";
 import ModalEdit from "./modalEdit";
 import { useAppDispatch } from "@/store/index";
-import { deleteUser, setUserSelected } from "@/store/manageUser";
+import { deleteUser, setPagination, setUserSelected } from "@/store/manageUser";
 import ModalConfirm from "@/components/confirm";
 import userApi from "@/api/user";
 import { eventEmitter } from "@/utils/index";
@@ -16,27 +16,34 @@ import SearchUser from "./searchUser";
 interface Props {
   loading?: boolean;
   userList: UserState[];
+  pagination: basePagination;
+  total: number;
 }
 
-const TableSaleContractManage = ({ loading = false, userList = [] }: Props) => {
+const TableSaleContractManage = ({
+  loading = false,
+  userList = [],
+  pagination,
+  total,
+}: Props) => {
   const dispatch = useAppDispatch();
 
   const handleDeleteUser = async (id) => {
     try {
       const { message, status } = await userApi.deleteUser(id);
 
-      if(status === statusCode.DELETED) {
+      if (status === statusCode.DELETED) {
         dispatch(deleteUser(id));
-  
-          eventEmitter.emit("submit_modal");
-  
-          Notification({
-            message: message,
-            description: "Delete user success",
-          });
+
+        eventEmitter.emit("submit_modal");
+
+        Notification({
+          message: message,
+          description: "Delete user success",
+        });
       }
-    } catch(e: unknown) {
-      throw new Error((e as Error).message)
+    } catch (e: unknown) {
+      throw new Error((e as Error).message);
     }
   };
 
@@ -45,7 +52,7 @@ const TableSaleContractManage = ({ loading = false, userList = [] }: Props) => {
       title: "NAME",
       dataIndex: "fullName",
       key: "fullName",
-      width: 130,
+      width: 100,
       render: (name: string, row: UserState) => {
         return (
           <div className="content__name">
@@ -89,16 +96,17 @@ const TableSaleContractManage = ({ loading = false, userList = [] }: Props) => {
       title: "ROLE",
       dataIndex: "role_user",
       key: "role_user",
+      align: "center",
       width: 30,
       render: (role: string) => {
-        return ROlE[role];
+        return <Tag color={TAG_ROLE[role]}>{ROlE[role]}</Tag>;
       },
     },
     {
       title: "ACTION",
       dataIndex: "action",
       key: "action",
-      width: 100,
+      width: 130,
       render: (action: unknown, row: UserState) => (
         <>
           <ModalEdit
@@ -129,6 +137,10 @@ const TableSaleContractManage = ({ loading = false, userList = [] }: Props) => {
     },
   ];
 
+  const onChangePagination = (page: number, size: number) => {
+    dispatch(setPagination({current: page, pageSize: size}))
+  }
+
   return (
     <div className="table__sale-contract">
       <div className="table__title">
@@ -136,6 +148,7 @@ const TableSaleContractManage = ({ loading = false, userList = [] }: Props) => {
       </div>
       <Table
         // size="large"
+        pagination={{ ...pagination, total: total, showSizeChanger: true, onChange: onChangePagination}}
         loading={loading}
         columns={columns}
         dataSource={userList}

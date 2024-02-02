@@ -5,13 +5,13 @@ const userApi = {
         const url = '/v1/api/user/create-user';
         return axiosService.post(url, body);
     },
-    getUsers(): Promise<metadataAllUser> {
+    getUsers(params): Promise<metadataAllUser> {
         const url = '/v1/api/user/list';
-        return axiosService.get(url)
+        return axiosService.get(url, {params: params})
     },
-    searchUser(search: string): Promise<metadataAllUser> {
+    searchUser(search: string, params): Promise<metadataAllUser> {
         const url = `/v1/api/user/list/${search}`;
-        return axiosService.get(url)
+        return axiosService.get(url, {params: params})
     },
     getMenu(): Promise<typeMenu> {
         const url = '/v1/api/user/menu';

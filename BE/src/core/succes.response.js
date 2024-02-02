@@ -20,10 +20,12 @@ class SuccessResponse {
     statusCode = STATUS_CODE.OK,
     reasonStatusCode = RESPON_STATUS_CODE.OK,
     metadata = {},
+    options = {},
   }) {
     this.message = !message ? reasonStatusCode : message;
     this.status = statusCode;
     this.metadata = metadata;
+    this.options = options;
   }
 
   send(res, header = {}) {
