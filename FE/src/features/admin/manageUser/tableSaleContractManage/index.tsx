@@ -13,6 +13,7 @@ import userApi from "@/api/user";
 import { eventEmitter } from "@/utils/index";
 import Notification from "@/components/notificationSend";
 import SearchUser from "./searchUser";
+import { handlePrevImageS3 } from "@/components/modal/modalChangeInfoUser/content/constant";
 interface Props {
   loading?: boolean;
   userList: UserState[];
@@ -28,12 +29,18 @@ const TableSaleContractManage = ({
 }: Props) => {
   const dispatch = useAppDispatch();
 
-  const handleDeleteUser = async (id) => {
+  const handleDeleteUser = async ({id, avatar, avatar_support}) => {
     try {
+      const fieldAvatar = avatar ? [{...JSON.parse(avatar), is_delete: true}] : [];
+      const fieldAvatarSP = avatar_support ? [{...JSON.parse(avatar_support), is_delete: true}] : [];
+
       const { message, status } = await userApi.deleteUser(id);
 
       if (status === statusCode.DELETED) {
         dispatch(deleteUser(id));
+
+        await handlePrevImageS3(fieldAvatar)
+        await handlePrevImageS3(fieldAvatarSP)
 
         eventEmitter.emit("submit_modal");
 
@@ -128,7 +135,7 @@ const TableSaleContractManage = ({
           <ModalConfirm
             title="Delete user"
             description="Are you sure to delete this user?"
-            handleConfirm={() => handleDeleteUser(row.id)}
+            handleConfirm={() => handleDeleteUser(row)}
           >
             <Tag color="red" className="tag__action">
               <DeleteOutlined /> DELETE

@@ -41,3 +41,25 @@ export const uploadFileS3 = (file: any, nameFile: string): Promise<UploadResult>
         }
     })
 };
+
+export const deleteFileS3 = (keyFile: string) => {
+    const params = {
+        Bucket: import.meta.env.VITE_AWS_S3_BUCKET,
+        Key: keyFile,
+    };
+
+    return new Promise((resolve, reject) => {
+        try {
+            myBucket.deleteObject(params, (err, data) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    // data.Location chứa URL của file tải lên
+                    resolve(true)
+                }
+            });
+        } catch (err) {
+            reject(err)
+        }
+    })
+}

@@ -12,6 +12,7 @@ import NotFound from '@/features/misc/NotFound';
 import Admin from '@/features/admin';
 import Introduce from '@/features/user/introduce';
 import Forbidden from '@/features/misc/Forbidden';
+import ManageUsers from '@/features/admin/manageUser';
 // import Shops from './features/shops';
 // import Users from './features/users';
 
@@ -58,8 +59,8 @@ function RouterComponent() {
           element: <Admin />
         },
         {
-          path: "sale-contract-manager",
-          element: <Admin />
+          path: "manage-users",
+          element: <ManageUsers />
         },
         // {
         //   path: "users",

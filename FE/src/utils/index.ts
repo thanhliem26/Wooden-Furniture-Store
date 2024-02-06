@@ -38,3 +38,11 @@ export const getUser = () => {
 export const removeUser = () => localStorage.removeItem(STAFF_MANAGE_USER);
 
 export { default as eventEmitter } from './emitter.ts';
+
+export const removeEmptyInOBject = (object) => {
+    for (const property in object) {
+        if (!object[property]) {
+            delete object[property];
+        }
+    }
+}

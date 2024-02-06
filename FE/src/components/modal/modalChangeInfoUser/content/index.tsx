@@ -9,11 +9,10 @@ import {
   handleSubmitCreate,
   handleSubmitEdit,
 } from "../constant";
-import moment from "moment";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/index";
 import { setUserSelected } from "@/store/manageUser";
 import dayjs from "dayjs";
-import { eventEmitter } from "@/utils/index";
+import { eventEmitter, removeEmptyInOBject } from "@/utils/index";
 import images from "@/constants/images";
 import {
   ButtonComponent,
@@ -23,8 +22,13 @@ import {
   SelectComponent,
 } from "@/components/form";
 import UploadComponent from "@/components/form/uploadComponent";
-import { uploadFileS3 } from "@/utils/aws";
-import { disabledDate, handleGetAvatar, optionRole } from "./constant";
+import {
+  disabledDate,
+  handlePrevImageS3,
+  handleSetImage,
+  optionGender,
+  optionRole,
+} from "./constant";
 import lodash from "lodash";
 
 interface Props {
@@ -36,19 +40,9 @@ const ContentInfoChange = ({ isEdit }: Props) => {
   const userSelected = useAppSelector(
     (state: RootState) => state.manageUser.userSelected
   );
-console.log("userSelected", userSelected)
-  const [avatar, setAvatar] = useState<string>(images.AvatarDefault);
-  const [fileListAvatar, setFileListAvatar] = useState(() => {
-    if (userSelected?.avatar) return [JSON.parse(userSelected?.avatar)];
-    return [];
-  });
 
+  const [avatar, setAvatar] = useState<string>(images.AvatarDefault);
   const [avatarSP, setAvatarSP] = useState<string>(images.AvatarSupporting);
-  const [fileListAvatarSP, setFileListAvatarSP] = useState(() => {
-    if (userSelected?.avatar_support)
-      return [JSON.parse(userSelected?.avatar_support)];
-    return [];
-  });
 
   const dispatch = useAppDispatch();
 
@@ -74,10 +68,10 @@ console.log("userSelected", userSelected)
       phoneNumber: userSelected?.phoneNumber || "",
       sex: userSelected?.sex,
       id: userSelected?.id,
-      avatar: userSelected?.avatar && [JSON.parse(userSelected?.avatar)],
-      avatar_support: userSelected?.avatar_support && [
+      avatar: userSelected?.avatar ? [JSON.parse(userSelected?.avatar)] : [],
+      avatar_support: userSelected?.avatar_support ? [
         JSON.parse(userSelected?.avatar_support),
-      ],
+      ] : [],
     },
   });
 
@@ -95,40 +89,14 @@ console.log("userSelected", userSelected)
 
       const { avatar, avatar_support } = dataValue;
 
-      if (avatar?.[0] && avatar?.[0]?.originFileObj) {
-        const nameAvatar = `${moment().format("YYYY-MM-DD HH:MM:ss")}_${
-          avatar[0].name
-        }`;
-        const avatar_S3 = await uploadFileS3(
-          avatar[0].originFileObj,
-          nameAvatar
-        );
-        dataValue.avatar = JSON.stringify({
-          url: avatar_S3?.Location,
-          name: avatar_S3?.key,
-          origin: "aws",
-        });
-      } else {
-        delete dataValue.avatar
-      }
-  
-      if (avatar_support?.[0] && avatar_support?.[0]?.originFileObj) {
-        const nameAvatarSP = `${moment().format("YYYY-MM-DD HH:MM:ss")}_${
-          avatar_support[0].name
-        }`;
-        const avatarSP_S3 = await uploadFileS3(
-          avatar_support[0].originFileObj,
-          nameAvatarSP
-        );
+      dataValue.avatar = !lodash.isEmpty(avatar)
+        ? await handlePrevImageS3(avatar)
+        : "";
+      dataValue.avatar_support = !lodash.isEmpty(avatar_support)
+        ? await handlePrevImageS3(avatar_support)
+        : "";
 
-        dataValue.avatar_support = JSON.stringify({
-          url: avatarSP_S3?.Location,
-          name: avatarSP_S3?.key,
-          origin: "aws",
-        });
-      } else {
-        delete dataValue.avatar_support
-      }
+      removeEmptyInOBject(dataValue);
 
       isEdit
         ? handleSubmitEdit(dataValue, dispatch, eventEmitter)
@@ -149,31 +117,37 @@ console.log("userSelected", userSelected)
     eventEmitter.emit("cancel_modal");
   };
 
-  //set avatar
-  useEffect(() => {
-    handleGetAvatar(getValues("avatar")?.[0], setAvatar);
-  }, [getValues("avatar")]);
+  const FileListAvatar = getValues("avatar");
+  const FileListAvatarSP = getValues("avatar_support");
 
-  useEffect(() => {
-    handleGetAvatar(getValues("avatar_support")?.[0], setAvatarSP);
-  }, [getValues("avatar_support")]);
+  const handleChange = ({ fileList: newFileList }, data, name) => {
+    const [imageUpload] = newFileList;
 
-  const handleChange = ({ fileList: newFileList }, data, setData, name) => {
     const fileList = data.map((item) => {
       item.is_delete = true;
 
       return item;
     });
-    setData([
-      ...fileList,
-      { ...newFileList[0], origin: "normal", is_delete: false },
-    ]);
 
-    setValue(name, newFileList, {
+    const arrayImage = [
+      ...fileList,
+      { ...imageUpload, origin: "normal", is_delete: false },
+    ];
+
+    setValue(name, arrayImage, {
       shouldValidate: true,
       shouldDirty: true,
     });
   };
+
+  //set avatar
+  useEffect(() => {
+    handleSetImage(FileListAvatar, setAvatar);
+  }, [FileListAvatar]);
+
+  useEffect(() => {
+    handleSetImage(FileListAvatarSP, setAvatarSP);
+  }, [FileListAvatarSP]);
 
   return (
     <div className={styled["information__tab"]}>
@@ -199,12 +173,7 @@ console.log("userSelected", userSelected)
                 maxCount={1}
                 uploadSelf={true}
                 onChange={(file) =>
-                  handleChange(
-                    file,
-                    fileListAvatarSP,
-                    setFileListAvatarSP,
-                    "avatar_support"
-                  )
+                  handleChange(file, FileListAvatarSP, "avatar_support")
                 }
               />
             </div>
@@ -222,12 +191,7 @@ console.log("userSelected", userSelected)
                 maxCount={1}
                 uploadSelf={true}
                 onChange={(file) =>
-                  handleChange(
-                    file,
-                    fileListAvatar,
-                    setFileListAvatar,
-                    "avatar"
-                  )
+                  handleChange(file, FileListAvatar, "avatar")
                 }
               />
             </div>
@@ -318,11 +282,7 @@ console.log("userSelected", userSelected)
                 errors={errors}
                 placeholder="sex"
                 className="remove__border"
-                options={[
-                  { value: "1", label: "Male" },
-                  { value: "2", label: "Female" },
-                  { value: "3", label: "Other" },
-                ]}
+                options={optionGender}
               />
             </Col>
 
@@ -336,7 +296,7 @@ console.log("userSelected", userSelected)
                     name="password"
                     control={control}
                     errors={errors}
-                    placeholder="Your name"
+                    placeholder="Your Password"
                     className="remove__border"
                     type={showPassword ? "text" : "password"}
                   />
@@ -349,7 +309,7 @@ console.log("userSelected", userSelected)
                     name="re_password"
                     control={control}
                     errors={errors}
-                    placeholder="Your name"
+                    placeholder="Confirm Password"
                     className="remove__border"
                     type={showPassword ? "text" : "password"}
                   />

@@ -55,14 +55,29 @@ export const manageUserSlice = createSlice({
         },
         deleteUser: (state, action: PayloadAction<number>) => {
             const id = action.payload;
-            
+
+            const { current, pageSize } = state.pagination;
+
+            const maxPage = Math.ceil(state.total / (pageSize || 10));
+            if(maxPage === state.pagination.current && state.userList.length === 1 && Number(current) > 1) {
+                state.pagination.current = Number(current) - 1
+            }
+
             state.userList = state.userList.filter((user: UserState) => {
                return user.id !== id;
             })
             state.total = state.total - 1;
         },
         addUser: (state, action: PayloadAction<UserState>) => {
+            const { current, pageSize } = state.pagination;
+
+            const maxPage = Math.ceil(state.total / (pageSize || 10));
+            if(maxPage === state.pagination.current && state.userList.length === pageSize) {
+                state.pagination.current = Number(current) + 1
+            }
+
             state.userList = [...state.userList, action.payload]
+            
             state.total = state.total + 1;
         },
         setPagination: (state, action: PayloadAction<basePagination>) => {

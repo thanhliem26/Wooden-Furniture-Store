@@ -6,6 +6,7 @@ import { Controller } from "react-hook-form";
 import { Form } from "antd";
 import styled from "./index.module.scss";
 import getBase64 from "@/utils/file";
+import { ORIGIN_UPLOAD } from "@/constants/index";
 
 interface uploadFileS3 extends UploadFile {
   origin?: string,
@@ -60,7 +61,7 @@ const UploadComponent = ({
   };
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
-    setFileList([{...newFileList[0], origin: 'normal', is_delete: false}]);
+    setFileList([{...newFileList[0], origin: ORIGIN_UPLOAD.NORMAL, is_delete: false}]);
 
     setValue(name, newFileList, {
       shouldValidate: true,

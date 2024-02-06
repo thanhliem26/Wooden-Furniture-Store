@@ -43,3 +43,8 @@ export const statusCode = {
   DELETED: 201,
   NO_CONTENT: 204,
 }
+
+export const ORIGIN_UPLOAD = {
+  NORMAL: 'normal',
+  AWS: 'aws'
+}
