@@ -9,6 +9,7 @@ interface Props extends ModalProps {
   content: any;
   title?: string;
   children?: any;
+  onCancelModal?: () => void;
 }
 
 const BaseModal = ({
@@ -17,6 +18,7 @@ const BaseModal = ({
   content,
   title = "Basic Modal",
   children = "body Content",
+  onCancelModal,
   ...props
 }: Props) => {
   const showModal = () => {
@@ -28,6 +30,7 @@ const BaseModal = ({
   };
 
   const handleCancel = () => {
+    onCancelModal && onCancelModal();
     setIsModalOpen(false);
   };
 

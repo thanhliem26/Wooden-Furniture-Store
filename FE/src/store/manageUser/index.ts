@@ -66,7 +66,6 @@ export const manageUserSlice = createSlice({
             state.total = state.total + 1;
         },
         setPagination: (state, action: PayloadAction<basePagination>) => {
-            console.log("set pagination", action.payload)
             state.pagination = {...state.pagination, ...action.payload};
         }
     },

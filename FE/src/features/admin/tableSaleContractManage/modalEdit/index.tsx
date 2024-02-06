@@ -8,6 +8,8 @@ import { Tabs } from "antd";
 import styled from "./index.module.scss";
 import ChangePassword from "./changePassword";
 import ContentInfoChange from "@/components/modal/modalChangeInfoUser/content";
+import { useAppDispatch } from "@/store/index";
+import { setUserSelected } from "@/store/manageUser";
 
 interface Props {
   content: any;
@@ -18,12 +20,15 @@ interface Props {
 
 const ModalEdit = ({ ...props }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+
   return (
     <Modal
       footer={[]}
       className={styled["modal__edit"]}
       isModalOpen={isModalOpen}
       setIsModalOpen={setIsModalOpen}
+      onCancelModal={() => dispatch(setUserSelected(null))}
       {...props}
     >
       <Tabs

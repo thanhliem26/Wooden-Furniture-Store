@@ -54,11 +54,13 @@ const TableSaleContractManage = ({
       key: "fullName",
       width: 100,
       render: (name: string, row: UserState) => {
+        const avatar = row.avatar && JSON.parse(row.avatar);
+       
         return (
           <div className="content__name">
             <div className="content__name-image">
               <img
-                src={images.HauntedHouseForeground}
+                src={avatar?.url || images.AvatarDefault}
                 alt="image description"
               />
             </div>

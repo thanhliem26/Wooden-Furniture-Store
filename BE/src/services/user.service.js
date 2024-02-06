@@ -143,6 +143,8 @@ class UserService {
           "sex",
           "role_user",
           "deleteFlg",
+          'avatar',
+          'avatar_support'
         ],
         object: newUser,
       });

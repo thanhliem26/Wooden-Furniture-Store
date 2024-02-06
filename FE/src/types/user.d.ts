@@ -9,6 +9,8 @@ interface UserState {
     role_user: string,
     sex: string,
     deleteFlg: number,
+    avatar: string
+    avatar_support: string
 }
 
 interface UserStateEdit {

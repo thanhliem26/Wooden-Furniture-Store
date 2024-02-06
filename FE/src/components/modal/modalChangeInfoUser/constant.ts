@@ -28,6 +28,12 @@ export const handleGetSchema = ({ isEdit = false }) => {
                     .string(),
                 id: yup
                     .number(),
+                show: yup
+                    .boolean(),
+                avatar: yup
+                    .mixed(),
+                avatar_support: yup
+                    .mixed(),
             })
             .required();
     }
@@ -73,9 +79,46 @@ export const handleGetSchema = ({ isEdit = false }) => {
                 .required("Repeat Password is required"),
             show: yup
                 .boolean(),
+            avatar: yup
+                .mixed(),
+            avatar_support: yup
+                .mixed(),
         })
         .required();
 }
+
+
+// export const handleGetSchema = ({ isEdit = false }) => {
+//     return yup
+//             .object({
+//                 email: yup
+//                     .string()
+//                     .email("email is not valid!")
+//                     .required("email is required"),
+//                 fullName: yup
+//                     .string()
+//                     .required("Full name is required"),
+//                 role_user: yup
+//                     .string()
+//                     .required("role_user is required"),
+//                 address: yup
+//                     .string(),
+//                 dateOfBirth: yup
+//                     .string(),
+//                 phoneNumber: yup
+//                     .string(),
+//                 sex: yup
+//                     .string(),
+//                 id: yup
+//                     .number(),
+//                 show: yup
+//                     .boolean(),
+//                 avatar: yup
+//                     .mixed(),
+//                 avatar_support: yup
+//                     .mixed(),
+//             })
+// }
 
 export const handleSubmitCreate = async (data, dispatch, eventEmitter) => {
     const { message, status, metadata } = await userApi.createUser(data);

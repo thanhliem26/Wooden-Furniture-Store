@@ -52,6 +52,8 @@ module.exports = (sequelize, DataTypes) => {
       sex: DataTypes.ENUM("1", "2", "3"),
       role_user: DataTypes.ENUM("1", "2", "3"),
       deleteFlg: DataTypes.INTEGER,
+      avatar: DataTypes.STRING,
+      avatar_support: DataTypes.STRING,
     },
     {
       sequelize,
@@ -72,7 +74,9 @@ address	char(255)		yes
 dateOfBirth	date		yes	
 sex tinyint(1, 2, 3) 1: Male, 2: Female, 3: Other
 role_user	tinyint(1, 2, 3)	1: Admin, 2: User, 3: shipper	no
-deleteFlg int delete logic user			
+deleteFlg int delete logic user		
+avatar: char(255) image of user
+avatar_support: char(255) image support of user,	
 created_at	date		no	
 update_at	date		no	
 

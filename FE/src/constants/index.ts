@@ -21,6 +21,7 @@ export const HEADER = {
   CLIENT_ID: "x-client-id",
   AUTHORIZATION: "Authorization",
   REFRESHTOKEN: "x-rtoken-id",
+  CONTENT_TYPE: "Content-Type"
 };
 
 export const ROlE = {
