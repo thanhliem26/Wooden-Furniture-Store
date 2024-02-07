@@ -13,6 +13,7 @@ import Admin from '@/features/admin';
 import Introduce from '@/features/user/introduce';
 import Forbidden from '@/features/misc/Forbidden';
 import ManageUsers from '@/features/admin/manageUser';
+import ManageCategory from '@/features/admin/manageCategory';
 // import Shops from './features/shops';
 // import Users from './features/users';
 
@@ -62,10 +63,10 @@ function RouterComponent() {
           path: "manage-users",
           element: <ManageUsers />
         },
-        // {
-        //   path: "users",
-        //   element: <Users />
-        // },
+        {
+          path: "manage-category",
+          element: <ManageCategory />
+        },
         // {
         //   path: "shops",
         //   element: <Shops />

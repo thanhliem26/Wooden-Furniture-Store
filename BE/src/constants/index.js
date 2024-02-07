@@ -2,14 +2,14 @@ export const menu = [
   {
     id: 1,
     label: "Manage users",
-    href: "/admin/manage-user",
+    href: "/admin/manage-users",
     role: [1],
     icon: "sale_contract_management",
   },
   {
     id: 2,
-    label: "Expense",
-    href: "expense",
+    label: "Manage Category",
+    href: "/admin/manage-category",
     role: [1],
     icon: "expense",
   },

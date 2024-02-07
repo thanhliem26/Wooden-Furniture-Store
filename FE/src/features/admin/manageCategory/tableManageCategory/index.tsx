@@ -5,14 +5,14 @@ import { ROlE, TAG_ROLE, statusCode } from "@/constants/index";
 import moment from "moment";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import images from "@/constants/images";
-import ModalEdit from "./modalEdit";
+// import ModalEdit from "./modalEdit";
 import { useAppDispatch } from "@/store/index";
 import { deleteUser, setPagination, setUserSelected } from "@/store/manageUser";
 import ModalConfirm from "@/components/confirm";
 import userApi from "@/api/user";
 import { eventEmitter } from "@/utils/index";
 import Notification from "@/components/notificationSend";
-import SearchUser from "./searchUser";
+// import SearchUser from "./searchUser";
 import { handlePrevImageS3 } from "@/components/modal/modalChangeInfoUser/content/constant";
 interface Props {
   loading?: boolean;
@@ -21,7 +21,7 @@ interface Props {
   total: number;
 }
 
-const TableSaleContractManage = ({
+const TableManageCategory = ({
   loading = false,
   userList = [],
   pagination,
@@ -57,8 +57,8 @@ const TableSaleContractManage = ({
   const columns: ColumnsType<UserState> = [
     {
       title: "NAME",
-      dataIndex: "fullName",
-      key: "fullName",
+      dataIndex: "name",
+      key: "name",
       width: 100,
       render: (name: string, row: UserState) => {
         const avatar = row.avatar && JSON.parse(row.avatar);
@@ -80,15 +80,15 @@ const TableSaleContractManage = ({
       },
     },
     {
-      title: "ADDRESS",
-      dataIndex: "address",
-      key: "address",
+      title: "Description",
+      dataIndex: "description",
+      key: "description",
       width: 140,
     },
     {
-      title: "DATE OF BIRTH",
-      dataIndex: "dateOfBirth",
-      key: "dateOfBirth",
+      title: "Created At",
+      dataIndex: "createdAt",
+      key: "createdAt",
       sorter: true,
       width: 100,
       render: (date: string) => {
@@ -96,20 +96,10 @@ const TableSaleContractManage = ({
       },
     },
     {
-      title: "PHONE NUMBER",
-      dataIndex: "phoneNumber",
-      key: "phoneNumber",
+      title: 'Updated At',
+      dataIndex: 'updatedAt',
+      key: 'updatedAt',
       width: 70,
-    },
-    {
-      title: "ROLE",
-      dataIndex: "role_user",
-      key: "role_user",
-      align: "center",
-      width: 30,
-      render: (role: string) => {
-        return <Tag color={TAG_ROLE[role]}>{ROlE[role]}</Tag>;
-      },
     },
     {
       title: "ACTION",
@@ -118,7 +108,7 @@ const TableSaleContractManage = ({
       width: 130,
       render: (action: unknown, row: UserState) => (
         <>
-          <ModalEdit
+          {/* <ModalEdit
             destroyOnClose={true}
             title="Edit user"
             width={800}
@@ -131,7 +121,7 @@ const TableSaleContractManage = ({
                 <EditOutlined /> EDIT
               </Tag>
             }
-          />
+          /> */}
           <ModalConfirm
             title="Delete user"
             description="Are you sure to delete this user?"
@@ -151,9 +141,9 @@ const TableSaleContractManage = ({
   }
 
   return (
-    <div className="table__sale-contract">
+    <div className="table__manage-category">
       <div className="table__title">
-        <SearchUser />
+        {/* <SearchUser /> */}
       </div>
       <Table
         // size="large"
@@ -167,4 +157,4 @@ const TableSaleContractManage = ({
   );
 };
 
-export default TableSaleContractManage;
+export default TableManageCategory;

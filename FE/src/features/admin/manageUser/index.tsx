@@ -1,4 +1,4 @@
-import TableSaleContractManage from './tableSaleContractManage';
+import TableManageUsers from './tableManageUsers';
 import styled from './index.module.scss';
 import { useAppSelector } from '@/store/index';
 import AddUser from './addUser';
@@ -10,9 +10,9 @@ const ManageUsers = () => {
   const total = useAppSelector((state) => state.manageUser.total);
 
   return (
-    <div className={styled["sale_contract_manage"]}>
+    <div className={styled["manage__users"]}>
       <AddUser />
-      <TableSaleContractManage total={total} loading={loading} userList={userList} pagination={pagination}/>
+      <TableManageUsers total={total} loading={loading} userList={userList} pagination={pagination}/>
     </div>
   )
 }

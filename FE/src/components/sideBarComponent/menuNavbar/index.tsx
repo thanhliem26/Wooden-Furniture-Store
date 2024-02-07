@@ -1,10 +1,10 @@
 import { Menu } from "antd";
 import { MenuItem, getItem } from "./constants";
-import authApi from "@/api/auth";
 import userApi from "@/api/user";
 import { useEffect, useState } from "react";
 import { iconMenu } from "@/constants/index";
 import { Skeleton } from "antd";
+import { Link, useLocation } from "react-router-dom";
 
 const skeleton = [
   getItem("Sketon", "1", <Skeleton active avatar />),
@@ -14,6 +14,7 @@ const skeleton = [
 
 const MenuNavbar = () => {
   const [menu, setMenu] = useState<MenuItem[]>([]);
+  const location = useLocation();
   const [loading, setLoading] = useState(true);
 
   const handleGetMenu = async () => {
@@ -25,7 +26,11 @@ const MenuNavbar = () => {
       const menu = metadata?.map((item: metadataMenu) => {
         const IconComponent = iconMenu[item.icon];
 
-        return getItem(item.label, item.id, <IconComponent />);
+        return getItem(
+          <Link to={item.href}>{item.label}</Link>,
+          item.href,
+          <IconComponent />
+        );
       });
 
       setMenu(menu);
@@ -46,8 +51,8 @@ const MenuNavbar = () => {
   return (
     <>
       <Menu
-        defaultSelectedKeys={["1"]}
-        defaultOpenKeys={["sub1"]}
+        defaultSelectedKeys={["/admin/manage-users"]}
+        selectedKeys={[location.pathname === '/admin' ? '/admin/manage-users' : location.pathname ]}
         mode="inline"
         theme="dark"
         items={loading ? skeleton : menu}

@@ -13,6 +13,20 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Categories.hasMany(models.Products, { foreignKey: "category_id", as: "category_data" })
     }
+
+    validateCategory() {
+      if(!this.dataValues.name) {
+        return {
+          status: false,
+          message: 'Category name is required!'
+        }
+      };
+      
+      return {
+        status: true,
+        message: 'Payload is Valid!'
+      };
+    }
   }
   Categories.init({
     name: DataTypes.STRING,
