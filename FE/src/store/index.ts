@@ -2,15 +2,15 @@ import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 //reducer
-import counterReducer from './counter/index';
 import userReducer from './user/index';
 import manageUserReducer from './manageUser';
+import manageCategoryReducer from './manageCategories';
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
     user: userReducer,
     manageUser: manageUserReducer,
+    manageCategory: manageCategoryReducer,
   },
 })
 

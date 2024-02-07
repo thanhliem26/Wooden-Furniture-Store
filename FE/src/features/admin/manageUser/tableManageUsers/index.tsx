@@ -1,4 +1,3 @@
-import React from "react";
 import { Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { ROlE, TAG_ROLE, statusCode } from "@/constants/index";
@@ -7,13 +6,13 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import images from "@/constants/images";
 import ModalEdit from "./modalEdit";
 import { useAppDispatch } from "@/store/index";
-import { deleteUser, setPagination, setUserSelected } from "@/store/manageUser";
+import { deleteUser, setPagination, setUserSelected, searchUser } from "@/store/manageUser";
 import ModalConfirm from "@/components/confirm";
 import userApi from "@/api/user";
 import { eventEmitter } from "@/utils/index";
 import Notification from "@/components/notificationSend";
-import SearchUser from "./searchUser";
 import { handlePrevImageS3 } from "@/components/modal/modalChangeInfoUser/content/constant";
+import InputSearchField from "@/components/admin/inputSearch";
 interface Props {
   loading?: boolean;
   userList: UserState[];
@@ -153,7 +152,12 @@ const TableManageUsers = ({
   return (
     <div className="table__sale-contract">
       <div className="table__title">
-        <SearchUser />
+        <InputSearchField
+          placeholder="Search User"
+          pagination={pagination}
+          setFieldSearch={searchUser}
+          setPagination={setPagination}
+        />
       </div>
       <Table
         // size="large"

@@ -5,6 +5,14 @@ interface baseInstance {
     options?: responseOptionBase,
 }
 
+interface baseDelete extends baseInstance {
+    metadata: number[]
+}
+
+interface baseUpdate extends baseInstance {
+    metadata: number[]
+}
+
 interface basePagination {
     current?: number,
     pageSize?: number,

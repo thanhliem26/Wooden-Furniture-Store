@@ -18,8 +18,8 @@ router.put('/changePassword', asyncHandler(UserController.changePassword));
 router.use(isAdmin);
 
 router.post('/create-user', asyncHandler(UserController.createNewUser));
-router.get('/list', asyncHandler(UserController.getAllUser));
-router.get('/list/:search', asyncHandler(UserController.searchUser));
+// router.get('/list', asyncHandler(UserController.getAllUser));
+router.get('/list', asyncHandler(UserController.searchUser));
 router.get('/:id', asyncHandler(UserController.getUserById));
 router.put('/delete/:id', asyncHandler(UserController.deleteUser));
 

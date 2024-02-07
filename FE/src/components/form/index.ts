@@ -3,3 +3,4 @@ export { default as ButtonComponent } from './buttonComponent';
 export { default as InputComponent } from './inputComponent';
 export { default as SelectComponent } from './selectComponent';
 export { default as CheckboxComponent } from './checkboxComponent';
+export { default as TextAreComponent } from './TextAreaComponent';

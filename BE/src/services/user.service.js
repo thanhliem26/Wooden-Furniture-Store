@@ -91,9 +91,11 @@ class UserService {
    *
    * @param {*} valueSearch: fullName, email, telephone
    */
-  static searchUser = async (valueSearch, query) => {
+  static searchUser = async (query) => {
+    console.log("🚀 ~ query:", query)
     const page = +query.page || 1;
     const limit = +query.limit || 10;
+    const valueSearch = query.name;
 
     return await db.User.findAndCountAll({
       where: {

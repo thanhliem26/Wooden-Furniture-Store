@@ -1,52 +1,49 @@
-import React from "react";
 import { Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { ROlE, TAG_ROLE, statusCode } from "@/constants/index";
+import { statusCode } from "@/constants/index";
 import moment from "moment";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import images from "@/constants/images";
-// import ModalEdit from "./modalEdit";
 import { useAppDispatch } from "@/store/index";
-import { deleteUser, setPagination, setUserSelected } from "@/store/manageUser";
 import ModalConfirm from "@/components/confirm";
-import userApi from "@/api/user";
 import { eventEmitter } from "@/utils/index";
 import Notification from "@/components/notificationSend";
-// import SearchUser from "./searchUser";
-import { handlePrevImageS3 } from "@/components/modal/modalChangeInfoUser/content/constant";
+import InputSearchField from "@/components/admin/inputSearch";
+import {
+  deleteCategory,
+  searchCategory,
+  setCategorySelected,
+  setPagination,
+} from "@/store/manageCategories";
+import ModalCategory from "../modalCategory";
+import categoryApi from "@/api/category";
 interface Props {
   loading?: boolean;
-  userList: UserState[];
+  categoryList: CategoryState[];
   pagination: basePagination;
   total: number;
 }
 
 const TableManageCategory = ({
   loading = false,
-  userList = [],
+  categoryList = [],
   pagination,
   total,
 }: Props) => {
   const dispatch = useAppDispatch();
+  console.log("pagination category", pagination)
 
-  const handleDeleteUser = async ({id, avatar, avatar_support}) => {
+  const handleDeleteUser = async ({ id }) => {
     try {
-      const fieldAvatar = avatar ? [{...JSON.parse(avatar), is_delete: true}] : [];
-      const fieldAvatarSP = avatar_support ? [{...JSON.parse(avatar_support), is_delete: true}] : [];
-
-      const { message, status } = await userApi.deleteUser(id);
+      const { message, status } = await categoryApi.deleteCategory(id);
 
       if (status === statusCode.DELETED) {
-        dispatch(deleteUser(id));
-
-        await handlePrevImageS3(fieldAvatar)
-        await handlePrevImageS3(fieldAvatarSP)
+        dispatch(deleteCategory(id));
 
         eventEmitter.emit("submit_modal");
 
         Notification({
-          message: message,
-          description: "Delete user success",
+          message: 'Notify success',
+          description: message,
         });
       }
     } catch (e: unknown) {
@@ -54,26 +51,17 @@ const TableManageCategory = ({
     }
   };
 
-  const columns: ColumnsType<UserState> = [
+  const columns: ColumnsType<CategoryState> = [
     {
       title: "NAME",
       dataIndex: "name",
       key: "name",
       width: 100,
-      render: (name: string, row: UserState) => {
-        const avatar = row.avatar && JSON.parse(row.avatar);
-       
+      render: (name: string) => {
         return (
           <div className="content__name">
-            <div className="content__name-image">
-              <img
-                src={avatar?.url || images.AvatarDefault}
-                alt="image description"
-              />
-            </div>
             <div className="content__name-info">
               <h5>{name}</h5>
-              <span>{row.email}</span>
             </div>
           </div>
         );
@@ -96,32 +84,36 @@ const TableManageCategory = ({
       },
     },
     {
-      title: 'Updated At',
-      dataIndex: 'updatedAt',
-      key: 'updatedAt',
+      title: "Updated At",
+      dataIndex: "updatedAt",
+      key: "updatedAt",
+      sorter: true,
       width: 70,
+      render: (date: string) => {
+        return <> {moment(date).format("DD-MM-YYYY")}</>;
+      },
     },
     {
       title: "ACTION",
       dataIndex: "action",
       key: "action",
       width: 130,
-      render: (action: unknown, row: UserState) => (
+      render: (action: unknown, row: CategoryState) => (
         <>
-          {/* <ModalEdit
+          <ModalCategory
             destroyOnClose={true}
-            title="Edit user"
+            title="Edit Category"
             width={800}
             content={
               <Tag
                 color="blue"
                 className="tag__action"
-                onClick={() => dispatch(setUserSelected(row))}
+                onClick={() => dispatch(setCategorySelected(row))}
               >
                 <EditOutlined /> EDIT
               </Tag>
             }
-          /> */}
+          />
           <ModalConfirm
             title="Delete user"
             description="Are you sure to delete this user?"
@@ -135,22 +127,31 @@ const TableManageCategory = ({
       ),
     },
   ];
-
   const onChangePagination = (page: number, size: number) => {
-    dispatch(setPagination({current: page, pageSize: size}))
-  }
+    dispatch(setPagination({ current: page, pageSize: size }));
+  };
 
   return (
     <div className="table__manage-category">
       <div className="table__title">
-        {/* <SearchUser /> */}
+        <InputSearchField
+          placeholder="Search Category"
+          pagination={pagination}
+          setFieldSearch={searchCategory}
+          setPagination={setPagination}
+        />
       </div>
       <Table
         // size="large"
-        pagination={{ ...pagination, total: total, showSizeChanger: true, onChange: onChangePagination}}
+        pagination={{
+          ...pagination,
+          total: total,
+          showSizeChanger: true,
+          onChange: onChangePagination,
+        }}
         loading={loading}
         columns={columns}
-        dataSource={userList}
+        dataSource={categoryList}
         scroll={{ x: 1000 }}
       />
     </div>

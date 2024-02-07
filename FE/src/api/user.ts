@@ -9,8 +9,8 @@ const userApi = {
         const url = '/v1/api/user/list';
         return axiosService.get(url, {params: params})
     },
-    searchUser(search: string, params): Promise<metadataAllUser> {
-        const url = `/v1/api/user/list/${search}`;
+    searchUser(params): Promise<metadataAllUser> {
+        const url = `/v1/api/user/list/`;
         return axiosService.get(url, {params: params})
     },
     getMenu(): Promise<typeMenu> {

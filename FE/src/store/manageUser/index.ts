@@ -2,11 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import userApi from '@/api/user';
 
-interface searchUserMg {
-    search: string,
-    params: paginationQuery | {},
-}
-
 //redux thunk
 export const fetchAllUser = createAsyncThunk(
     'users/fetchAllUser',
@@ -18,8 +13,8 @@ export const fetchAllUser = createAsyncThunk(
 
 export const searchUser = createAsyncThunk(
     'users/searchUser',
-    async ({search, params}: searchUserMg): Promise<typeMetadataUser> => {
-        const { metadata } = await userApi.searchUser(search, params);
+    async (params: paginationQuery): Promise<typeMetadataUser> => {
+        const { metadata } = await userApi.searchUser(params);
         return metadata;
     }
 )

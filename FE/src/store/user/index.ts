@@ -21,6 +21,8 @@ const initialState: UserState = {
     role_user: '',
     sex: '',
     deleteFlg: 0,
+    avatar: '',
+    avatar_support: ''
 }
 
 export const userSlice = createSlice({
