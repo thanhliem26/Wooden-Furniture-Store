@@ -15,8 +15,8 @@ export const menu = [
   },
   {
     id: 3,
-    label: "Progress",
-    href: "progress",
+    label: "Manage Products",
+    href: "/admin/manage-products",
     role: [1],
     icon: "progress",
   },
