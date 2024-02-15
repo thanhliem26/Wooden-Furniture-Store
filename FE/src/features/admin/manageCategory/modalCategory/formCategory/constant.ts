@@ -36,8 +36,7 @@ export const handleSubmitCreate = async (data, dispatch, eventEmitter) => {
 }
 
 export const handleSubmitEdit = async (data, dispatch, eventEmitter) => {
-    const { id, ...body } = data;
-    const { message, status } = await categoryApi.updateCategory(body);
+    const { message, status } = await categoryApi.updateCategory(data);
 
     if (status === statusCode.UPDATED) {
         dispatch(setCategoryList(data as CategoryStateEdit));

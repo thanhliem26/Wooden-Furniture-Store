@@ -1,7 +1,7 @@
 import { Controller } from "react-hook-form";
-import { Form, Input, InputProps } from "antd";
+import { Form, InputNumberProps, InputNumber } from "antd";
 
-interface typeInputComponent extends InputProps {
+interface typeInputComponent extends InputNumberProps {
   name: string,
   control: any,
   errors?: any,
@@ -29,7 +29,7 @@ const InputComponent = ({
       control={control}
       render={({ field }) => (
         <Form.Item label={label} className={className}>
-          <Input
+          <InputNumber
             {...field}
             placeholder={placeholder}
             prefix={icon}

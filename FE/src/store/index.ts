@@ -5,12 +5,14 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import userReducer from './user/index';
 import manageUserReducer from './manageUser';
 import manageCategoryReducer from './manageCategories';
+import manageProductReducer from './manageProducts';
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
     manageUser: manageUserReducer,
     manageCategory: manageCategoryReducer,
+    manageProduct: manageProductReducer,
   },
 })
 

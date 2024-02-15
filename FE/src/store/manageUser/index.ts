@@ -71,7 +71,7 @@ export const manageUserSlice = createSlice({
                 state.pagination.current = Number(current) + 1
             }
 
-            state.userList = [...state.userList, action.payload]
+            state.userList = [...state.userList, {...action.payload, key: action.payload.id}]
             
             state.total = state.total + 1;
         },

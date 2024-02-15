@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Modal, Upload } from "antd";
+import { Upload } from "antd";
 import type { UploadFile, UploadProps } from "antd";
 import { Controller } from "react-hook-form";
 import { Form } from "antd";
 import styled from "./index.module.scss";
 import getBase64 from "@/utils/file";
 import { ORIGIN_UPLOAD } from "@/constants/index";
+import ImageComponent from "../imageComponent";
+import lodash from "lodash";
+import ModalPreview from "./modalPreview";
 
 interface uploadFileS3 extends UploadFile {
-  origin?: string,
-  is_delete?: boolean,
+  origin?: string;
+  is_delete?: boolean;
 }
 
 interface typeInpuUploadComponent extends UploadProps {
@@ -24,7 +27,14 @@ interface typeInpuUploadComponent extends UploadProps {
   maxCount?: number;
   listType?: "text" | "picture" | "picture-card" | "picture-circle";
   uploadSelf?: boolean;
+  defaultValue?: any;
 }
+
+const dummyRequest = async ({ file, onSuccess = (txt) => txt }) => {
+  setTimeout(() => {
+    onSuccess("ok");
+  }, 0);
+};
 
 const UploadComponent = ({
   name,
@@ -38,90 +48,144 @@ const UploadComponent = ({
   listType = "picture-circle",
   uploadSelf = false,
   children,
+  defaultValue,
+  id,
   ...props
 }: typeInpuUploadComponent) => {
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
-  const [previewTitle, setPreviewTitle] = useState("");
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [fileCompress, setFileCompress] = useState<any>(null);
   const [fileList, setFileList] = useState<uploadFileS3[]>([]);
-  // console.log("🚀 ~ fileList:", fileList)
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleCancel = () => setPreviewOpen(false);
+  const countVisible = useMemo(() => {
+    return fileList.filter((image) => {
+      return image.is_delete === false;
+    }).length;
+  }, [fileList]);
 
-  const handlePreview = async (file: uploadFileS3) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+  const handleChange: UploadProps["onChange"] = async ({
+    fileList: newFileList,
+    file,
+  }) => {
+    if (file.status === "uploading") {
+      setShowModal(true);
+      setLoading(true);
+      return;
     }
 
-    setPreviewImage(file.url || (file.preview as string));
-    setPreviewOpen(true);
-    setPreviewTitle(
-      file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
-    );
+    if (file.status === "done") {
+      setShowModal(true);
+      setFileCompress(file.originFileObj);
+      setLoading(false);
+    }
   };
 
-  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
-    setFileList([{...newFileList[0], origin: ORIGIN_UPLOAD.NORMAL, is_delete: false}]);
+  const handleDelete = (uid) => {
+    const cloneImages = lodash.cloneDeep(fileList);
 
-    setValue(name, newFileList, {
+    const newFiles = cloneImages.map((image) => {
+      if (image.uid === uid) {
+        image.is_delete = true;
+      }
+
+      return image;
+    });
+
+    setFileList(newFiles);
+    setValue(name, newFiles, {
       shouldValidate: true,
       shouldDirty: true,
     });
   };
 
-  const uploadButton = (
-    <button style={{ border: 0, background: "none" }} type="button">
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </button>
-  );
+  const setChange = async (file) => {
+    const index = fileList.findIndex((item) => item.uid === file.uid);
+
+    if (index === -1) {
+      let newFiles = lodash.cloneDeep(fileList);
+      const thumbUrl = await getBase64(file);
+      newFiles.push({
+        originFileObj: file,
+        origin: ORIGIN_UPLOAD.NORMAL,
+        is_delete: false,
+        name: file.name,
+        type: file.type,
+        uid: file.uid,
+        thumbUrl: thumbUrl,
+      });
+
+      setFileList(newFiles);
+      setValue(name, newFiles, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+  };
 
   const renderFileList = (fileList, action, disabled = false) => {
     return fileList.map((file, index) => {
-      // if (file.isUrlFile && +file.status === ATTACH_FILE_STATUS.DELETE) {
-      //   return null
-      // }
+      if (file.is_delete === true) {
+        return null;
+      }
 
       return (
-        <div className="custom-item-render" key={index}>
-          {/* {originNode} */}
-          {/* <img src={file.url || file.thumbUrl} alt="" /> */}
-          <Button
-            size="small"
-            onClick={() => console.log("Custom button clicked")}
-          >
-            Custom Button
-          </Button>
-        </div>
+        <ImageComponent
+          key={index}
+          file={file}
+          onDelete={() => handleDelete(file.uid)}
+        />
       );
     });
   };
-  
+
+  const btnUploadComponent = (
+    <div className="item__image">
+      <button className="btn__image" type="button">
+        <label htmlFor="upload__images">
+          <PlusOutlined /> Upload
+        </label>
+      </button>
+    </div>
+  );
+
+  useEffect(() => {
+    if (defaultValue && !lodash.isEmpty(defaultValue)) {
+      setFileList(defaultValue);
+    }
+  }, [defaultValue]);
+
   return (
     <div className={`${styled["upload__component"]}`}>
-      <div>{uploadSelf ? null : renderFileList(fileList, false, false)}</div>
+      <div className="image__list">
+        {uploadSelf ? null : renderFileList(fileList, false, false)}
+        {uploadSelf ? (
+          btnUploadComponent
+        ) : countVisible >= maxCount ? null : (
+          btnUploadComponent
+        )}
+      </div>
       <Controller
         name={name}
         control={control}
         render={({ field }) => (
           <Form.Item label={label} className={`${className} upload__self`}>
             <Upload
+              id={id ? id : "upload__images"}
               listType={"picture"}
-              // {...field}
-              fileList={fileList}
-              onPreview={handlePreview}
-              beforeUpload={() => false}
-              maxCount={maxCount}
+              customRequest={dummyRequest}
+              // fileList={fileList}
+              // beforeUpload={() => false}
+              // maxCount={maxCount}
               className={"upload-area"}
               accept="image/png, image/jpeg, image/jpg"
               onChange={handleChange}
               {...props}
             >
               {uploadSelf
-                ? uploadButton
-                : fileList.length >= maxCount
+                ? btnUploadComponent
+                : countVisible >= maxCount
                 ? null
-                : uploadButton}
+                : btnUploadComponent}
             </Upload>
             {errors?.[name] && (
               <div className="ant-form-item-explain-error">
@@ -131,15 +195,14 @@ const UploadComponent = ({
           </Form.Item>
         )}
       />
-
-      <Modal
-        open={previewOpen}
-        title={previewTitle}
-        footer={null}
-        onCancel={handleCancel}
-      >
-        <img alt="example" style={{ width: "100%" }} src={previewImage} />
-      </Modal>
+      <ModalPreview
+        isModalOpen={showModal}
+        setIsModalOpen={setShowModal}
+        title="Preview Image"
+        fileCompress={fileCompress}
+        loading={loading}
+        setChange={setChange}
+      />
     </div>
   );
 };

@@ -6,10 +6,11 @@ import { eventEmitter } from '@/utils/index';
 interface Props extends ModalProps {
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
-  content: any;
+  content?: any;
   title?: string;
   children?: any;
   onCancelModal?: () => void;
+  onSuccessModal?: () => boolean;
 }
 
 const BaseModal = ({
@@ -19,6 +20,7 @@ const BaseModal = ({
   title = "Basic Modal",
   children = "body Content",
   onCancelModal,
+  onSuccessModal = () => true,
   ...props
 }: Props) => {
   const showModal = () => {
@@ -26,7 +28,8 @@ const BaseModal = ({
   };
 
   const handleSubmit = () => {
-    setIsModalOpen(false);
+    const result = onSuccessModal();
+    result && setIsModalOpen(false);
   };
 
   const handleCancel = () => {
@@ -42,7 +45,7 @@ const BaseModal = ({
 
   return (
     <>
-      <span onClick={showModal}>{content}</span>
+      {content && <span onClick={showModal}>{content}</span>}
       <Modal
         title={title}
         open={isModalOpen}

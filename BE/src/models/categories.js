@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-import BaseModel from '../helpers/baseModel';
+import BaseModel from "../helpers/baseModel";
 
 module.exports = (sequelize, DataTypes) => {
   class Categories extends BaseModel {
@@ -11,30 +11,39 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Categories.hasMany(models.Products, { foreignKey: "category_id", as: "category_data" })
+      Categories.hasMany(models.Products, {
+        foreignKey: "category_id",
+        as: "category_data",
+        onDelete: "cascade",
+        hooks: true,
+      });
     }
 
     validateCategory() {
-      if(!this.dataValues.name) {
+      if (!this.dataValues.name) {
         return {
           status: false,
-          message: 'Category name is required!'
-        }
-      };
-      
+          message: "Category name is required!",
+        };
+      }
+
       return {
         status: true,
-        message: 'Payload is Valid!'
+        message: "Payload is Valid!",
       };
     }
   }
-  Categories.init({
-    name: DataTypes.STRING,
-    description: DataTypes.TEXT,
-  }, {
-    sequelize,
-    modelName: 'Categories',
-  });
+  Categories.init(
+    {
+      name: DataTypes.STRING,
+      description: DataTypes.TEXT,
+    },
+    {
+      sequelize,
+      modelName: "Categories",
+    }
+  );
+
   return Categories;
 };
 /*

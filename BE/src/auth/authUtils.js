@@ -34,7 +34,7 @@ const createTokenPair = async (payload, publicKey, privateKey) => {
 };
 
 const authentication = asyncHandler(async (req, res, next) => {
-  if(req.url === '/user/handleRefreshToken') {
+  if(req.url === '/handleRefreshToken') {
     return next();
   }
 
@@ -71,6 +71,7 @@ const authentication = asyncHandler(async (req, res, next) => {
 });
 
 const authenticationV2 = asyncHandler(async (req, res, next) => {
+  console.log("authentication v2")
   /*
     1 - check userId missing
     1 - get accessToken

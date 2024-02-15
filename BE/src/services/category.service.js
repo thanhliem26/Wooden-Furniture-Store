@@ -21,16 +21,21 @@ class CategoryService {
 
   static searchCategory = async (query) => {
     const page = +query.page || 1;
-    const limit = +query.limit || 10;
+    const limit = query.limit ? +query.limit : null;
     const valueSearch = query.name;
 
-    return await db.Categories.findAndCountAll({
+    const queryOptions = {
       where: {
         [Op.or]: [{ name: { [Op.like]: `%${valueSearch}%` } }],
       },
-      limit: limit,
       offset: (page - 1) * limit,
-    });
+    }
+
+    if (limit !== null) {
+      queryOptions.limit = limit;
+    }
+
+    return await db.Categories.findAndCountAll(queryOptions);
   };
 
   static createCategory = async (data) => {

@@ -25,6 +25,7 @@ interface CategoryState {
     description: string,
     createdAt: string,
     updatedAt: string,
+    key?: number,
 }
 
 interface CategoryStateEdit {

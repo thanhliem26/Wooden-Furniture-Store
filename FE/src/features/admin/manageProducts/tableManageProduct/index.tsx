@@ -1,7 +1,6 @@
 import { Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { statusCode } from "@/constants/index";
-import moment from "moment";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "@/store/index";
 import ModalConfirm from "@/components/confirm";
@@ -9,40 +8,51 @@ import { eventEmitter } from "@/utils/index";
 import Notification from "@/components/notificationSend";
 import InputSearchField from "@/components/admin/inputSearch";
 import {
-  deleteCategory,
-  searchCategory,
-  setCategorySelected,
   setPagination,
-} from "@/store/manageCategories";
-import ModalCategory from "../modalCategory";
-import categoryApi from "@/api/category";
+  deleteProduct,
+} from "@/store/manageProducts";
+import {searchProduct, setProductSelected} from '@/store/manageProducts';
+import ModalProduct from "../modalProduct"; 
+import productApi from "@/api/product";
+import { ProductContext } from "../constant";
+import { useContext } from "react";
+
 interface Props {
   loading?: boolean;
-  categoryList: CategoryState[];
+  productList: ProductState[];
   pagination: basePagination;
   total: number;
 }
 
 const TableManageCategory = ({
   loading = false,
-  categoryList = [],
+  productList = [],
   pagination,
   total,
 }: Props) => {
+  const categoryContext = useContext(ProductContext);
   const dispatch = useAppDispatch();
 
-  const handleDeleteCategory = async ({ id }) => {
+  const handleGetCategory = (id) => {
+    const [result] = categoryContext.categoryList.filter((category) => {
+      return category.id === id;
+    })
+
+    return result || {};
+  }
+
+  const handleDeleteProduct = async ({ id }) => {
     try {
-      const { message, status } = await categoryApi.deleteCategory(id);
+      const { message, status } = await productApi.deleteProduct(id);
 
       if (status === statusCode.DELETED) {
-        dispatch(deleteCategory(id));
+        dispatch(deleteProduct(id));
 
         eventEmitter.emit("submit_modal");
 
         Notification({
-          message: 'Notify success',
-          description: message,
+          message: message,
+          description: 'Notify delete succes',
         });
       }
     } catch (e: unknown) {
@@ -50,7 +60,7 @@ const TableManageCategory = ({
     }
   };
 
-  const columns: ColumnsType<CategoryState> = [
+  const columns: ColumnsType<ProductState> = [
     {
       title: "NAME",
       dataIndex: "name",
@@ -73,23 +83,34 @@ const TableManageCategory = ({
       width: 140,
     },
     {
-      title: "Created At",
-      dataIndex: "createdAt",
-      key: "createdAt",
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
       sorter: true,
       width: 100,
-      render: (date: string) => {
-        return <> {moment(date).format("DD-MM-YYYY")}</>;
+      render: (price: number) => {
+        return <> {price}</>;
       },
     },
     {
-      title: "Updated At",
-      dataIndex: "updatedAt",
-      key: "updatedAt",
+      title: "Stock quantity",
+      dataIndex: "stock_quantity",
+      key: "stock_quantity",
       sorter: true,
       width: 70,
-      render: (date: string) => {
-        return <> {moment(date).format("DD-MM-YYYY")}</>;
+      render: (stock_quantity: number) => {
+        return <> {stock_quantity}</>;
+      },
+    },
+    {
+      title: "Category",
+      dataIndex: "category_id",
+      key: "category_id",
+      width: 70,
+      render: (category_id: number) => {
+        const category = handleGetCategory(category_id);
+      
+        return <b>{category.name}</b>;
       },
     },
     {
@@ -97,26 +118,27 @@ const TableManageCategory = ({
       dataIndex: "action",
       key: "action",
       width: 130,
-      render: (action: unknown, row: CategoryState) => (
+      render: (action: unknown, row: ProductState) => (
         <>
-          <ModalCategory
+          <ModalProduct
             destroyOnClose={true}
             title="Edit Category"
             width={800}
+            isEdit={true}
             content={
               <Tag
                 color="blue"
                 className="tag__action"
-                onClick={() => dispatch(setCategorySelected(row))}
+                onClick={() => dispatch(setProductSelected(row))}
               >
                 <EditOutlined /> EDIT
               </Tag>
             }
           />
           <ModalConfirm
-            title="Delete user"
-            description="Are you sure to delete this user?"
-            handleConfirm={() => handleDeleteCategory(row)}
+            title="Delete product"
+            description="Are you sure to delete this product?"
+            handleConfirm={() => handleDeleteProduct(row)}
           >
             <Tag color="red" className="tag__action">
               <DeleteOutlined /> DELETE
@@ -131,12 +153,12 @@ const TableManageCategory = ({
   };
 
   return (
-    <div className="table__manage-category">
+    <div className="table__manage-product">
       <div className="table__title">
         <InputSearchField
-          placeholder="Search Category"
+          placeholder="Search product"
           pagination={pagination}
-          setFieldSearch={searchCategory}
+          setFieldSearch={searchProduct}
           setPagination={setPagination}
         />
       </div>
@@ -150,7 +172,7 @@ const TableManageCategory = ({
         }}
         loading={loading}
         columns={columns}
-        dataSource={categoryList}
+        dataSource={productList}
         scroll={{ x: 1000 }}
       />
     </div>

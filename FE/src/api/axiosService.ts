@@ -58,6 +58,7 @@ axiosService.interceptors.response.use(
 
 					if (refreshToken) {
 						const { metadata } = await authApi.reFreshToken(refreshToken);
+
 						const { user, tokens } = metadata;
 
 						authUtil.setUser(user)

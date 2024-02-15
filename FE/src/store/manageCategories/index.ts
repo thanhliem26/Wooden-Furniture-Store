@@ -31,11 +31,11 @@ export const manageUserSlice = createSlice({
             state.categorySelected = action.payload;
         },
         setCategoryList: (state, action: PayloadAction<CategoryStateEdit>) => {
-            const {id, ...value} = action.payload;
+            const { id, ...value } = action.payload;
 
             state.categoryList = state.categoryList.map((category: CategoryState, index) => {
-                if(category.id === id) {
-                    category = {...category, ...value}
+                if (category.id === id) {
+                    category = { ...category, ...value }
                 }
 
                 return category;
@@ -47,12 +47,12 @@ export const manageUserSlice = createSlice({
             const { current, pageSize } = state.pagination;
 
             const maxPage = Math.ceil(state.total / (pageSize || 10));
-            if(maxPage === state.pagination.current && state.categoryList.length === 1 && Number(current) > 1) {
+            if (maxPage === state.pagination.current && state.categoryList.length === 1 && Number(current) > 1) {
                 state.pagination.current = Number(current) - 1
             }
 
             state.categoryList = state.categoryList.filter((category: CategoryState) => {
-               return category.id !== id;
+                return category.id !== id;
             })
             state.total = state.total - 1;
         },
@@ -60,11 +60,11 @@ export const manageUserSlice = createSlice({
             const { current, pageSize } = state.pagination;
 
             const maxPage = Math.ceil(state.total / (pageSize || 10));
-            if(maxPage === state.pagination.current && state.categoryList.length === pageSize) {
+            if (maxPage === state.pagination.current && state.categoryList.length === pageSize) {
                 state.pagination.current = Number(current) + 1
             }
 
-            state.categoryList = [...state.categoryList, action.payload]
+            state.categoryList = [...state.categoryList, { ...action.payload, key: action.payload.id }]
 
             state.total = state.total + 1;
         },
@@ -94,11 +94,11 @@ export const manageUserSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { 
-    setCategorySelected, 
-    setCategoryList, 
-    deleteCategory, 
-    addCategory, 
-    setPagination 
+export const {
+    setCategorySelected,
+    setCategoryList,
+    deleteCategory,
+    addCategory,
+    setPagination
 } = manageUserSlice.actions
 export default manageUserSlice.reducer

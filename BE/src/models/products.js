@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
 import Joi from "joi";
-import BaseModel from '../helpers/baseModel';
+import BaseModel from "../helpers/baseModel";
 
 module.exports = (sequelize, DataTypes) => {
   class Products extends BaseModel {
@@ -12,7 +12,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Products.belongsTo(models.Categories, {foreignKey: 'category_id', as: 'category_data'});
+      Products.belongsTo(models.Categories, {
+        foreignKey: "category_id",
+        as: "category_data",
+      });
     }
 
     validateProduct = async () => {
@@ -21,12 +24,11 @@ module.exports = (sequelize, DataTypes) => {
         price: Joi.number().min(0).required(),
         stock_quantity: Joi.number().min(0).required(),
         category_id: Joi.number().required(),
-      })
-        .unknown(true) // unknown(true): accepts payloads that are not within the defined schema
+      }).unknown(true); // unknown(true): accepts payloads that are not within the defined schema
 
       try {
         const value = await schema.validateAsync({ ...this.dataValues });
-        if(value) return {status: true, message: 'Payload is valid!'};
+        if (value) return { status: true, message: "Payload is valid!" };
       } catch (error) {
         return {
           status: false,
@@ -35,17 +37,20 @@ module.exports = (sequelize, DataTypes) => {
       }
     };
   }
-  Products.init({
-    name: DataTypes.STRING,
-    description: DataTypes.TEXT,
-    price: DataTypes.INTEGER,
-    stock_quantity: DataTypes.INTEGER,
-    category_id: DataTypes.INTEGER,
-    images: DataTypes.STRING,
-  }, {
-    sequelize,
-    modelName: 'Products',
-  });
+  Products.init(
+    {
+      name: DataTypes.STRING,
+      description: DataTypes.TEXT,
+      price: DataTypes.INTEGER,
+      stock_quantity: DataTypes.INTEGER,
+      category_id: DataTypes.INTEGER,
+      images: DataTypes.TEXT,
+    },
+    {
+      sequelize,
+      modelName: "Products",
+    }
+  );
   return Products;
 };
 /*

@@ -46,3 +46,29 @@ export const removeEmptyInOBject = (object) => {
         }
     }
 }
+
+export const reduceImageQuality = async (blob, quality, callback) => {
+    if(!blob) return;
+
+    const percentQuality = quality / 100;
+    const img = new Image();
+    img.src = URL.createObjectURL(blob);
+
+    img.onload = function () {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      ctx?.drawImage(img, 0, 0);
+      canvas.toBlob(
+        (newBlob) => {
+          callback({ filterBlob: newBlob, quality: quality });
+        },
+        "image/jpeg",
+        percentQuality
+      );
+    };
+  };
+
