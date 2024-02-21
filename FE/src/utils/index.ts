@@ -48,27 +48,46 @@ export const removeEmptyInOBject = (object) => {
 }
 
 export const reduceImageQuality = async (blob, quality, callback) => {
-    if(!blob) return;
+    if (!blob) return;
 
     const percentQuality = quality / 100;
     const img = new Image();
     img.src = URL.createObjectURL(blob);
 
     img.onload = function () {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
 
-      canvas.width = img.width;
-      canvas.height = img.height;
+        canvas.width = img.width;
+        canvas.height = img.height;
 
-      ctx?.drawImage(img, 0, 0);
-      canvas.toBlob(
-        (newBlob) => {
-          callback({ filterBlob: newBlob, quality: quality });
-        },
-        "image/jpeg",
-        percentQuality
-      );
+        ctx?.drawImage(img, 0, 0);
+        canvas.toBlob(
+            (newBlob) => {
+                callback({ filterBlob: newBlob, quality: quality });
+            },
+            "image/jpeg",
+            percentQuality
+        );
     };
-  };
+};
+
+
+export const formatCurrency = (number) => {
+    // Chuyển đổi số thành chuỗi và ngược lại
+    let strNumber = number.toString();
+    // Biểu thức chính quy để chia nhỏ chuỗi thành các nhóm ba số
+    let regex = /(\d)(?=(\d{3})+(?!\d))/g;
+    // Thay thế mỗi nhóm ba số bằng nhóm ba số đó cộng với dấu phân cách (,)
+    return strNumber.replace(regex, "$1,");
+}
+
+export const isJson = (str) => {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+};
 

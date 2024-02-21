@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useAppDispatch } from "@/store/index";
 import { Col, Row, Form } from "antd";
 import {
@@ -33,6 +33,7 @@ const FormProduct = ({ isEdit }: Props) => {
   const productSelected = useAppSelector(
     (state: RootState) => state.manageProduct.productSelected
   );
+  const [imageDefault, setImageDefault] = useState([]);
 
   const categoryContext = useContext(ProductContext);
 
@@ -47,7 +48,7 @@ const FormProduct = ({ isEdit }: Props) => {
     defaultValues: {
       id: productSelected?.id,
       name: productSelected?.name,
-      description: productSelected?.description,
+      description: productSelected?.description || '',
       price: productSelected?.price,
       stock_quantity: productSelected?.stock_quantity,
       category_id: productSelected?.category_id,
@@ -58,14 +59,14 @@ const FormProduct = ({ isEdit }: Props) => {
   const onSubmit = async (data: FormData) => {
     try {
       setLoading(true);
-      const dataValue: FormData = lodash.cloneDeep(data);
+      const dataValue = lodash.cloneDeep(data);
       const { images } = dataValue;
 
       const imagesUpload = !lodash.isEmpty(images)
       ? await handleMultiPrevImageS3(images)
       : "";
       dataValue.images = typeof imagesUpload === 'string' ? imagesUpload : JSON.stringify(imagesUpload);
-      
+
       isEdit
         ? handleSubmitEdit(dataValue, dispatch, eventEmitter)
         : handleSubmitCreate(dataValue, dispatch, eventEmitter);
@@ -84,6 +85,11 @@ const FormProduct = ({ isEdit }: Props) => {
   const handleClose = () => {
     eventEmitter.emit("cancel_modal");
   };
+
+  useEffect(() => {
+    const imageShow = productSelected?.images ? JSON.parse(productSelected?.images) : [];
+    setImageDefault(imageShow);
+  }, [productSelected])
 
   return (
     <div className="change__field-product">
@@ -107,6 +113,15 @@ const FormProduct = ({ isEdit }: Props) => {
                 label: category.name,
                 value: category.id,
               }))}
+              showSearch
+              filterOption={(input, option) => {
+                if(option && option.label) {
+                  //@ts-ignore
+                  return  option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+                }
+                return true;
+                
+              }}
             />
           </Col>
           <Col md={6} span={24}>
@@ -122,7 +137,7 @@ const FormProduct = ({ isEdit }: Props) => {
             />
           </Col>
           <Col md={6} span={24}>
-            Product Image
+            Product Image <span className="required">*</span>
           </Col>
           <Col md={18} span={24}>
             <UploadComponent
@@ -132,7 +147,7 @@ const FormProduct = ({ isEdit }: Props) => {
               className="remove__border"
               setValue={setValue}
               maxCount={5}
-              defaultValue={productSelected?.images && JSON.parse(productSelected?.images)}
+              defaultValue={imageDefault}
             />
           </Col>
           <Col md={6} span={24}>

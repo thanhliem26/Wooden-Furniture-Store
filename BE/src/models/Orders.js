@@ -1,6 +1,6 @@
-'use strict';
-
-import BaseModel from '../helpers/baseModel';
+"use strict";
+import Joi from "joi";
+import BaseModel from "../helpers/baseModel";
 
 module.exports = (sequelize, DataTypes) => {
   class Orders extends BaseModel {
@@ -11,19 +11,56 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Orders.hasOne(models.OrderDetail, { foreignKey: "order_id", as: "order_detail" })
-      Orders.belongsTo(models.User, { foreignKey: "user_id", as: "user_data" })
+      Orders.hasMany(models.OrderDetail, {
+        foreignKey: "order_id",
+        as: "order_detail",
+        onDelete: "cascade",
+        hooks: true,
+      });
+      Orders.belongsTo(models.User, { foreignKey: "user_id", as: "user_data" });
     }
+
+    validateOrder = async () => {
+      const schema = Joi.object({
+        user_id: Joi.number().required(),
+        order_status: Joi.string().valid(
+          "pending",
+          "wait_confirmation",
+          "confirmed",
+          "shipped",
+          "cancelled",
+          "delivered"
+        ),
+      }).unknown(true); // unknown(true): accepts payloads that are not within the defined schema
+
+      try {
+        const value = await schema.validateAsync({ ...this.dataValues });
+        if (value) return { status: true, message: "Payload is valid!" };
+      } catch (error) {
+        return {
+          status: false,
+          message: error.details?.[0]?.message,
+        };
+      }
+    };
   }
-  Orders.init({
-    user_id: DataTypes.INTEGER,
-    order_date: DataTypes.DATE,
-    total_amount: DataTypes.INTEGER,
-    order_status: DataTypes.ENUM("pending", "confirmed", "shipped", "cancelled", "delivered"),
-  }, {
-    sequelize,
-    modelName: 'Orders',
-  });
+  Orders.init(
+    {
+      user_id: DataTypes.INTEGER,
+      order_status: DataTypes.ENUM(
+        "pending",
+        "wait_confirmation",
+        "confirmed",
+        "shipped",
+        "cancelled",
+        "delivered"
+      ),
+    },
+    {
+      sequelize,
+      modelName: "Orders",
+    }
+  );
   return Orders;
 };
 /*

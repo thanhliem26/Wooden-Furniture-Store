@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from "react";
 import Images from "@/constants/images";
 import { Col, Row } from "antd";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useEffect } from "react";
 
 const Benefit = () => {
-  const imageRef = useRef(null);
-
   const BenefitList = [
     {
       image: Images.CarSide,
@@ -20,6 +20,14 @@ const Benefit = () => {
     },
   ];
 
+  //init aos 
+  useEffect(() => {
+    AOS.init({ duration: 1000,
+      once: true
+    });
+    AOS.refresh();
+  }, [])
+
   return (
     <>
       <div
@@ -32,7 +40,7 @@ const Benefit = () => {
         <Row gutter={[16, 16]} className="benefit__items">
           {BenefitList.map((benefit, index) => {
             return (
-              <Col sm={8} xs={24} key={index}>
+              <Col sm={8} xs={24} key={index} data-aos="fade-left"  data-aos-delay={(index * 200).toString()}>
                 <div className="benefit__item">
                   <div className="benefit__item-icon">
                     <img src={benefit.image} alt="" />

@@ -6,6 +6,7 @@ import Advertisement from "./advertisement";
 import AboutMe from "./aboutMe";
 
 const UserFooterLayout = () => {
+
   return (
     <div className={styled["layout__footer"]}>
       <div className="layout__footer-main">

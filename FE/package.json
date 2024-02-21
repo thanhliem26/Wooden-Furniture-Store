@@ -14,6 +14,7 @@
     "@hookform/resolvers": "^3.3.1",
     "@reduxjs/toolkit": "^1.9.6",
     "antd": "^5.9.4",
+    "aos": "^2.3.4",
     "aws-sdk": "^2.1550.0",
     "axios": "^1.5.1",
     "dayjs": "^1.11.10",

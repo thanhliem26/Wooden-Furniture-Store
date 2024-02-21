@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "category_id",
         as: "category_data",
       });
+      Products.hasMany(models.OrderDetail, {
+        foreignKey: "productId",
+        as: "product_data",
+      });
     }
 
     validateProduct = async () => {
@@ -24,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         price: Joi.number().min(0).required(),
         stock_quantity: Joi.number().min(0).required(),
         category_id: Joi.number().required(),
+        images: Joi.string().required(),
       }).unknown(true); // unknown(true): accepts payloads that are not within the defined schema
 
       try {

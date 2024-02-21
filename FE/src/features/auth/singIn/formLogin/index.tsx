@@ -31,6 +31,7 @@ const FormRegister = () => {
 
       const { metadata } = await authApi.login(data);
       const { tokens, user } = metadata;
+
       Notification({
         message: "Notification Success",
         description: "Login success",

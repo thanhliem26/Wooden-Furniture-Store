@@ -1,5 +1,5 @@
 'use strict';
-
+import Joi from "joi";
 import BaseModel from '../helpers/baseModel';
 
 module.exports = (sequelize, DataTypes) => {
@@ -12,16 +12,36 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       OrderDetail.belongsTo(models.Orders, { foreignKey: "order_id", as: "order_detail" })
+      OrderDetail.belongsTo(models.Products, { foreignKey: "productId", as: "product_data" })
     }
+
+    validateOrderDetail = async () => {
+      const schema = Joi.object({
+        order_id: Joi.number().required(),
+        productId: Joi.number().required(),
+        quantity: Joi.number().min(1).required(),
+      }).unknown(true); // unknown(true): accepts payloads that are not within the defined schema
+
+      try {
+        const value = await schema.validateAsync({ ...this.dataValues });
+        if (value) return { status: true, message: "Payload is valid!" };
+      } catch (error) {
+        return {
+          status: false,
+          message: error.details?.[0]?.message,
+        };
+      }
+    };
+
   }
   OrderDetail.init({
     order_id: DataTypes.INTEGER,
-    product_list_id: DataTypes.STRING,
+    productId: DataTypes.INTEGER,
     quantity: DataTypes.INTEGER,
-    unit_list_price: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'OrderDetail',
+    tableName: 'order_detail',
   });
   return OrderDetail;
 };

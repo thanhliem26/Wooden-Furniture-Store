@@ -23,7 +23,9 @@ export const schema = yup
             .number()
             .required(),
         images: yup
-            .mixed(),
+            .array()
+            .min(1, 'image is not empty')
+            .required(),
     })
     .required();
 

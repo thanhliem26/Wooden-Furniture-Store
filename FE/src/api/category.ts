@@ -5,7 +5,7 @@ const categoryApi = {
         const url = '/v1/api/category/create-category';
         return axiosService.post(url, body);
     },
-    searchCategory(params): Promise<metadataCategory> {
+    searchCategory(params = {name: ''}): Promise<metadataCategory> {
         const url = `/v1/api/category/list`;
         return axiosService.get(url, {params: params})
     },

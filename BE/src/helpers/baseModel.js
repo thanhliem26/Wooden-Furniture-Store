@@ -1,6 +1,6 @@
 const { Model } = require('sequelize');
 import { isEmpty } from 'lodash';
-import { NotFoundError } from '../core/error.response';
+import { BadRequestError, NotFoundError } from '../core/error.response';
 class BaseModel extends Model {
   static async findOneAndUpdate({filter = {}, values = {}, options = {} }) {
     try {

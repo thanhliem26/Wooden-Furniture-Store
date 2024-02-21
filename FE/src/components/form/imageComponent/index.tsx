@@ -17,7 +17,7 @@ const ImageComponent = ({ file, onDelete }: Props) => {
     <div className="item__image">
       <div className="image__contain">
         <img src={urlImage} alt={file.name} />
-        <Image
+        {isPreviewVisible && <Image
           width={200}
           preview={{
             visible: isPreviewVisible,
@@ -25,7 +25,7 @@ const ImageComponent = ({ file, onDelete }: Props) => {
               setPreviewVisible(visible),
           }}
           src={urlImage}
-        />
+        />}
         <div className="action__image">
           <span onClick={() => setPreviewVisible(!isPreviewVisible)}>
             <Tooltip title={"Preview image"}>

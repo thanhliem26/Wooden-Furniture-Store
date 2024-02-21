@@ -12,14 +12,21 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.hasMany(models.Orders, { foreignKey: "user_id", as: "user_data" });
+      User.hasMany(models.Orders, {
+        foreignKey: "user_id",
+        as: "user_data",
+        onDelete: "cascade",
+        hooks: true,
+      });
     }
 
     validateCreateUser = async () => {
       const schema = Joi.object({
         fullName: Joi.string().required(),
         password: Joi.string()
-          .pattern(new RegExp("^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};':\",.<>?]{3,30}$"))
+          .pattern(
+            new RegExp("^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};':\",.<>?]{3,30}$")
+          )
           .required(),
         email: Joi.string()
           .email({
@@ -27,12 +34,11 @@ module.exports = (sequelize, DataTypes) => {
             tlds: { allow: ["com", "net"] },
           })
           .required(),
-      })
-        .unknown(true)
+      }).unknown(true);
 
       try {
         const value = await schema.validateAsync({ ...this.dataValues });
-        if(value) return {status: true};
+        if (value) return { status: true };
       } catch (error) {
         return {
           status: false,

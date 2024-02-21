@@ -6,10 +6,12 @@ import userReducer from './user/index';
 import manageUserReducer from './manageUser';
 import manageCategoryReducer from './manageCategories';
 import manageProductReducer from './manageProducts';
+import orderUser from './orderUser';
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    order: orderUser,
     manageUser: manageUserReducer,
     manageCategory: manageCategoryReducer,
     manageProduct: manageProductReducer,

@@ -34,6 +34,13 @@ class CategoryController {
             metadata: await ProductService.createProduct(req.body),
         }).send(res)
     }
+
+    getTopProduct = async (req, res, next) => {
+        new SuccessResponse({
+            message: 'get top product success!',
+            metadata: await ProductService.getTopProduct(req.query),
+        }).send(res)
+    }
 }
 
 module.exports = new CategoryController

@@ -104,6 +104,13 @@
 
 .logo__admin-vertical .user__name {
   color: white;
+  width: 100px;
+}
+
+.logo__admin-vertical .user__name p{
+  white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .layout__admin-private {

@@ -9,6 +9,8 @@ const { authentication, authenticationV2, isAdmin } = require('../../auth/authUt
 //authentication token
 router.use(authentication);
 
+router.get('/top-product', asyncHandler(ProductController.getTopProduct));
+
 //role admin
 router.use(isAdmin);
 

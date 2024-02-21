@@ -52,6 +52,7 @@ export const deleteFileS3 = (keyFile: string) => {
         try {
             myBucket.deleteObject(params, (err, data) => {
                 if (err) {
+                    console.log("🚀 ~ err:", err)
                     reject(err)
                 } else {
                     // data.Location chứa URL của file tải lên
@@ -59,6 +60,7 @@ export const deleteFileS3 = (keyFile: string) => {
                 }
             });
         } catch (err) {
+            console.log("🚀 ~ err:", err)
             reject(err)
         }
     })

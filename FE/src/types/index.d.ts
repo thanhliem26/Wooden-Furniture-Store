@@ -32,3 +32,10 @@ interface resize {
     width: number;
     height: number;
 }
+
+interface typeImageS3 {
+    url: string,
+    origin: string,
+    name: string,
+    is_delete?: boolean,
+}

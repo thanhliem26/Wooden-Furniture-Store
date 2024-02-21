@@ -22,8 +22,8 @@ export const menu = [
   },
   {
     id: 4,
-    label: "Manage service contract",
-    href: "manage_service_contract",
+    label: "Setting static",
+    href: "/admin/setting_static",
     role: [1],
     icon: "manage_service_contract",
   },

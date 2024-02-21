@@ -5,7 +5,7 @@ const productApi = {
         const url = '/v1/api/product/create-product';
         return axiosService.post(url, body);
     },
-    searchProducts(params): Promise<metadataProduct> {
+    searchProducts(params = {name: ''}): Promise<metadataProduct> {
         const url = `/v1/api/product/list`;
         return axiosService.get(url, {params: params})
     },

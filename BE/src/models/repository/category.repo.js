@@ -16,18 +16,24 @@ const createNewCategory = async (payload) => {
     throw new BadRequestError(category_isValid.message);
   }
 
-  return await db.Categories.create({
-    ...payload,
-  });
+  try {
+    return await db.Categories.create({
+      ...payload,
+    });
+  } catch (e) {
+    const [err] = e.errors;
+
+    throw new BadRequestError(err.message);
+  }
 };
 
-const updateCategory= async (payload) => {
-  if (payload.hasOwnProperty('name') && !payload.name) {
-    throw new BadRequestError('Category name is not empty!');
+const updateCategory = async (payload) => {
+  if (payload.hasOwnProperty("name") && !payload.name) {
+    throw new BadRequestError("Category name is not empty!");
   }
 
-  if(!payload.id) {
-    throw new BadRequestError('Category id is not empty!');
+  if (!payload.id) {
+    throw new BadRequestError("Category id is not empty!");
   }
 
   return await db.Categories.update(
@@ -42,5 +48,5 @@ const updateCategory= async (payload) => {
 
 module.exports = {
   createNewCategory,
-  updateCategory
+  updateCategory,
 };

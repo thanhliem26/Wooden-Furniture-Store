@@ -1,6 +1,7 @@
 import { Controller } from "react-hook-form";
 import { Form, Input, Select } from "antd";
 import { SelectProps } from "antd";
+import { useEffect } from "react";
 
 interface typeInputSelectComponent extends SelectProps {
   name: string;
@@ -10,6 +11,8 @@ interface typeInputSelectComponent extends SelectProps {
   placeholder?: string;
   className?: string;
   icon?: React.ReactNode;
+  defaultValue?: any;
+  setValue?: (name, value) => void;
 }
 
 const SelectComponent = ({
@@ -20,8 +23,15 @@ const SelectComponent = ({
   placeholder = "",
   className = "",
   icon,
+  defaultValue,
+  setValue,
   ...props
 }: typeInputSelectComponent) => {
+
+  useEffect(() => {
+    setValue && setValue(name, defaultValue)
+  }, [defaultValue])
+
   return (
     <Controller
       name={name}

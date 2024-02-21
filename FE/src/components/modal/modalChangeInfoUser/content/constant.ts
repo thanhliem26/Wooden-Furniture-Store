@@ -54,11 +54,16 @@ export const handlePrevImageS3 = async (fileList) => {
         current.ImageUpload.push(next);
       }
 
+      if ((next.is_delete === false || !next.hasOwnProperty('is_delete')) && next.origin === ORIGIN_UPLOAD.AWS) {
+        current.imageUPloaded.push(next);
+      }
+
       return current;
     },
-    { ImageDelete: [], ImageUpload: [] }
+    { ImageDelete: [], ImageUpload: [], imageUPloaded: [] }
   );
-  const { ImageDelete, ImageUpload } = classifyImage;
+  const { ImageDelete, ImageUpload, imageUPloaded } = classifyImage;
+
   ImageDelete.forEach((image) => {
     if (image.url) deleteFileS3(image.name);
   });
@@ -80,7 +85,7 @@ export const handlePrevImageS3 = async (fileList) => {
     });
   }
 
-  return null;
+  return imageUPloaded;
 };
 
 export const handleMultiPrevImageS3 = async (fileList) => {
@@ -94,11 +99,15 @@ export const handleMultiPrevImageS3 = async (fileList) => {
         current.ImageUpload.push(next);
       }
 
+      if ((next.is_delete === false || !next.hasOwnProperty('is_delete')) && next.origin === ORIGIN_UPLOAD.AWS) {
+        current.imageUPloaded.push(next);
+      }
+
       return current;
     },
-    { ImageDelete: [], ImageUpload: [] }
+    { ImageDelete: [], ImageUpload: [], imageUPloaded: [] }
   );
-  const { ImageDelete, ImageUpload } = classifyImage;
+  const { ImageDelete, ImageUpload, imageUPloaded } = classifyImage;
 
   ImageDelete.forEach((image) => {
     if (image.url) deleteFileS3(image.name);
@@ -116,8 +125,8 @@ export const handleMultiPrevImageS3 = async (fileList) => {
       };
     }));
 
-    return result;
+    return [...imageUPloaded, ...result];
   }
 
-  return null;
+  return imageUPloaded;
 }

@@ -15,6 +15,7 @@ import Forbidden from '@/features/misc/Forbidden';
 import ManageUsers from '@/features/admin/manageUser';
 import ManageCategory from '@/features/admin/manageCategory';
 import ManageProduct from '@/features/admin/manageProducts';
+import SettingStatic from '@/features/admin/settingStatic';
 // import Shops from './features/shops';
 // import Users from './features/users';
 
@@ -71,6 +72,10 @@ function RouterComponent() {
         {
           path: "manage-products",
           element: <ManageProduct />
+        },
+        {
+          path: "setting_static",
+          element: <SettingStatic />
         },
       ]
     },

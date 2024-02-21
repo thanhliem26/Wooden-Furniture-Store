@@ -65,6 +65,10 @@ import Mail from '@/assets/images/icons/mail.png';
 import AvatarSupporting from '@/assets/images/avatar_support.jpg';
 import AvatarDefault from '@/assets/images/avatar_default.jpg';
 
+//default
+import DefaultProduct from '@/assets/images/default/default_product.jpg';
+import StoreEmpty from '@/assets/images/default/store-empty.png';
+
 export default {
     SingIn,
     SingUp,
@@ -124,5 +128,8 @@ export default {
     HauntedHouseBackground,
     //avatar
     AvatarSupporting,
-    AvatarDefault
+    AvatarDefault,
+    //default
+    DefaultProduct,
+    StoreEmpty
 }
