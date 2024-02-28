@@ -1,3 +1,4 @@
+import Notification from "@/components/notificationSend/index.tsx";
 import { STAFF_MANAGE_TOKEN, STAFF_MANAGE_USER, STAFF_REFRESH_MANAGE_USER } from "@/constants/index";
 import Cookies from 'js-cookie';
 
@@ -90,4 +91,12 @@ export const isJson = (str) => {
     }
     return true;
 };
+
+export const NotificationError = (error) => {
+    return Notification({
+        type: "error",
+        message: "Notification Error",
+        description: error?.["response"]?.["data"]?.["message"],
+    });
+}
 

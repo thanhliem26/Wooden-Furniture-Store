@@ -48,3 +48,8 @@ export const ORIGIN_UPLOAD = {
   NORMAL: 'normal',
   AWS: 'aws'
 }
+
+export const TYPE_ADD_MINUS = {
+  ADD: 'add',
+  MINUS: 'minus',
+}

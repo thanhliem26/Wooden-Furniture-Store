@@ -2,6 +2,9 @@ interface metadataOrderDetail extends baseInstance {
     metadata: OrderDetailState
 }
 
+interface listOrderDetailByOrderId extends baseInstance {
+    metadata: OrderDetailState[]
+}
 
 interface OrderDetailState {
     id: number,
@@ -11,4 +14,9 @@ interface OrderDetailState {
     quantity: number,
     createdAt?: string,
     updatedAt?: string,
+}
+
+interface paramSearchOrderDetail {
+    id: number,
+    user_id: number,
 }

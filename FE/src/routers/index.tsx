@@ -16,8 +16,7 @@ import ManageUsers from '@/features/admin/manageUser';
 import ManageCategory from '@/features/admin/manageCategory';
 import ManageProduct from '@/features/admin/manageProducts';
 import SettingStatic from '@/features/admin/settingStatic';
-// import Shops from './features/shops';
-// import Users from './features/users';
+import CartOrder from '@/features/user/cart';
 
 function RouterComponent() {
   const router = createBrowserRouter([
@@ -36,6 +35,10 @@ function RouterComponent() {
         {
           path: '/introduce',
           element: <Introduce />
+        },
+        {
+          path: '/cart/:id',
+          element: <CartOrder />
         }
       ]
     },

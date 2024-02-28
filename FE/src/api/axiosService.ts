@@ -82,13 +82,15 @@ axiosService.interceptors.response.use(
 				return errorData;
 			break;
 			case 500:
-				// if (errorData?.message === 'invalid signature') {
-				// 	removeHeader(HEADER.AUTHORIZATION);
-				// 	authUtil.removeToken()
-				// 	authUtil.removeUser()
-				// 	authUtil.removeRefreshToken();
-				// 	window.location.href = "/login";
-				// }
+				const url = error.config?.url;
+
+				if (url === import.meta.env.VITE_API_REFRESH_TOKEN &&  errorData?.message === 'jwt expired') {
+					removeHeader(HEADER.AUTHORIZATION);
+					authUtil.removeToken()
+					authUtil.removeUser()
+					authUtil.removeRefreshToken();
+					window.location.href = "/login";
+				}
 				return errorData;
 			default:
 				return Promise.reject(error);

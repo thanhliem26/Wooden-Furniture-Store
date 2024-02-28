@@ -1,10 +1,10 @@
 ("use strict");
+import { BadRequestError, ForbiddenError } from "../core/error.response";
 import db, { sequelize } from "../models";
-import { createNewOrderDetail } from '../models/repository/orderDetail.repo';
-const { Op } = require("sequelize");
+import { createNewOrderDetail } from "../models/repository/orderDetail.repo";
+const { Op, where } = require("sequelize");
 
 class OrderService {
-
   static deleteOrderDetail = async (orderId) => {
     return await db.OrderDetail.destroy({
       where: {
@@ -13,36 +13,28 @@ class OrderService {
     });
   };
 
-//   static searchOrder = async (query) => {
-//     const page = +query.page || 1;
-//     const limit = query.limit ? +query.limit : null;
-//     const filterSearch = {};
-    
-//     if(query.order_status) {
-//       filterSearch.order_status = query.order_status
-//     }
+  static getOrderDetailById = async (query) => {
+    if (!query.user_id || !query.id) {
+      throw new BadRequestError("user_id and id is not empty!");
+    }
 
-//     if(query.user_id) {
-//       filterSearch.user_id = query.user_id
-//     }
+    const order = await db.Orders.findByPk(query.id);
+    if (+order.user_id !== +query.user_id) {
+      throw new ForbiddenError("User don't have a permission!");
+    }
 
-//     const queryOptions = {
-//       where: {
-//         ...filterSearch
-//       },
-//       offset: (page - 1) * limit,
-//     }
-  
+    const orderDetail = await db.OrderDetail.findAll({
+      where: {
+        order_id: query.id,
+      },
+      include: [{ model: db.Products, as: "product_data"}]
+    });
 
-//     if (limit !== null) {
-//       queryOptions.limit = limit;
-//     }
-
-//     return await db.Orders.findAndCountAll(queryOptions);
-//   };
+    return orderDetail;
+  };
 
   static createOrderDetail = async (data) => {
-    return await createNewOrderDetail(data)
+    return await createNewOrderDetail(data);
   };
 }
 

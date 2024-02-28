@@ -5,10 +5,10 @@ const orderDetailApi = {
         const url = '/v1/api/orderDetail/create';
         return axiosService.post(url, body);
     },
-    // searchOrder(params: paramSearchOrder): Promise<metadataOrder> {
-    //     const url = `/v1/api/order/list`;
-    //     return axiosService.get(url, {params: params})
-    // },
+    getByOrderId(params: paramSearchOrderDetail): Promise<listOrderDetailByOrderId> {
+        const url = `/v1/api/orderDetail/get-orderDetail-byId`;
+        return axiosService.get(url, {params: params})
+    },
     // updateProduct(body): Promise<baseUpdate> {
     //     const url = `/v1/api/product/update/`
     //     return axiosService.put(url, body)

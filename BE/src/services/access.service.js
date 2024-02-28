@@ -12,8 +12,7 @@ const {
 import { findById } from "../models/repository/user.repo";
 import db from "../models";
 import { validateUser, createNewUser } from "../models/repository/user.repo";
-import { menu } from "../constants";
-import { getInfoData, removeElement } from "../utils";
+import { getInfoData } from "../utils";
 
 const RoleShop = {
   SHOP: "SHOP",

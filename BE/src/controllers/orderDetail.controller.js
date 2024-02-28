@@ -11,15 +11,15 @@ class OrderController {
         }).send(res)
     }
 
-    // searchOrder = async (req, res, next) => {
-    //     new SuccessResponse({
-    //         message: 'get order list success!',
-    //         metadata: await OrderDetailService.searchOrder(req.query),
-    //         options: {
-    //             ...req.query
-    //         }
-    //     }).send(res)
-    // }
+    getOrderDetailById = async (req, res, next) => {
+        new SuccessResponse({
+            message: 'get order detail list success!',
+            metadata: await OrderDetailService.getOrderDetailById(req.query),
+            options: {
+                ...req.query
+            }
+        }).send(res)
+    }
 
     createOrderDetail = async (req, res, next) => {
         new CREATED({

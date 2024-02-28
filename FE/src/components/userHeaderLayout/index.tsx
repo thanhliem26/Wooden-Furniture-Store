@@ -8,10 +8,16 @@ import Logo from "@/assets/images/logo.png";
 import UtilUser from "./utilUser";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/index.ts";
 import { searchOrder } from "@/store/orderUser/index.ts";
+import userApi from "@/api/user.ts";
+import Notification from "../notificationSend/index.tsx";
+import { Skeleton } from "antd";
+import { NotificationError } from "@/utils/index.ts";
 
 const UserLayoutHeader = () => {
   const resize = useResizeWindow();
   const [headerFixed, setHeaderFixed] = useState<boolean>(false);
+  const [menu, setMenu] = useState<metadataMenu[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const idUser = useAppSelector((state: RootState) => state.user.id);
   const dispatch = useAppDispatch();
@@ -31,10 +37,19 @@ const UserLayoutHeader = () => {
       setHeaderFixed(true);
     }
 
-    if(heightViewPort < 50) {
+    if (heightViewPort < 50) {
       setHeaderFixed(false);
     }
-  
+  };
+
+  const handleGetMenu = async () => {
+    try {
+      const { metadata } = await userApi.getMenuUser();
+      setMenu(metadata);
+      setLoading(false);
+    } catch (error) {
+      NotificationError(error)
+    }
   };
 
   useEffect(() => {
@@ -45,16 +60,26 @@ const UserLayoutHeader = () => {
     };
   }, []);
 
+  useEffect(() => {
+    handleGetMenu();
+  }, []);
+
   const propertyHeader = {
-    'className': headerFixed ? `${styled["header_page"]} ${styled["add__fixed"]} ${styled['stuckModeDown']}` : styled["header_page"]
+    className: headerFixed
+      ? `${styled["header_page"]} ${styled["add__fixed"]} ${styled["stuckModeDown"]}`
+      : styled["header_page"],
   };
 
   return (
     <article>
-      <header
-        {...propertyHeader}
-      >
-        <div className={headerFixed ? 'header__wrapper stuck stuckModeDown' : 'header__wrapper'}>
+      <header {...propertyHeader}>
+        <div
+          className={
+            headerFixed
+              ? "header__wrapper stuck stuckModeDown"
+              : "header__wrapper"
+          }
+        >
           <div className="header_wrapper-util">
             <div className="container header_wrapper-util-container">
               <div className="util__search">
@@ -84,48 +109,23 @@ const UserLayoutHeader = () => {
           </div>
           {resize.width >= 850 ? (
             <div className="header_wrapper-products">
-              <div className="wrapper__product">
-                <NavLink to="/introduce">
-                  {({ isActive }) => (
-                    <h5 className={isActive ? "active" : ""}>Giới thiệu</h5>
-                  )}
-                </NavLink>
-              </div>
-              <div className="wrapper__product">
-                <NavLink to="/category/ban-ghe">
-                  {({ isActive }) => (
-                    <h5 className={isActive ? "active" : ""}>Bàn ghế</h5>
-                  )}
-                </NavLink>
-              </div>
-              <div className="wrapper__product">
-                <NavLink to="/category/ban-ghe">
-                  {({ isActive }) => (
-                    <h5 className={isActive ? "active" : ""}>Bàn ghế SOFA</h5>
-                  )}
-                </NavLink>
-              </div>
-              <div className="wrapper__product">
-                <NavLink to="/category/ke-tivi">
-                  {({ isActive }) => (
-                    <h5 className={isActive ? "active" : ""}>Kệ Tivi</h5>
-                  )}
-                </NavLink>
-              </div>
-              <div className="wrapper__product">
-                <NavLink to="/news">
-                  {({ isActive }) => (
-                    <h5 className={isActive ? "active" : ""}>Tin tức</h5>
-                  )}
-                </NavLink>
-              </div>
-              <div className="wrapper__product">
-                <NavLink to="/contact">
-                  {({ isActive }) => (
-                    <h5 className={isActive ? "active" : ""}>Liên hệ</h5>
-                  )}
-                </NavLink>
-              </div>
+              {loading ? (
+                <Skeleton active paragraph={{ rows: 0 }} />
+              ) : (
+                menu.map((item, index) => {
+                  return (
+                    <div className="wrapper__product" key={index}>
+                      <NavLink to={item.href}>
+                        {({ isActive }) => (
+                          <h5 className={isActive ? "active" : ""}>
+                            {item.label}
+                          </h5>
+                        )}
+                      </NavLink>
+                    </div>
+                  );
+                })
+              )}
             </div>
           ) : (
             ""

@@ -13,6 +13,7 @@ import { schema, FormData } from "./constant";
 import authApi from "@/api/auth";
 import Notification from "@/components/notificationSend";
 import { useNavigate } from "react-router-dom";
+import { NotificationError } from "@/utils/index";
 
 const FormRegister = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -49,11 +50,7 @@ const FormRegister = () => {
       navigate("/login");
     } catch (error: unknown) {
       if (error?.["response"]?.["data"]?.["status"] === "error") {
-        Notification({
-          type: "error",
-          message: "Notification Error",
-          description: error?.["response"]?.["data"]?.["message"],
-        });
+        NotificationError(error)
       }
       throw error;
     } finally {

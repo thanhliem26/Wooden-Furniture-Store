@@ -19,7 +19,7 @@ class BaseModel extends Model {
     return instance;
     } catch(err) {
       console.log("error", err)
-      throw new BadRequestError('Bad request base model')
+      throw new BadRequestError(err.message)
     }
   }
 }

@@ -31,6 +31,8 @@ export const userSlice = createSlice({
     reducers: {
         setUserInfo: (state, action: PayloadAction<UserState>) => {
             state = { ...state, ...action.payload }
+
+            return state;
         },
     },
     extraReducers: (builder) => {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Modal from "@/components/modal";
-import ContentInfoChange from "./content";
+import ChangePassword from "./ContentChangePassword";
 
 interface Props {
   content: any;
@@ -22,7 +22,7 @@ const ModalAddUser = ({ isEdit = false, onSuccess, setNullWhenCancel = true,  ..
       footer={[]}
       {...props}
     >
-      <ContentInfoChange isEdit={isEdit} onSuccess={onSuccess} setNullWhenCancel={setNullWhenCancel}/>
+      <ChangePassword />
     </Modal>
   );
 };

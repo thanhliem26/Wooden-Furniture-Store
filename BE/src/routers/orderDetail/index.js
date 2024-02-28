@@ -10,7 +10,7 @@ const { authentication, authenticationV2, isAdmin } = require('../../auth/authUt
 router.use(authentication);
 
 router.post('/create', asyncHandler(OrderDetailController.createOrderDetail));
-// router.get('/list', asyncHandler(OrderDetailController.searchOrder));
+router.get('/get-orderDetail-byId', asyncHandler(OrderDetailController.getOrderDetailById));
 router.delete('/delete/:id', asyncHandler(OrderDetailController.deleteOrderDetail));
 
 //role admin

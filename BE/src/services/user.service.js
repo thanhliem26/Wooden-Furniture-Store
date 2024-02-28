@@ -1,12 +1,12 @@
 ("use strict");
 import { findById } from "../models/repository/user.repo";
 import db from "../models";
-import { menu } from "../constants";
+import { menu, menu_user } from "../constants";
 import { getInfoData, removeElement } from "../utils";
 const bcrypt = require("bcrypt");
 const { Op } = require("sequelize");
 import { validateUser, createNewUser } from "../models/repository/user.repo";
-import { BadRequestError } from "../core/error.response";
+import { BadRequestError, NotFoundError } from "../core/error.response";
 
 class UserService {
   static findUserById = async (userId) => {
@@ -38,6 +38,19 @@ class UserService {
       return current;
     }, []);
   };
+
+  static handleGetMenuUser = async (roleUser) => {
+    return menu_user.reduce((current, next) => {
+      if (next.role.includes(Number(roleUser))) {
+        current.push(
+          getInfoData({ field: ["id", "href", "label"], object: next })
+        );
+      }
+
+      return current;
+    }, []);
+  };
+
 
   static getAllUser = async (query) => {
     const page = +query.page || 1;
@@ -73,18 +86,34 @@ class UserService {
     );
   };
 
-  static changePassword = async ({ userId, password }) => {
+  static changePassword = async (data) => {
+    const { userId, password, re_password, current_password } = data;
+
+    if(!userId || !password || !re_password) {
+      throw new BadRequestError('id, password, re_password is not empty');
+    }
+ 
+    const user = await db.User.findByPk(userId);
+    if(!user) {
+      throw new NotFoundError('user not found');
+    }
+
+    if(current_password) {
+      const match = await bcrypt.compare(current_password, user.password);
+      if(!match) {
+        throw new BadRequestError('Password current is wrong!!!')
+      }
+    }
+    
+    if(re_password !== password) {
+      throw new BadRequestError('Password and Re_password not equal');
+    }
+
     //create password hash
     const passwordHash = await bcrypt.hash(password, 10);
+    user.password = passwordHash;
 
-    return await db.User.update(
-      { password: passwordHash },
-      {
-        where: {
-          id: userId,
-        },
-      }
-    );
+    return await user.save();
   };
 
   /**

@@ -18,6 +18,10 @@ const authApi = {
         const url = '/v1/api/access/handleRefreshToken';
         return axiosService.post(url, undefined, {headers: {[HEADER.REFRESHTOKEN]: refreshToken}});
     },
+    logOut({user_id, refreshToken}): Promise<baseDelete> {
+        const url = '/v1/api/access/logout';
+        return axiosService.post(url, {user_id}, {headers: {[HEADER.REFRESHTOKEN]: refreshToken}});
+    }
 }
 
 export default authApi;

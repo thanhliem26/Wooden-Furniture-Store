@@ -33,9 +33,11 @@ import lodash from "lodash";
 
 interface Props {
   isEdit?: boolean;
+  onSuccess?: any;
+  setNullWhenCancel?: boolean;
 }
 
-const ContentInfoChange = ({ isEdit }: Props) => {
+const ContentInfoChange = ({ isEdit, onSuccess, setNullWhenCancel = true }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const userSelected = useAppSelector(
     (state: RootState) => state.manageUser.userSelected
@@ -101,6 +103,8 @@ const ContentInfoChange = ({ isEdit }: Props) => {
       isEdit
         ? handleSubmitEdit(dataValue, dispatch, eventEmitter)
         : handleSubmitCreate(dataValue, dispatch, eventEmitter);
+
+        onSuccess && onSuccess();
     } catch (error: unknown) {
       throw error;
     } finally {
@@ -113,7 +117,7 @@ const ContentInfoChange = ({ isEdit }: Props) => {
   };
 
   const handleClose = () => {
-    dispatch(setUserSelected(null));
+    setNullWhenCancel && dispatch(setUserSelected(null));
     eventEmitter.emit("cancel_modal");
   };
 

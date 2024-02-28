@@ -1,7 +1,7 @@
 import { Col, Row, Tooltip } from "antd";
 import Images from "@/constants/images";
 import lodash from "lodash";
-import { formatCurrency } from "@/utils/index";
+import { NotificationError, formatCurrency } from "@/utils/index";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/index";
 import orderApi from "@/api/order";
 import Notification from "@/components/notificationSend";
@@ -71,11 +71,7 @@ const Products = ({ dataProduct }: ProductProps) => {
         );
       }
     } catch (error) {
-      Notification({
-        type: "error",
-        message: "Notification Error",
-        description: error?.["response"]?.["data"]?.["message"],
-      });
+      NotificationError(error)
     }
   };
 

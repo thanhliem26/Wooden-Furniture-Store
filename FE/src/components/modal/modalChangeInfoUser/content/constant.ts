@@ -85,7 +85,13 @@ export const handlePrevImageS3 = async (fileList) => {
     });
   }
 
-  return imageUPloaded;
+  if(!lodash.isEmpty(imageUPloaded)) {
+    const [imageOlder] = imageUPloaded;
+
+    return JSON.stringify(imageOlder);
+  }
+
+  return '[]';
 };
 
 export const handleMultiPrevImageS3 = async (fileList) => {

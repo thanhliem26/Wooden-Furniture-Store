@@ -9,7 +9,7 @@ import authApi from "@/api/auth";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Notification from "@/components/notificationSend";
-import { setToken, setUser, setRefreshToken } from "@/utils/index";
+import { setToken, setUser, setRefreshToken, NotificationError } from "@/utils/index";
 import { setHeader } from "@/api/axiosService";
 
 const FormRegister = () => {
@@ -45,11 +45,7 @@ const FormRegister = () => {
     } catch (error: unknown) {
       console.log("🚀 ~ error:", error);
       if (error?.["response"]?.["data"]?.["status"] === "error") {
-        Notification({
-          type: "error",
-          message: "Notification Error",
-          description: error?.["response"]?.["data"]?.["message"],
-        });
+        NotificationError(error)
       }
       throw error;
     } finally {

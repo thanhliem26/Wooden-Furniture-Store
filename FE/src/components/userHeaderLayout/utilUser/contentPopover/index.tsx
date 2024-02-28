@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from "react";
 import styled from "./index.module.scss";
-import { formatCurrency } from "@/utils/index";
+import { NotificationError, formatCurrency } from "@/utils/index";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/index";
 import { deleteOrder } from "@/store/orderUser";
 import lodash from "lodash";
@@ -8,11 +8,14 @@ import { ButtonComponent } from "@/components/form";
 import orderDetailApi from "@/api/orderDetail";
 import { statusCode } from "@/constants/index";
 import Notification from "@/components/notificationSend";
+import { useNavigate } from "react-router-dom";
 
 const ContentPopover = () => {
   const listOrder = useAppSelector(
     (state: RootState) => state.order.list_order
   );
+  const orderId = useAppSelector((state) => state.order.id);
+  const navigate = useNavigate();
   const popoverRef = useRef<HTMLDivElement>(null);
 
   const dispatch = useAppDispatch();
@@ -36,18 +39,17 @@ const ContentPopover = () => {
         dispatch(deleteOrder(id));
       }
     } catch (error: unknown) {
-      Notification({
-        type: "error",
-        message: "Notification Error",
-        description: error?.["response"]?.["data"]?.["message"],
-      });
+      NotificationError(error)
     }
   };
+
+  const handleNavigate  = async () => {
+    navigate(`/cart/${orderId}`)
+  }
 
   useEffect(() => {
     //@ts-ignore
     if (popoverRef?.current?.clientHeight >= 300) {
-      console.log("check")
       //@ts-ignore
       popoverRef.current.classList.add('overFlow_scroll')
 
@@ -102,14 +104,12 @@ const ContentPopover = () => {
             <ButtonComponent
               label="Xem Giỏ Hàng"
               className="btn__tab popover__action popover__action-see"
-              // loading={loading}
               type="default"
-              // onClick={handleClose}
+              onClick={handleNavigate}
             />
             <ButtonComponent
               label="Thanh Toán"
               className="btn__tab popover__action popover__action-pay"
-              // loading={loading}
               type="default"
               // onClick={handleClose}
             />

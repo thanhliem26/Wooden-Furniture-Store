@@ -50,35 +50,3 @@ export const initialValue: initialValueType = {
     productShow: [],
     type: null,
 };
-
-
-// export const handleSubmitCreate = async (data, dispatch, eventEmitter) => {
-//     const { message, status, metadata } = await productApi.createProduct(data);
-
-//     if (status === statusCode.CREATED) {
-//         dispatch(addProduct(metadata));
-
-//         eventEmitter.emit("submit_modal");
-
-//         Notification({
-//             message: "Notify create success",
-//             description: message,
-//         });
-//     }
-// }
-
-// export const handleSubmitEdit = async (data, dispatch, eventEmitter) => {
-//     const { message, status } = await productApi.updateProduct(data);
-
-//     if (status === statusCode.UPDATED) {
-//         dispatch(setProductList(data as ProductStateEdit));
-
-//         eventEmitter.emit("submit_modal");
-//         dispatch(setProductSelected(null));
-
-//         Notification({
-//             message: 'Notify update succes',
-//             description: message,
-//         });
-//     }
-// }
