@@ -23,6 +23,10 @@ interface paginationQuery {
     limit?: number,
 }
 
+interface baseSearchQuery extends paginationQuery {
+    name: string;
+}
+
 interface responseOptionBase {
     limit: number,
 }

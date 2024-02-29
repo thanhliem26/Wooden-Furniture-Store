@@ -17,6 +17,7 @@ import ManageCategory from '@/features/admin/manageCategory';
 import ManageProduct from '@/features/admin/manageProducts';
 import SettingStatic from '@/features/admin/settingStatic';
 import CartOrder from '@/features/user/cart';
+import Products from '@/features/user/products';
 
 function RouterComponent() {
   const router = createBrowserRouter([
@@ -39,7 +40,11 @@ function RouterComponent() {
         {
           path: '/cart/:id',
           element: <CartOrder />
-        }
+        },
+        {
+          path: '/product',
+          element: <Products />
+        },
       ]
     },
     {

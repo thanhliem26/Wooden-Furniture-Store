@@ -5,7 +5,7 @@ import productApi from '@/api/product';
 //redux thunk
 export const searchProduct = createAsyncThunk(
     'users/searchProduct',
-    async (params: paginationQuery | {}): Promise<typeMetadataProduct> => {
+    async (params: baseSearchQuery): Promise<typeMetadataProduct> => {
         const { metadata } = await productApi.searchProducts(params);
         return metadata;
     }
@@ -26,6 +26,9 @@ export const manageUserSlice = createSlice({
     name: 'manage_products',
     initialState,
     reducers: {
+        pushListProduct: (state, action: PayloadAction<ProductState[]>) => {
+            state.productList = [...state.productList, ...action.payload];
+        },
         setProductSelected: (state, action: PayloadAction<ProductState | null>) => {
             state.productSelected = action.payload;
         },
@@ -98,6 +101,7 @@ export const {
     setProductList, 
     deleteProduct, 
     addProduct, 
-    setPagination 
+    setPagination,
+    pushListProduct,
 } = manageUserSlice.actions
 export default manageUserSlice.reducer

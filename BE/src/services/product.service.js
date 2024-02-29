@@ -24,12 +24,39 @@ class CategoryService {
     const limit = query.limit ? +query.limit : null;
     const valueSearch = query.name;
 
+    const queryWhere = {
+      [Op.or]: [{ name: { [Op.like]: `%${valueSearch}%` } }],
+    };
+
+    if (query.category_id) {
+      queryWhere.category_id = query.category_id;
+    }
+
+    if (query.minPrice && query.maxPrice) {
+      queryWhere.price = {
+        [Op.between]: [query.minPrice, query.maxPrice],
+      };
+    }
+
     const queryOptions = {
       where: {
-        [Op.or]: [{ name: { [Op.like]: `%${valueSearch}%` } }],
+        ...queryWhere,
       },
+      attributes: [
+        "category_id",
+        "createdAt",
+        "description",
+        "id",
+        "images",
+        "name",
+        "price",
+        "stock_quantity",
+        "updatedAt",
+        [sequelize.literal("category_data.name"), "category_name"],
+      ],
       offset: (page - 1) * limit,
-    }
+      include: [{ model: db.Categories, as: "category_data", attributes: [] }],
+    };
 
     if (limit !== null) {
       queryOptions.limit = limit;
@@ -65,13 +92,18 @@ class CategoryService {
         },
         raw: true,
       });
-      
-      const initialValue = Array.from(new Array(top)).reduce((current, next, index) => {
-        const productTop = category[index] ? {...category[index], data: []} : {category_id: null, total: 0, category_name: null, data: []};
-        current[`top${index + 1}`] = productTop;
 
-        return current;
-      }, {});
+      const initialValue = Array.from(new Array(top)).reduce(
+        (current, next, index) => {
+          const productTop = category[index]
+            ? { ...category[index], data: [] }
+            : { category_id: null, total: 0, category_name: null, data: [] };
+          current[`top${index + 1}`] = productTop;
+
+          return current;
+        },
+        {}
+      );
 
       const orderProduct = productInTop.reduce((current, next) => {
         for (const property in initialValue) {
@@ -88,6 +120,16 @@ class CategoryService {
     });
 
     return categories;
+  };
+
+  static getRangePrice = async ({}) => {
+    const minPrice = await db.Products.min("price");
+    const maxPrice = await db.Products.max("price");
+
+    return {
+      minPrice,
+      maxPrice,
+    };
   };
 }
 

@@ -9,6 +9,7 @@ interface state_reducer_manageProducts {
 interface ProductState {
     id: number,
     name: string,
+    category_name: string,
     price: number,
     stock_quantity: number,
     images: string,
@@ -27,6 +28,16 @@ interface typeMetadataProduct {
 interface metadataProduct extends baseInstance {
     metadata: typeMetadataProduct
 }
+
+interface metaDataRangePrice extends baseInstance {
+    metadata: rangePriceProduct
+}
+
+interface rangePriceProduct {
+    minPrice: number,
+    maxPrice: number,
+}
+
 
 interface metadataProductRp extends baseInstance {
     metadata: ProductState

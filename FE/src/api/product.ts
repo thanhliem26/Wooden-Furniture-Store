@@ -17,6 +17,10 @@ const productApi = {
         const url = `/v1/api/product/delete/${id}`
         return axiosService.delete(url)
     },
+    getRangePrice(): Promise<metaDataRangePrice> {
+        const url = `/v1/api/product/get-range-price`
+        return axiosService.get(url)
+    },
 }
 
 export default productApi;

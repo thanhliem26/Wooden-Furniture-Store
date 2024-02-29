@@ -19,7 +19,11 @@
       }
 
       .header_wrapper-util {
-        height: 70px;
+        height: 70px !important;
+      }
+
+      .header_wrapper-products {
+        min-height: 50px;
       }
     }
   }

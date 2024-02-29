@@ -41,6 +41,13 @@ class CategoryController {
             metadata: await ProductService.getTopProduct(req.query),
         }).send(res)
     }
+
+    getRangePrice = async (req, res, next) => {
+        new SuccessResponse({
+            message: 'get range price of product success!',
+            metadata: await ProductService.getRangePrice(req.query),
+        }).send(res)
+    }
 }
 
 module.exports = new CategoryController

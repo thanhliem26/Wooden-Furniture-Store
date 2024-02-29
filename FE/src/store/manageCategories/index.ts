@@ -6,7 +6,7 @@ import categoryApi from '@/api/category';
 //redux thunk
 export const searchCategory = createAsyncThunk(
     'users/searchCategory',
-    async (params: paginationQuery | {}): Promise<typeMetadataCategory> => {
+    async (params: baseSearchQuery): Promise<typeMetadataCategory> => {
         const { metadata } = await categoryApi.searchCategory(params);
         return metadata;
     }

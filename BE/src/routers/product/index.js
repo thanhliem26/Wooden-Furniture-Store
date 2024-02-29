@@ -10,12 +10,13 @@ const { authentication, authenticationV2, isAdmin } = require('../../auth/authUt
 router.use(authentication);
 
 router.get('/top-product', asyncHandler(ProductController.getTopProduct));
+router.get('/get-range-price', asyncHandler(ProductController.getRangePrice));
+router.get('/list', asyncHandler(ProductController.searchProduct));
 
 //role admin
 router.use(isAdmin);
 
 router.post('/create-product', asyncHandler(ProductController.createNewProduct));
-router.get('/list', asyncHandler(ProductController.searchProduct));
 router.put('/update', asyncHandler(ProductController.updateProduct));
 router.delete('/delete/:id', asyncHandler(ProductController.deleteProduct));
 
