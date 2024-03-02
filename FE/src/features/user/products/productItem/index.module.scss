@@ -30,6 +30,7 @@
 
         &:hover {
           .item__content-image {
+           
             .shopping_card {
               color: black;
 
@@ -52,6 +53,10 @@
           display: flex;
           align-items: center;
           justify-content: center;
+
+          a {
+            width: 100%;
+          }
 
           .shopping_card {
             width: 100%;

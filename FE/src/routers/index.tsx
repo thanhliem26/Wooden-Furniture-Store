@@ -18,13 +18,10 @@ import ManageProduct from '@/features/admin/manageProducts';
 import SettingStatic from '@/features/admin/settingStatic';
 import CartOrder from '@/features/user/cart';
 import Products from '@/features/user/products';
+import ProductDetail from '@/features/user/productDetail';
 
 function RouterComponent() {
   const router = createBrowserRouter([
-    // {
-    //   path: "/",
-    //   element: !isUserLoggedIn() ? <Navigate to='/login' /> : <Navigate to='/admin' />,
-    // },
     {
       path: "/",
       element: <PublicLayoutUser />,
@@ -44,6 +41,10 @@ function RouterComponent() {
         {
           path: '/product',
           element: <Products />
+        },
+        {
+          path: '/product/:id',
+          element: <ProductDetail />
         },
       ]
     },

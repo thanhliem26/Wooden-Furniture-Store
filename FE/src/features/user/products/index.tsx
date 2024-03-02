@@ -38,7 +38,6 @@ const Products = () => {
     try {
       const { metadata } = await productApi.searchProducts({...optionQuery});
       const { rows } = metadata;
-      console.log("🚀 ~ rows:", rows)
       dispatch(pushListProduct(rows))
     } catch(error) {
       NotificationError(error)
@@ -58,7 +57,7 @@ const Products = () => {
           <div className="container__main-title">Cửa hàng</div>
         </div>
         <Row gutter={[16, 16]} className="product__content">
-          <Col span={6} md={6} className="product__content-filter">
+          <Col span={24} md={6} className="product__content-filter">
             <ProductFilter
               sliderPrice={sliderPrice}
               setSliderPrice={setSliderPrice}
@@ -69,7 +68,7 @@ const Products = () => {
               categorySelected={categorySelected}
             />
           </Col>
-          <Col span={6} md={18} className="product__content-item">
+          <Col span={24} md={18} className="product__content-item">
             <ProductItem handleScrollPage={handleScrollPage}/>
           </Col>
         </Row>

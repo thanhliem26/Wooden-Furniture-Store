@@ -4,7 +4,8 @@ import {
   updateProduct,
 } from "../models/repository/product.repo";
 import db, { sequelize } from "../models";
-const { Op } = require("sequelize");
+import { BadRequestError } from "../core/error.response";
+const { Op, where } = require("sequelize");
 
 class CategoryService {
   static UpdateProduct = async (payload) => {
@@ -131,6 +132,66 @@ class CategoryService {
       maxPrice,
     };
   };
+
+  static getProductById = async (id) => {
+    return await db.Products.findOne({where: {id: id},  attributes: [
+      "category_id",
+      "createdAt",
+      "description",
+      "id",
+      "images",
+      "name",
+      "price",
+      "stock_quantity",
+      "updatedAt",
+      [sequelize.literal("category_data.name"), "category_name"],
+    ],  include: [{ model: db.Categories, as: "category_data", attributes: [] }]})
+  };
+
+  static getListProductDifferent = async (query) => {
+    const page = +query.page || 1;
+    const limit = query.limit ? +query.limit : null;
+    
+    if(!query.id || !query.category_id) {
+      throw new BadRequestError('id and category_id is required!')
+    }
+
+    const queryWhere = {
+      id: {
+        [Op.not]: query.id, // Loại trừ sản phẩm có ID cụ thể
+      },
+      category_id: query.category_id,
+    };
+
+    const queryOptions = {
+      where: {
+        ...queryWhere,
+      },
+      attributes: [
+        "category_id",
+        "createdAt",
+        "description",
+        "id",
+        "images",
+        "name",
+        "price",
+        "stock_quantity",
+        "updatedAt",
+        [sequelize.literal("category_data.name"), "category_name"],
+      ],
+      offset: (page - 1) * limit,
+      include: [{ model: db.Categories, as: "category_data", attributes: [] }],
+      order: [
+        ['createdAt', 'DESC'], 
+      ],
+    };
+
+    if (limit !== null) {
+      queryOptions.limit = limit;
+    }
+
+    return await db.Products.findAndCountAll(queryOptions);
+  }
 }
 
 module.exports = CategoryService;

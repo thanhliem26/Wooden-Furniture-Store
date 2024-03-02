@@ -24,7 +24,7 @@ const CartOrder = () => {
             <TableCart dataOrder={dataOrder} setDataOrder={setDataOrder} />
           </Col>
           <Col span={8} className="main__content-information">
-            <TotalCart />
+            <TotalCart dataOrder={dataOrder}/>
           </Col>
         </Row>
       </div>

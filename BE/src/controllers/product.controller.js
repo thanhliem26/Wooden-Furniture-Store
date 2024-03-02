@@ -48,6 +48,20 @@ class CategoryController {
             metadata: await ProductService.getRangePrice(req.query),
         }).send(res)
     }
+
+    getProductById = async (req, res, next) => {
+        new SuccessResponse({
+            message: 'get product success!',
+            metadata: await ProductService.getProductById(req.params.id),
+        }).send(res)
+    }
+
+    listDifferent = async (req, res, next) => {
+        new SuccessResponse({
+            message: 'get list product success!',
+            metadata: await ProductService.getListProductDifferent(req.query),
+        }).send(res)
+    }
 }
 
 module.exports = new CategoryController

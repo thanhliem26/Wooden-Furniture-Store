@@ -52,3 +52,10 @@ interface ProductStateEdit {
     category_id: number,
     description?: string,
 }
+
+type ParamGetProductDifferent = {
+    id: number, 
+    category_id: number, 
+    limit?: number, 
+    page?: number
+}

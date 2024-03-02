@@ -1,6 +1,8 @@
 import Notification from "@/components/notificationSend/index.tsx";
 import { STAFF_MANAGE_TOKEN, STAFF_MANAGE_USER, STAFF_REFRESH_MANAGE_USER } from "@/constants/index";
 import Cookies from 'js-cookie';
+import Images from '@/constants/images.ts';
+import lodash from 'lodash';
 
 export const isUserLoggedIn = (): any => localStorage.getItem(STAFF_MANAGE_TOKEN);
 
@@ -75,6 +77,7 @@ export const reduceImageQuality = async (blob, quality, callback) => {
 
 
 export const formatCurrency = (number) => {
+    if(!number) return '';
     // Chuyển đổi số thành chuỗi và ngược lại
     let strNumber = number.toString();
     // Biểu thức chính quy để chia nhỏ chuỗi thành các nhóm ba số
@@ -99,4 +102,24 @@ export const NotificationError = (error) => {
         description: error?.["response"]?.["data"]?.["message"],
     });
 }
+
+
+export const handleURL = (images) => {
+    const imageList = images && JSON.parse(images);
+
+    if (!imageList || (Array.isArray(imageList) && lodash.isEmpty(imageList))) {
+      return {
+        url: Images.StoreEmpty,
+      };
+    }
+
+    const [imageFirst, ...otherImage] = imageList;
+    if (Array.isArray(imageList) && imageFirst) {
+      return imageFirst;
+    }
+  };
+
+  export const messageOrderTooLimit = (limit: number, order: number) => {
+    return `Bạn không thể đặt ${order} (tính cả sản phẩm đã tồn tại trong order), do số lượng đã vượt quá sản phẩm trong kho là ${limit}`;
+  }
 

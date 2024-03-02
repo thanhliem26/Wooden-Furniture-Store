@@ -1,7 +1,7 @@
 import { Col, Row, Tooltip } from "antd";
 import Images from "@/constants/images";
 import lodash from "lodash";
-import { NotificationError, formatCurrency } from "@/utils/index";
+import { NotificationError, formatCurrency, messageOrderTooLimit } from "@/utils/index";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/index";
 import orderApi from "@/api/order";
 import Notification from "@/components/notificationSend";
@@ -48,6 +48,16 @@ const Products = ({ dataProduct }: ProductProps) => {
 
   const handleAddOrderDetail = async (product) => {
     try {
+      if (product?.stock_quantity < 1) {
+        Notification({
+          type: 'error',
+          message: "Notification Success",
+          description: messageOrderTooLimit(product.stock_quantity, 1),
+        });
+  
+        return;
+      }
+
       let order_id = orderId;
 
       if (!order_id) {

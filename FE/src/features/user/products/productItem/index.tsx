@@ -1,11 +1,11 @@
 import { RootState, useAppDispatch, useAppSelector } from "@/store/index";
-import { searchProduct, setPagination } from "@/store/manageProducts";
-import React, { useEffect, useMemo } from "react";
+import { setPagination } from "@/store/manageProducts";
+import { useEffect, useMemo } from "react";
 import styled from "./index.module.scss";
 import { Col, Row, Spin, Tooltip } from "antd";
 import lodash from "lodash";
 import Images from "@/constants/images";
-import { NotificationError, formatCurrency } from "@/utils/index";
+import { NotificationError, formatCurrency, handleURL, messageOrderTooLimit } from "@/utils/index";
 import orderApi from "@/api/order";
 import orderDetailApi from "@/api/orderDetail";
 import Notification from "@/components/notificationSend";
@@ -14,6 +14,7 @@ import { searchOrder } from "@/store/orderUser";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { Link } from "react-router-dom";
 
 interface Props {
   handleScrollPage: any;
@@ -41,6 +42,16 @@ const ProductItem = ({handleScrollPage}: Props) => {
 
   const handleAddOrderDetail = async (product) => {
     try {
+      if (product?.stock_quantity < 1) {
+        Notification({
+          type: 'error',
+          message: "Notification Success",
+          description: messageOrderTooLimit(product.stock_quantity, 1),
+        });
+  
+        return;
+      }
+
       let order_id = orderId;
 
       if (!order_id) {
@@ -65,21 +76,6 @@ const ProductItem = ({handleScrollPage}: Props) => {
       }
     } catch (error) {
       NotificationError(error);
-    }
-  };
-
-  const handleURL = (images) => {
-    const imageList = images && JSON.parse(images);
-
-    if (!imageList || (Array.isArray(imageList) && lodash.isEmpty(imageList))) {
-      return {
-        url: Images.DefaultProduct,
-      };
-    }
-
-    const [imageFirst, ...otherImage] = imageList;
-    if (Array.isArray(imageList) && imageFirst) {
-      return imageFirst;
     }
   };
 
@@ -118,21 +114,24 @@ const ProductItem = ({handleScrollPage}: Props) => {
                 const image = handleURL(product.images);
                 return (
                   <Col
-                    sm={8}
-                    xs={12}
+                    md={8}
+                    span={12}
                     key={index}
                     data-aos="fade-right"
                     data-aos-delay={"200"}
                   >
                     <div className="product_item-content">
                       <div className="item__content-image">
+                      <Link to={`/product/${product.id}`} >
                         <img src={image.url} alt={product.description} />
 
-                        <div className="shopping_card">
+                       
+                      </Link>
+                      <div className="shopping_card" onClick={(e) => e.preventDefault()}>
                           {productInOrder.includes(product.id) ? (
-                            <div className="shopping__card-exists">
+                            <Link to={`/cart/${orderId}`} className="shopping__card-exists">
                               Xem giỏ hàng →
-                            </div>
+                            </Link>
                           ) : (
                             <Tooltip placement="top" title="Thêm vào giỏ">
                               <strong
@@ -145,6 +144,7 @@ const ProductItem = ({handleScrollPage}: Props) => {
                           )}
                         </div>
                       </div>
+                    
                       <div className="item__content-price">
                         <p className="item__type">{product.category_name}</p>
                         <p className="item_name">

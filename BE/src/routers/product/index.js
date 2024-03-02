@@ -12,6 +12,9 @@ router.use(authentication);
 router.get('/top-product', asyncHandler(ProductController.getTopProduct));
 router.get('/get-range-price', asyncHandler(ProductController.getRangePrice));
 router.get('/list', asyncHandler(ProductController.searchProduct));
+router.get('/list-different-product', asyncHandler(ProductController.listDifferent));
+router.get('/:id', asyncHandler(ProductController.getProductById));
+
 
 //role admin
 router.use(isAdmin);

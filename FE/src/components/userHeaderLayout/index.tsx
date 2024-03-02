@@ -33,7 +33,7 @@ const UserLayoutHeader = () => {
   const handleScroll = (event) => {
     const heightViewPort = window.scrollY;
 
-    if (heightViewPort > 900) {
+    if (heightViewPort > 1500) {
       setHeaderFixed(true);
     }
 
