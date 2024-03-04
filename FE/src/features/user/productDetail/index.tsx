@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import styled from "./index.module.scss";
 import ProductContent from "./productContent";
 import ProductSame from "./productSame";
+import ProductEvaluate from "./productEvaluate";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -33,6 +34,9 @@ const ProductDetail = () => {
         </div>
         <div className="product__detail-content">
           <ProductContent product={product}/>
+        </div>
+        <div className="product__detail-evaluate">
+          <ProductEvaluate product={product}/>
         </div>
         <div className="product__detail-same">
             <ProductSame product={product}/>

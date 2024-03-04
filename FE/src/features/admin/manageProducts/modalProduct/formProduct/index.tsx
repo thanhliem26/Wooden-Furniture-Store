@@ -21,6 +21,9 @@ import { ProductContext } from "../../constant";
 import UploadComponent from "@/components/form/uploadComponent";
 import lodash from 'lodash';
 import { handleMultiPrevImageS3 } from "@/components/modal/modalChangeInfoUser/content/constant";
+import MarkdownProduct from "../markdown";
+import markDownApi from "@/api/markdown";
+import debounce from "@/utils/debounce";
 
 interface Props {
   isEdit: boolean;
@@ -33,8 +36,11 @@ const FormProduct = ({ isEdit }: Props) => {
   const productSelected = useAppSelector(
     (state: RootState) => state.manageProduct.productSelected
   );
-  const [imageDefault, setImageDefault] = useState([]);
 
+  const [imageDefault, setImageDefault] = useState([]);
+  const [markdown, setMarkDown] = useState({html: '', text: ''});
+  const [showMarkDown, setShowMarkdown] = useState(false)
+ 
   const categoryContext = useContext(ProductContext);
 
   const {
@@ -66,7 +72,18 @@ const FormProduct = ({ isEdit }: Props) => {
       ? await handleMultiPrevImageS3(images)
       : "";
       dataValue.images = typeof imagesUpload === 'string' ? imagesUpload : JSON.stringify(imagesUpload);
+ 
+      const { metadata } = await markDownApi.createMarkdown({
+        contentHTML: markdown.html, 
+        contentMarkdown: markdown.text,
+        markdown_id: isEdit && productSelected?.markdown_id ? productSelected?.markdown_id : null,
+      })
 
+      const { id } = metadata;
+      dataValue.markdown_id = id;
+      dataValue.contentHTML = markdown.html;
+      dataValue.contentMarkdown = markdown.text;
+      
       isEdit
         ? handleSubmitEdit(dataValue, dispatch, eventEmitter)
         : handleSubmitCreate(dataValue, dispatch, eventEmitter);
@@ -77,6 +94,12 @@ const FormProduct = ({ isEdit }: Props) => {
       setLoading(false);
     }
   };
+
+  const handleEditorChange = ({ html, text }) => {
+    setMarkDown({html, text});
+  }
+
+  const debounceEditor = lodash.debounce(handleEditorChange, 300);
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
@@ -89,6 +112,10 @@ const FormProduct = ({ isEdit }: Props) => {
   useEffect(() => {
     const imageShow = productSelected?.images ? JSON.parse(productSelected?.images) : [];
     setImageDefault(imageShow);
+
+    handleEditorChange({html: productSelected?.contentHTML || '', text: productSelected?.contentMarkdown || ''})
+    
+    setShowMarkdown(true)
   }, [productSelected])
 
   return (
@@ -190,6 +217,13 @@ const FormProduct = ({ isEdit }: Props) => {
               className="remove__border"
               rows={4}
             />
+          </Col>
+          <Col md={24} span={24}>
+            Markdown
+          </Col>
+          <Col md={24} span={24}>
+           <MarkdownProduct showMarkDown={showMarkDown} handleEditorChange={debounceEditor} markdown={markdown}/>
+           
           </Col>
         </Row>
         <div className="button__footer">

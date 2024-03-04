@@ -2,11 +2,15 @@
   width: 100%;
   :global {
     .content__item-image {
-      max-height: 350px;
+      height: 350px;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
+
+      .ant_image {
+        height: 100%;
+      }
   
       img {
         width: 100%;

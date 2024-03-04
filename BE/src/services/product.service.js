@@ -5,7 +5,7 @@ import {
 } from "../models/repository/product.repo";
 import db, { sequelize } from "../models";
 import { BadRequestError } from "../core/error.response";
-const { Op, where } = require("sequelize");
+const { Op } = require("sequelize");
 
 class CategoryService {
   static UpdateProduct = async (payload) => {
@@ -53,10 +53,16 @@ class CategoryService {
         "price",
         "stock_quantity",
         "updatedAt",
+        "markdown_id",
         [sequelize.literal("category_data.name"), "category_name"],
+        [sequelize.literal("markdown_data.contentHTML"), "contentHTML"],
+        [sequelize.literal("markdown_data.contentMarkdown"), "contentMarkdown"],
       ],
       offset: (page - 1) * limit,
-      include: [{ model: db.Categories, as: "category_data", attributes: [] }],
+      include: [
+        { model: db.Categories, as: "category_data", attributes: [] },
+        { model: db.Markdowns, as: "markdown_data", attributes: [] },
+      ],
     };
 
     if (limit !== null) {
@@ -134,26 +140,36 @@ class CategoryService {
   };
 
   static getProductById = async (id) => {
-    return await db.Products.findOne({where: {id: id},  attributes: [
-      "category_id",
-      "createdAt",
-      "description",
-      "id",
-      "images",
-      "name",
-      "price",
-      "stock_quantity",
-      "updatedAt",
-      [sequelize.literal("category_data.name"), "category_name"],
-    ],  include: [{ model: db.Categories, as: "category_data", attributes: [] }]})
+    return await db.Products.findOne({
+      where: { id: id },
+      attributes: [
+        "category_id",
+        "createdAt",
+        "description",
+        "id",
+        "images",
+        "name",
+        "price",
+        "stock_quantity",
+        "updatedAt",
+        "markdown_id",
+        [sequelize.literal("category_data.name"), "category_name"],
+        [sequelize.literal("markdown_data.contentHTML"), "contentHTML"],
+        [sequelize.literal("markdown_data.contentMarkdown"), "contentMarkdown"],
+      ],
+      include: [
+        { model: db.Categories, as: "category_data", attributes: [] },
+        { model: db.Markdowns, as: "markdown_data", attributes: [] },
+      ],
+    });
   };
 
   static getListProductDifferent = async (query) => {
     const page = +query.page || 1;
     const limit = query.limit ? +query.limit : null;
-    
-    if(!query.id || !query.category_id) {
-      throw new BadRequestError('id and category_id is required!')
+
+    if (!query.id || !query.category_id) {
+      throw new BadRequestError("id and category_id is required!");
     }
 
     const queryWhere = {
@@ -181,9 +197,7 @@ class CategoryService {
       ],
       offset: (page - 1) * limit,
       include: [{ model: db.Categories, as: "category_data", attributes: [] }],
-      order: [
-        ['createdAt', 'DESC'], 
-      ],
+      order: [["createdAt", "DESC"]],
     };
 
     if (limit !== null) {
@@ -191,7 +205,7 @@ class CategoryService {
     }
 
     return await db.Products.findAndCountAll(queryOptions);
-  }
+  };
 }
 
 module.exports = CategoryService;

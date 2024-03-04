@@ -4,7 +4,7 @@ import Joi from "joi";
 import BaseModel from "../helpers/baseModel";
 
 module.exports = (sequelize, DataTypes) => {
-  class Products extends BaseModel {
+  class Markdowns extends BaseModel {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -12,27 +12,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Products.belongsTo(models.Categories, {
-        foreignKey: "category_id",
-        as: "category_data",
-      });
-      Products.hasMany(models.OrderDetail, {
-        foreignKey: "productId",
-        as: "product_data",
-      });
-      Products.belongsTo(models.Markdowns, {
+      Markdowns.hasOne(models.Products, {
         foreignKey: "markdown_id",
         as: "markdown_data",
+        onDelete: "cascade",
+        hooks: true,
       });
     }
 
-    validateProduct = async () => {
+    validateMarkdown = async () => {
       const schema = Joi.object({
-        name: Joi.string().required(),
-        price: Joi.number().min(0).required(),
-        stock_quantity: Joi.number().min(0).required(),
-        category_id: Joi.number().required(),
-        images: Joi.string().required(),
+        contentHTML: Joi.string().required(),
+        contentMarkdown: Joi.string().required(),
       }).unknown(true); // unknown(true): accepts payloads that are not within the defined schema
 
       try {
@@ -45,23 +36,20 @@ module.exports = (sequelize, DataTypes) => {
         };
       }
     };
+
   }
-  Products.init(
+  Markdowns.init(
     {
-      name: DataTypes.STRING,
-      description: DataTypes.TEXT,
-      price: DataTypes.INTEGER,
-      stock_quantity: DataTypes.INTEGER,
-      category_id: DataTypes.INTEGER,
-      images: DataTypes.TEXT,
-      markdown_id: DataTypes.INTEGER,
+      contentHTML: DataTypes.TEXT,
+      contentMarkdown: DataTypes.TEXT,
     },
     {
       sequelize,
-      modelName: "Products",
+      modelName: "Markdowns",
+       tableName: "Markdown",
     }
   );
-  return Products;
+  return Markdowns;
 };
 /*
 

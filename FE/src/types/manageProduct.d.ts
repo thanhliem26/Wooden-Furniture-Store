@@ -17,6 +17,9 @@ interface ProductState {
     description: string,
     createdAt: string,
     updatedAt: string,
+    markdown_id: number | null,
+    contentHTML: string,
+    contentMarkdown: string,
     key?: number,
 }
 

@@ -131,6 +131,13 @@
   padding: 0 !important;
   margin: 0 !important;
 }
+
+.overflow__text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 /* reset css */
 /* Document
    ========================================================================== */

@@ -81,6 +81,9 @@ const TableManageCategory = ({
       dataIndex: "description",
       key: "description",
       width: 140,
+      render: (description: string) => {
+        return <p className="overflow__text">{description}</p>
+      }
     },
     {
       title: "Price",
