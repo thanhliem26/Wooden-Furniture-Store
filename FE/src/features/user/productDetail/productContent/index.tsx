@@ -15,6 +15,8 @@ import Notification from "@/components/notificationSend";
 import { searchOrder } from "@/store/orderUser";
 import Images from "@/constants/images";
 import { Image } from "antd";
+import { CommentOutlined } from "@ant-design/icons";
+import ModalComment from "./comments";
 
 interface Props {
   product: ProductState | null;
@@ -198,6 +200,18 @@ const ProductContent = ({ product }: Props) => {
                 <p>
                   Danh mục: <span>{product?.category_name}</span>
                 </p>
+              </div>
+              <div className="item__info-comment">
+                <ModalComment
+                  destroyOnClose={true}
+                  width={800}
+                  product={product}
+                  content={
+                    <p>
+                      <CommentOutlined /> Hỏi và đáp (Comment)
+                    </p>
+                  }
+                />
               </div>
             </div>
           ) : null}

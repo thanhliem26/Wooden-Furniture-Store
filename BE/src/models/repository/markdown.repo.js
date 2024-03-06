@@ -18,7 +18,7 @@ const createNewMarkdown = async (payload) => {
   }
 
   const filter = {};
-  if (payload.markdown_id && typeof !isNaN(payload.markdown_id))
+  if (payload.markdown_id && !isNaN(payload.markdown_id))
     filter.id = payload.markdown_id;
   const update = { ...payload };
   const options = { upsert: true };

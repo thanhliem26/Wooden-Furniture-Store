@@ -19,8 +19,13 @@ const isJson = (str) => {
   return true;
 };
 
+const isNumber = (str) => {
+  return !isNaN(str)
+}
+
 module.exports = {
   getInfoData,
   removeElement,
   isJson,
+  isNumber,
 };

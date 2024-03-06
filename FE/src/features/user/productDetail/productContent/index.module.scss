@@ -119,6 +119,16 @@
           }
         }
       }
+
+      .item__info-comment {
+        width: 100%;
+
+        p {
+          color: #d09f11;
+          margin: 10px 0;
+          cursor: pointer;
+        }
+      }
     }
   }
 }

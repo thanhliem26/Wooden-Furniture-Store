@@ -1,7 +1,7 @@
 import { Tabs } from "antd";
 import styled from './index.module.scss';
 import Description from "./description";
-import Comment from './comments'
+import Stars from './stars'
 import { CommentOutlined, SmileOutlined, StarOutlined } from "@ant-design/icons";
 
 interface Props {
@@ -17,8 +17,8 @@ const ProductEvaluate= ({product}: Props) => {
     },
     {
       key: "2",
-      label: <span><CommentOutlined />Comments</span>,
-      children: <Comment />,
+      label: <span><StarOutlined />Đánh giá</span>,
+      children: <Stars />,
     },
   ];
 

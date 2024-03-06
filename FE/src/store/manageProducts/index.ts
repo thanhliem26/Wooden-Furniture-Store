@@ -22,7 +22,7 @@ const initialState: state_reducer_manageProducts = {
     total: 0,
 }
 
-export const manageUserSlice = createSlice({
+export const manageProductSlice = createSlice({
     name: 'manage_products',
     initialState,
     reducers: {
@@ -103,5 +103,5 @@ export const {
     addProduct, 
     setPagination,
     pushListProduct,
-} = manageUserSlice.actions
-export default manageUserSlice.reducer
+} = manageProductSlice.actions
+export default manageProductSlice.reducer

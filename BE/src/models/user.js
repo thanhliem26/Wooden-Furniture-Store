@@ -18,6 +18,13 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "cascade",
         hooks: true,
       });
+
+      User.hasMany(models.Comment, {
+        foreignKey: "user_id",
+        as: "user_comment",
+        onDelete: "cascade",
+        hooks: true,
+      });
     }
 
     validateCreateUser = async () => {

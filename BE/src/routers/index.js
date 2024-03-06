@@ -16,6 +16,7 @@ router.use('/v1/api/static', require('./static'));
 router.use('/v1/api/order', require('./orders'));
 router.use('/v1/api/orderDetail', require('./orderDetail'));
 router.use('/v1/api/markdown', require('./markdown'));
+router.use('/v1/api/comment', require('./comment'));
 
 router.get('/', (req, res, next) => {
     return res.status(200).json({

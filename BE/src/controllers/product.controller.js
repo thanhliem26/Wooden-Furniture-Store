@@ -3,7 +3,7 @@
 const ProductService = require("../services/product.service");
 const { OK, CREATED, SuccessResponse, UPDATED, DELETED } = require('../core/succes.response');
 
-class CategoryController {
+class ProductController {
     updateProduct = async (req, res, next) => {
         new UPDATED({
             message: 'update product success!',
@@ -64,4 +64,4 @@ class CategoryController {
     }
 }
 
-module.exports = new CategoryController
+module.exports = new ProductController

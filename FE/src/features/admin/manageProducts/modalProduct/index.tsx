@@ -7,7 +7,6 @@ import { Tabs } from "antd";
 import styled from "./index.module.scss";
 import { useAppDispatch } from "@/store/index";
 import FormProduct from "./formProduct";
-import { setCategorySelected } from "@/store/manageCategories";
 import { setProductSelected } from "@/store/manageProducts";
 
 interface Props {

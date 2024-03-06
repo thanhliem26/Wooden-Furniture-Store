@@ -7,7 +7,7 @@ import db, { sequelize } from "../models";
 import { BadRequestError } from "../core/error.response";
 const { Op } = require("sequelize");
 
-class CategoryService {
+class ProductService {
   static UpdateProduct = async (payload) => {
     return await updateProduct(payload);
   };
@@ -208,4 +208,4 @@ class CategoryService {
   };
 }
 
-module.exports = CategoryService;
+module.exports = ProductService;

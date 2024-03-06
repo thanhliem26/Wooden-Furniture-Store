@@ -24,6 +24,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "markdown_id",
         as: "markdown_data",
       });
+      Products.hasMany(models.Comment, {
+        foreignKey: "product_id",
+        as: "product_comment",
+        onDelete: "cascade",
+        hooks: true,
+      });
     }
 
     validateProduct = async () => {

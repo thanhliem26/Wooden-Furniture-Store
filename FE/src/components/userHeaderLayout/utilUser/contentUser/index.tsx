@@ -94,6 +94,7 @@ const ContentUser = () => {
 
   useEffect(() => {
     const { avatar } = user;
+
     if (isJson(avatar) && JSON.parse(avatar).url) {
       setAvatar(JSON.parse(avatar).url);
     }
