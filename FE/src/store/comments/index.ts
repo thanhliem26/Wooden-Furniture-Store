@@ -16,11 +16,12 @@ const initialState: state_reducer_comments = {
   commentList: [],
   loading: true,
   idSelected: null,
-  // pagination: {
-  //     current: 1,
-  //     pageSize: 10,
-  // },
+  pagination: {
+    current: 1,
+    pageSize: 10,
+  },
   total: 0,
+  totalParent: 0, 
 };
 
 export const manageCommentSlice = createSlice({
@@ -31,10 +32,25 @@ export const manageCommentSlice = createSlice({
       const newComment = lodash.cloneDeep(action.payload);
 
       state.commentList = [
-        { ...newComment, openChildren: false, commentChildren: [] },
+        { ...newComment, openChildren: false, commentChildren: [], pageSize: 10, current: 1 },
         ...state.commentList,
       ];
       state.total += 1;
+      state.totalParent += 1;
+
+      return state;
+    },
+    pushCommentToList: (state, action: PayloadAction<CommentStateReducer[]>) => {
+      const clonePushComment = lodash.cloneDeep(action.payload);
+
+      const newComment = clonePushComment.map((comment) => {
+        return { ...comment, openChildren: false, commentChildren: [], pageSize: 10, current: 1 }
+      })
+
+      state.commentList = [
+        ...state.commentList,
+        ...newComment,
+      ];
 
       return state;
     },
@@ -52,13 +68,13 @@ export const manageCommentSlice = createSlice({
             content: parent_id ? comment.content : content,
             commentChildren: parent_id
               ? comment.commentChildren?.map((commentChildren) => {
-                  return commentChildren.id === id
-                    ? {
-                        ...commentChildren,
-                        content: content,
-                      }
-                    : commentChildren;
-                })
+                return commentChildren.id === id
+                  ? {
+                    ...commentChildren,
+                    content: content,
+                  }
+                  : commentChildren;
+              })
               : comment.commentChildren,
           };
         }
@@ -70,21 +86,21 @@ export const manageCommentSlice = createSlice({
     },
     deleteComment: (state, action: PayloadAction<number>) => {
       const id = action.payload;
-    
+
       //@ts-ignore
       state.commentList = state.commentList.reduce((acc, comment) => {
         if (comment.id === id) {
-            return acc;
+          return acc;
         }
-        
+
         const filteredChildren = (comment.commentChildren || []).filter(item => item.id !== id);
 
         return [...acc, {
-            ...comment,
-            commentChildren: filteredChildren
+          ...comment,
+          commentChildren: filteredChildren
         }];
-    }, []);
-    
+      }, []);
+
       state.total = state.total - 1;
 
       return state;
@@ -98,7 +114,9 @@ export const manageCommentSlice = createSlice({
 
       state.commentList = state.commentList.map((comment) => {
         if (id === comment.id) {
-          comment.commentChildren = cloneList;
+          if(comment.commentChildren.length < comment.countChild_total) {
+            comment.commentChildren = [...comment.commentChildren, ...cloneList];
+          }
         }
 
         return comment;
@@ -146,20 +164,29 @@ export const manageCommentSlice = createSlice({
 
       return state;
     },
+    setPagination: (state, action: PayloadAction<basePagination>) => {
+      state.pagination = action.payload;
+
+      return state;
+    },
+
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder
       .addCase(getListComment.fulfilled, (state, action) => {
-        const { count, rows } = action.payload;
+        const { count, rows, countParent } = action.payload;
         state = {
           ...state,
           loading: false,
           total: count,
+          totalParent: countParent,
           commentList: rows.map((item, index) => ({
             ...item,
             commentChildren: [],
             openChildren: false,
+            pageSize: 10,
+            current: 1,
             key: index,
           })),
         };
@@ -189,5 +216,7 @@ export const {
   setOpenChildrenList,
   setIdSelected,
   PushCommentChildren,
+  setPagination,
+  pushCommentToList,
 } = manageCommentSlice.actions;
 export default manageCommentSlice.reducer;

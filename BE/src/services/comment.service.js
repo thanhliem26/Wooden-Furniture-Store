@@ -56,8 +56,44 @@ class CommentService {
     const queryCountComment = {
       where: {
         product_id: query.product_id,
+        is_deleted: "0",
+        [Op.or]: [
+          sequelize.literal(`(
+            (Comment.is_deleted = '0' AND Comment.parent_id IS NOT NULL AND EXISTS (
+                SELECT 1 
+                FROM comments AS pr 
+                WHERE pr.id = Comment.parent_id 
+                AND (pr.is_deleted = '0' OR pr.parent_id IS NOT NULL)
+                AND user_comment.deleteFlg = '0'
+            )) 
+            OR
+            (Comment.is_deleted = '0' AND Comment.parent_id IS NULL AND user_comment.deleteFlg = '0')
+          )`),
+        ],
       },
+      include: [
+        {
+          model: db.User,
+          as: "user_comment",
+          where: { deleteFlg: "0" },
+        },
+      ],
     };
+
+    const queryCountParent = {
+       where: {
+        product_id: query.product_id,
+        is_deleted: "0",
+        parent_id: null,
+      },
+      include: [
+        {
+          model: db.User,
+          as: "user_comment",
+          where: { deleteFlg: "0" },
+        },
+      ],
+    }
 
     const queryListComment = {
       where: {
@@ -109,15 +145,19 @@ class CommentService {
       queryListComment.limit = limit;
     }
 
-    const [total, comments] = await Promise.all([
+    const [total, totalParent, comments] = await Promise.all([
       db.Comment.count(queryCountComment),
+      db.Comment.count(queryCountParent),
       db.Comment.findAll(queryListComment),
     ]);
 
-    return { count: total, rows: comments };
+    return { count: total, countParent: totalParent, rows: comments };
   };
 
   static listCommentChildren = async (query) => {
+    const page = +query.page || 1;
+    const limit = query.limit ? +query.limit : null;
+
     if (!query.parent_id) throw new BadRequestError("parent_id is required!");
 
     const parentComment = await db.Comment.findOne({
@@ -126,7 +166,7 @@ class CommentService {
     if (!parentComment) throw new NotFoundError("Comment not found!");
     const { left, right } = parentComment;
 
-    return await db.Comment.findAll({
+    const queryOption = {
       where: {
         is_deleted: "0",
         left: { [Op.gt]: left }, // left > 1
@@ -157,7 +197,14 @@ class CommentService {
         },
       ],
       order: [["createdAt", "ASC"]],
-    });
+      offset: (page - 1) * limit,
+    };
+
+    if (limit !== null) {
+      queryOption.limit = limit;
+    }
+
+    return await db.Comment.findAll(queryOption);
   };
 
   static createComment = async (data, user) => {

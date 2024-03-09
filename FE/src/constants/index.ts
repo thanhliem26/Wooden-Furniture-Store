@@ -53,3 +53,8 @@ export const TYPE_ADD_MINUS = {
   ADD: 'add',
   MINUS: 'minus',
 }
+
+export const TYPE_REPLY_COMMENT = {
+  REPLY: 'reply',
+  UPDATE: 'update',
+}

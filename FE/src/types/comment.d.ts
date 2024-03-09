@@ -21,13 +21,16 @@ type UserComment = {
 
 interface CommentStateReducer extends CommentState {
     user_comment : UserComment,
-    commentChildren?: CommentStateReducer[],
-    openChildren?: boolean;
+    commentChildren: CommentStateReducer[],
+    openChildren: boolean;
+    pageSize: number;
+    current: number;
 }
 
 interface typeAddListChildrenComment {
     children_list : CommentStateReducer[],
     id: number,
+    pagination: basePagination
 }
 
 interface typePushChildrenComment {
@@ -49,10 +52,14 @@ type paramCreateComment = {
 
 type paramGetListComment = {
     product_id: number;
+    page?: number;
+    limit?: number;
 }
 
 type paramGetListChildrenComment = {
     parent_id: number;
+    page?: number;
+    limit?: number;
 }
 
 type paramUpdateComment = {
@@ -65,11 +72,14 @@ type state_reducer_comments = {
     commentList: CommentStateReducer[],
     loading: boolean,
     total: number,
+    totalParent: number,
     idSelected: number | null,
+    pagination: basePagination,
 }
 
 interface typeMetadataComment {
     count: number,
+    countParent: number,
     rows: CommentStateReducer[],
 }
 
