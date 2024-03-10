@@ -126,10 +126,23 @@ export const messageOrderTooLimit = (limit: number, order: number) => {
     return `Bạn không thể đặt ${order} (tính cả sản phẩm đã tồn tại trong order), do số lượng đã vượt quá sản phẩm trong kho là ${limit}`;
 }
 
-export const getInfoData = ({ field = [], object = {} }: {field: string[], object}) => {
+export const getInfoData = ({ field = [], object = {} }: { field: string[], object }) => {
     return lodash.pick(object, field);
 };
 
-export const removeElement = ({ field = [], object = {} }: {field: string[], object}) => {
+export const removeElement = ({ field = [], object = {} }: { field: string[], object }) => {
     return lodash.omit(object, field);
-  };
+};
+
+
+export const sendingWS = (ws, data) => {
+    if (!ws) return;
+    ws.send(
+        JSON.stringify({ ...data })
+    );
+}
+
+export const destroyWS = (ws) => {
+    if(!ws) return;
+    ws.close();
+}

@@ -26,16 +26,16 @@ Props) => {
     <div className="main__comment-children">
       <div className="comment__children-title">
         {!comment.openChildren ? (
-          <p onClick={() => commentContext.handleGetListChildren(comment, {page: 1, limit: 10})}>
+          <span onClick={() => commentContext.handleGetListChildren(comment, {page: 1, limit: 10})}>
             Xem thêm {comment.countChild_total} câu trả lời{" "}
             {commentContext.idSelected === comment.id ? (
               <Spin />
             ) : (
               <DownOutlined />
             )}
-          </p>
+          </span>
         ) : (
-          <p
+          <span
             onClick={() => {
               dispatch(
                 setOpenChildrenList({
@@ -46,7 +46,7 @@ Props) => {
             }}
           >
             Ẩn câu trả lời <UpOutlined />
-          </p>
+          </span>
         )}
       </div>
       {comment.openChildren ? (

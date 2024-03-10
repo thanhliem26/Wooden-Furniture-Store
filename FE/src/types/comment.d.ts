@@ -75,6 +75,7 @@ type state_reducer_comments = {
     totalParent: number,
     idSelected: number | null,
     pagination: basePagination,
+    is_call_api: boolean;
 }
 
 interface typeMetadataComment {

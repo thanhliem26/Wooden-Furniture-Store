@@ -1,12 +1,13 @@
-import { useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import Images from "@/constants/images";
 import {
   NotificationError,
   getInfoData,
   isJson,
   removeElement,
+  sendingWS,
 } from "@/utils/index";
-import { TYPE_REPLY_COMMENT } from "@/constants/index";
+import { STATUS_WS, TYPE_REPLY_COMMENT, TYPE_WS } from "@/constants/index";
 import moment from "moment";
 import PopoverContent from "../popoverContent";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/index";
@@ -26,6 +27,7 @@ import styled from "./index.module.scss";
 import { CommentContext } from "./constant";
 import ItemChildren from "./itemChildren";
 import { current } from "@reduxjs/toolkit";
+import { WebSocketContext } from "@/features/user/productDetail/constant";
 
 interface Props {
   comment: CommentStateReducer;
@@ -43,6 +45,7 @@ const ItemContent = ({ comment, product }: Props) => {
     (state: RootState) => state.comments.idSelected
   );
   const [idReply, setIdReply] = useState<StateIdReply[]>([]);
+  const { ws, product_id } = useContext(WebSocketContext);
 
   const dispatch = useAppDispatch();
 
@@ -57,7 +60,7 @@ const ItemContent = ({ comment, product }: Props) => {
   }, [user]);
 
   const urlImage = useMemo(() => {
-    return handleGetUrl(comment.user_comment.avatar);
+    return handleGetUrl(comment?.user_comment?.avatar);
   }, [comment]);
 
   const handleReplyComment = async ({
@@ -85,6 +88,22 @@ const ItemContent = ({ comment, product }: Props) => {
           parent_id: parent_id,
         })
       );
+
+      if (ws?.readyState === STATUS_WS.OPEN) {
+        sendingWS(ws, {
+          type: TYPE_WS.UPDATE_COMMENT,
+          room_id: product_id,
+          data_ws: {
+            parent_id: parent_id,
+            data: {
+              id: metadata.id,
+              content: metadata.content,
+              parent_id: parent_id,
+            },
+          },
+        });
+      }
+
       handleRemoveReply(id);
       dispatch(setLoading(false));
 
@@ -127,6 +146,15 @@ const ItemContent = ({ comment, product }: Props) => {
           commentChildren: comment_store,
         })
       );
+
+      if (ws?.readyState === STATUS_WS.OPEN) {
+        sendingWS(ws, {
+          type: TYPE_WS.ADD_COMMENT,
+          room_id: product_id,
+          data_ws: { parent_id: parent_id, data: comment_store },
+        });
+      }
+
       handleRemoveReply(parent_id);
       return true;
     } catch (error) {
@@ -175,6 +203,16 @@ const ItemContent = ({ comment, product }: Props) => {
 
       const { metadata } = await commentApi.deleteComment(id);
       dispatch(deleteComment(metadata.id));
+      if (ws?.readyState === STATUS_WS.OPEN) {
+       
+        sendingWS(ws, {
+          type: TYPE_WS.DELETE_COMMENT,
+          room_id: product_id,
+          data_ws: {
+            data: metadata.id,
+          },
+        });
+      }
       handleRemoveReply(id);
       dispatch(setLoading(false));
 

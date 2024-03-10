@@ -203,7 +203,7 @@ const ProductContent = ({ product }: Props) => {
               </div>
               <div className="item__info-comment">
                 <ModalComment
-                  destroyOnClose={true}
+                  // destroyOnClose={true}
                   width={800}
                   product={product}
                   content={

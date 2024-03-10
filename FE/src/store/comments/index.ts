@@ -22,6 +22,7 @@ const initialState: state_reducer_comments = {
   },
   total: 0,
   totalParent: 0, 
+  is_call_api: false,
 };
 
 export const manageCommentSlice = createSlice({
@@ -32,7 +33,7 @@ export const manageCommentSlice = createSlice({
       const newComment = lodash.cloneDeep(action.payload);
 
       state.commentList = [
-        { ...newComment, openChildren: false, commentChildren: [], pageSize: 10, current: 1 },
+        { ...newComment, openChildren: false, commentChildren: [], pageSize: 10, current: 1, parent_id: null },
         ...state.commentList,
       ];
       state.total += 1;
@@ -87,9 +88,13 @@ export const manageCommentSlice = createSlice({
     deleteComment: (state, action: PayloadAction<number>) => {
       const id = action.payload;
 
+      let totalDelete = 1;
+
       //@ts-ignore
       state.commentList = state.commentList.reduce((acc, comment) => {
         if (comment.id === id) {
+          totalDelete = comment.countChild_total + 1;
+
           return acc;
         }
 
@@ -101,7 +106,7 @@ export const manageCommentSlice = createSlice({
         }];
       }, []);
 
-      state.total = state.total - 1;
+      state.total = state.total - totalDelete;
 
       return state;
     },
@@ -136,6 +141,7 @@ export const manageCommentSlice = createSlice({
           const listChildren = comment.commentChildren ? comment.commentChildren : []
           comment.commentChildren = [...listChildren, cloneList]
           comment.countChild_total += 1;
+          comment.openChildren = true;
         }
 
         return comment;
@@ -169,7 +175,11 @@ export const manageCommentSlice = createSlice({
 
       return state;
     },
+    setCallApi: (state, action: PayloadAction<boolean>) => {
+      state.is_call_api = action.payload;
 
+      return state;
+    },
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
@@ -190,6 +200,7 @@ export const manageCommentSlice = createSlice({
             key: index,
           })),
         };
+        state.is_call_api = true;
 
         return state;
       })
@@ -218,5 +229,6 @@ export const {
   PushCommentChildren,
   setPagination,
   pushCommentToList,
+  setCallApi
 } = manageCommentSlice.actions;
 export default manageCommentSlice.reducer;

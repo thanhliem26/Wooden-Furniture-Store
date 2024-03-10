@@ -73,3 +73,11 @@ export const menu_user = [
     role: [ROLE_USER.ADMIN],
   },
 ];
+
+export const TYPE_WS = {
+  JOIN_ROOM: 'JOIN_ROOM',
+  LEAVE_ROOM: 'LEAVE_ROOM',
+  ADD_COMMENT: 'ADD_COMMENT',
+  DELETE_COMMENT: 'DELETE_COMMENT',
+  UPDATE_COMMENT: 'UPDATE_COMMENT',
+}

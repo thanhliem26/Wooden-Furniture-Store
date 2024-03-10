@@ -58,3 +58,18 @@ export const TYPE_REPLY_COMMENT = {
   REPLY: 'reply',
   UPDATE: 'update',
 }
+
+export const STATUS_WS = {
+  CONNECTING: 0,
+  OPEN: 1,
+  CLOSING: 2,
+  CLOSED: 3,
+}
+
+export const TYPE_WS = {
+  JOIN_ROOM: 'JOIN_ROOM',
+  LEAVE_ROOM: 'LEAVE_ROOM',
+  ADD_COMMENT: 'ADD_COMMENT',
+  DELETE_COMMENT: 'DELETE_COMMENT',
+  UPDATE_COMMENT: 'UPDATE_COMMENT',
+}

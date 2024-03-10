@@ -3,6 +3,7 @@ import { RootState, useAppDispatch, useAppSelector } from "@/store/index";
 import {
   getListComment,
   pushCommentToList,
+  setCallApi,
   setLoading,
   setPagination,
 } from "@/store/comments";
@@ -57,13 +58,19 @@ const ListComment = ({ product }: Props) => {
   };
 
   useEffect(() => {
+    const paginationInit = {pageSize: 10, current: 1};
     dispatch(
       getListComment({
         product_id: product.id,
-        page: pagination.current,
-        limit: pagination.pageSize,
+        page: paginationInit.current,
+        limit: paginationInit.pageSize,
       })
     );
+    dispatch(setPagination({...paginationInit}))
+
+    return () => {
+      dispatch(setCallApi(false));
+    }
   }, [product]);
 
   const handleScrollEndPage = () => {
