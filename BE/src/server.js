@@ -1,6 +1,8 @@
-const app = require("./src/app");
+const app = require("./app");
+require("dotenv").config();
+
 const PORT = process.env.PORT || 8000;
-import websocket from "./src/utils/ws";
+import websocket from "./utils/ws";
 
 const server = app.listen(PORT, () => {
   console.log(`Project is running with port ${PORT}`);

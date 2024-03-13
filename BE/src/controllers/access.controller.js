@@ -32,6 +32,20 @@ class AccessController {
             }
         }).send(res)
     }
+
+    uploadFileS3 = async (req, res, next) => {
+        new CREATED({
+            message: 'upload file success!',
+            metadata: await AccessService.uploadFileServiceS3(req.file, req.body),
+        }).send(res)
+    }
+
+    deleteFileS3 = async (req, res, next) => {
+        new CREATED({
+            message: 'delete file success!',
+            metadata: await AccessService.deleteFileServiceS3(req.params.key),
+        }).send(res)
+    }
 }
 
 module.exports = new AccessController

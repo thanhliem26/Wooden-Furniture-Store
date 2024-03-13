@@ -22,6 +22,7 @@ import categoryApi from "@/api/category";
 import staticApi from "@/api/static";
 import { statusCode } from "@/constants/index";
 import Notification from "@/components/notificationSend";
+import { NotificationError } from "@/utils/index";
 
 const SettingStatic = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -63,7 +64,7 @@ const SettingStatic = () => {
           : JSON.stringify(imageSPUpload);
       dataValue.productShow = JSON.stringify(productShow ? productShow : []);
 
-      const { status, metadata, message } = await staticApi.setStatic(
+      const { status, message } = await staticApi.setStatic(
         dataValue
       );
     
@@ -76,7 +77,7 @@ const SettingStatic = () => {
         });
       }
     } catch (error: unknown) {
-      throw error;
+      NotificationError(error)
     } finally {
       setLoading(false);
     }

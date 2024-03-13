@@ -9,7 +9,6 @@ import UtilUser from "./utilUser";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/index.ts";
 import { searchOrder } from "@/store/orderUser/index.ts";
 import userApi from "@/api/user.ts";
-import Notification from "../notificationSend/index.tsx";
 import { Skeleton } from "antd";
 import { NotificationError } from "@/utils/index.ts";
 
@@ -30,7 +29,7 @@ const UserLayoutHeader = () => {
     }
   }, [idUser]);
 
-  const handleScroll = (event) => {
+  const handleScroll = () => {
     const heightViewPort = window.scrollY;
 
     if (heightViewPort > 1500) {

@@ -204,12 +204,12 @@ export const manageCommentSlice = createSlice({
 
         return state;
       })
-      .addCase(getListComment.pending, (state, action) => {
+      .addCase(getListComment.pending, (state) => {
         state = { ...state, total: 0, loading: true };
 
         return state;
       })
-      .addCase(getListComment.rejected, (state, action) => {
+      .addCase(getListComment.rejected, (state) => {
         state = { ...state, total: 0, loading: false };
 
         return state;

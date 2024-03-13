@@ -2,7 +2,6 @@ import categoryApi from "@/api/category";
 import Notification from "@/components/notificationSend";
 import { statusCode } from "@/constants/index";
 import { addCategory, setCategoryList, setCategorySelected } from "@/store/manageCategories";
-import { addUser } from "@/store/manageUser";
 import * as yup from "yup";
 
 export const schema = yup

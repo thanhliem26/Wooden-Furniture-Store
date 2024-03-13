@@ -5,13 +5,13 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.sequelize.transaction((t) => {
       return Promise.all([
-        queryInterface.removeColumn("order_detail", "product_list_id", {
+        queryInterface.removeColumn("Order_detail", "product_list_id", {
           transaction: t,
         }),
-        queryInterface.removeColumn("order_detail", "unit_list_price", {
+        queryInterface.removeColumn("Order_detail", "unit_list_price", {
           transaction: t,
         }),
-        queryInterface.addColumn("order_detail", "productId", {
+        queryInterface.addColumn("Order_detail", "productId", {
           type: Sequelize.DataTypes.INTEGER,
           allowNull: false,
           name: 'fk_orderDetail_id_products',
@@ -21,7 +21,7 @@ module.exports = {
           after: 'order_id',
           transaction: t,
         }),
-        queryInterface.changeColumn("order_detail", "order_id", {
+        queryInterface.changeColumn("Order_detail", "order_id", {
           type: Sequelize.DataTypes.INTEGER,
           allowNull: false,
           name: 'fk_orderDetail_id_orders',
@@ -36,18 +36,18 @@ module.exports = {
   down: (queryInterface, Sequelize) => {
     return queryInterface.sequelize.transaction((t) => {
       return Promise.all([
-        queryInterface.addColumn("order_detail", "product_list_id", {
+        queryInterface.addColumn("Order_detail", "product_list_id", {
           type: Sequelize.DataTypes.STRING,
           transaction: t,
         }),
-        queryInterface.addColumn("order_detail", "unit_list_price", {
+        queryInterface.addColumn("Order_detail", "unit_list_price", {
           type: Sequelize.DataTypes.STRING,
           transaction: t,
         }),
-        queryInterface.removeColumn("order_detail", "productId", {
+        queryInterface.removeColumn("Order_detail", "productId", {
           transaction: t,
         }),
-        queryInterface.changeColumn("order_detail", "order_id", {
+        queryInterface.changeColumn("Order_detail", "order_id", {
           type: Sequelize.DataTypes.INTEGER,
           allowNull: false,
           transaction: t,

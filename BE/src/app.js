@@ -19,7 +19,7 @@ app.use(helmet()); //hidden framework using
 app.use(compression());
 
 const corsOptions = {
-  origin: "http://localhost:2612",
+  origin: process.env.URL_FE_CORS,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   optionsSuccessStatus: 204,
 };
@@ -27,7 +27,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 //init db
-// require('./dbs/init.mysql')
 connection();
 
 //init route

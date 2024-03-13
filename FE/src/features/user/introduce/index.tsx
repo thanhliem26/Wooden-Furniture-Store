@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "./index.module.scss";
 import Image from "@/constants/images";
 import { Col, Row } from "antd";

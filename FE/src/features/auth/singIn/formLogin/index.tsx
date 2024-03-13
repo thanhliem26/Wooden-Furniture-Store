@@ -29,6 +29,7 @@ const FormRegister = () => {
     try {
       setLoading(true);
 
+      //@ts-ignore
       const { metadata } = await authApi.login(data);
       const { tokens, user } = metadata;
 

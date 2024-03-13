@@ -19,6 +19,9 @@ export const handleSetImage = (FileList, setValue) => {
   });
 
   if (!imageEnabled) return;
+
+  // eslint-disable-next-line
+  //@ts-ignore
   return new Promise(async (resolve, reject) => {
     const imageURL = await handleGetURL(imageEnabled);
     setValue(imageURL);
@@ -54,6 +57,7 @@ export const handlePrevImageS3 = async (fileList) => {
         current.ImageUpload.push(next);
       }
 
+       // eslint-disable-next-line
       if ((next.is_delete === false || !next.hasOwnProperty('is_delete')) && next.origin === ORIGIN_UPLOAD.AWS) {
         current.imageUPloaded.push(next);
       }
@@ -105,6 +109,7 @@ export const handleMultiPrevImageS3 = async (fileList) => {
         current.ImageUpload.push(next);
       }
 
+       // eslint-disable-next-line
       if ((next.is_delete === false || !next.hasOwnProperty('is_delete')) && next.origin === ORIGIN_UPLOAD.AWS) {
         current.imageUPloaded.push(next);
       }

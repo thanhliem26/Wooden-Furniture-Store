@@ -1,5 +1,5 @@
 import { Controller } from "react-hook-form";
-import { DatePicker, Form, Input } from "antd";
+import { DatePicker, Form } from "antd";
 import { DatePickerProps } from "antd";
 
 type typeInputDateComponent = DatePickerProps & {
@@ -20,8 +20,6 @@ const InputDateComponent = ({
   label = "",
   placeholder = "",
   className = "",
-  icon,
-  type = "text",
   ...props
 }: typeInputDateComponent ) => {
   return (

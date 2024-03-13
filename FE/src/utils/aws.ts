@@ -1,4 +1,5 @@
-import AWS from "aws-sdk";
+import { NotificationError } from "./index";
+import authApi from "@/api/auth";
 
 interface UploadResult {
     Location: string;
@@ -7,61 +8,21 @@ interface UploadResult {
     Key: string
 }
 
-AWS.config.update({
-    accessKeyId: import.meta.env.VITE_AWS_ACCESSKEY,
-    secretAccessKey: import.meta.env.VITE_AWS_SECRETKEY,
-});
-
-const myBucket = new AWS.S3({
-    params: { Bucket: import.meta.env.VITE_AWS_S3_BUCKET },
-    region: import.meta.env.VITE_AWS_REGION,
-});
-
-export const uploadFileS3 = (file: any, nameFile: string): Promise<UploadResult> => {
-    const params = {
-        ACL: "public-read",
-        Body: file,
-        Bucket: import.meta.env.VITE_AWS_S3_BUCKET,
-        Key: nameFile,
-        ContentType: "image/jpeg",
-    };
-
-    return new Promise((resolve, reject) => {
-        try {
-            myBucket.upload(params, (err, data) => {
-                if (err) {
-                    reject(err)
-                } else {
-                    // data.Location chứa URL của file tải lên
-                    resolve(data)
-                }
-            });
-        } catch (err) {
-            reject(err)
-        }
-    })
+export const uploadFileS3 = async (file: any, nameFile: string): Promise<UploadResult> => {
+    try {
+        const { metadata } = await authApi.uploadFileS3({file, nameFile})
+        return metadata
+    } catch(error) {
+        NotificationError(error)
+    }
 };
 
-export const deleteFileS3 = (keyFile: string) => {
-    const params = {
-        Bucket: import.meta.env.VITE_AWS_S3_BUCKET,
-        Key: keyFile,
-    };
 
-    return new Promise((resolve, reject) => {
-        try {
-            myBucket.deleteObject(params, (err, data) => {
-                if (err) {
-                    console.log("🚀 ~ err:", err)
-                    reject(err)
-                } else {
-                    // data.Location chứa URL của file tải lên
-                    resolve(true)
-                }
-            });
-        } catch (err) {
-            console.log("🚀 ~ err:", err)
-            reject(err)
-        }
-    })
+export const deleteFileS3 = async (keyFile: string) => {
+    try {
+        const { metadata } = await authApi.deleteFileS3(keyFile)
+        return metadata
+    } catch(error) {
+        NotificationError(error)
+    }
 }

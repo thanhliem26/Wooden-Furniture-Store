@@ -12,7 +12,11 @@ import {
 import { RootState, useAppDispatch, useAppSelector } from "@/store/index";
 import { setUserSelected } from "@/store/manageUser";
 import dayjs from "dayjs";
-import { eventEmitter, removeEmptyInOBject } from "@/utils/index";
+import {
+  NotificationError,
+  eventEmitter,
+  removeEmptyInOBject,
+} from "@/utils/index";
 import images from "@/constants/images";
 import {
   ButtonComponent,
@@ -37,7 +41,11 @@ interface Props {
   setNullWhenCancel?: boolean;
 }
 
-const ContentInfoChange = ({ isEdit, onSuccess, setNullWhenCancel = true }: Props) => {
+const ContentInfoChange = ({
+  isEdit,
+  onSuccess,
+  setNullWhenCancel = true,
+}: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const userSelected = useAppSelector(
     (state: RootState) => state.manageUser.userSelected
@@ -71,9 +79,9 @@ const ContentInfoChange = ({ isEdit, onSuccess, setNullWhenCancel = true }: Prop
       sex: userSelected?.sex,
       id: userSelected?.id,
       avatar: userSelected?.avatar ? [JSON.parse(userSelected?.avatar)] : [],
-      avatar_support: userSelected?.avatar_support ? [
-        JSON.parse(userSelected?.avatar_support),
-      ] : [],
+      avatar_support: userSelected?.avatar_support
+        ? [JSON.parse(userSelected?.avatar_support)]
+        : [],
     },
   });
 
@@ -104,9 +112,9 @@ const ContentInfoChange = ({ isEdit, onSuccess, setNullWhenCancel = true }: Prop
         ? handleSubmitEdit(dataValue, dispatch, eventEmitter)
         : handleSubmitCreate(dataValue, dispatch, eventEmitter);
 
-        onSuccess && onSuccess();
+      onSuccess && onSuccess();
     } catch (error: unknown) {
-      throw error;
+      NotificationError(error);
     } finally {
       setLoading(false);
     }
@@ -124,8 +132,8 @@ const ContentInfoChange = ({ isEdit, onSuccess, setNullWhenCancel = true }: Prop
   const FileListAvatar = getValues("avatar");
   const FileListAvatarSP = getValues("avatar_support");
 
-  const handleChange = ({ fileList: newFileList }, data, name) => {
-    const [imageUpload] = newFileList;
+  const handleChange = ({ file: newFileList }, data, name) => {
+    const imageUpload = newFileList;
 
     const fileList = data.map((item) => {
       item.is_delete = true;
@@ -194,9 +202,7 @@ const ContentInfoChange = ({ isEdit, onSuccess, setNullWhenCancel = true }: Prop
                 setValue={setValue}
                 maxCount={1}
                 uploadSelf={true}
-                onChange={(file) =>
-                  handleChange(file, FileListAvatar, "avatar")
-                }
+                onChange={(file) => handleChange(file, FileListAvatar, "avatar")}
               />
             </div>
           </div>

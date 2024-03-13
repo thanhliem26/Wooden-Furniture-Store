@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import userApi from '@/api/user';
 import categoryApi from '@/api/category';
 
 //redux thunk
@@ -33,7 +32,7 @@ export const manageUserSlice = createSlice({
         setCategoryList: (state, action: PayloadAction<CategoryStateEdit>) => {
             const { id, ...value } = action.payload;
 
-            state.categoryList = state.categoryList.map((category: CategoryState, index) => {
+            state.categoryList = state.categoryList.map((category: CategoryState) => {
                 if (category.id === id) {
                     category = { ...category, ...value }
                 }
@@ -80,11 +79,11 @@ export const manageUserSlice = createSlice({
             state = { ...state, loading: false, total: count, categoryList: rows.map((item, index) => ({ ...item, key: index })) }
 
             return state;
-        }).addCase(searchCategory.pending, (state, action) => {
+        }).addCase(searchCategory.pending, (state) => {
             state = { ...state, total: 0, loading: true }
 
             return state;
-        }).addCase(searchCategory.rejected, (state, action) => {
+        }).addCase(searchCategory.rejected, (state) => {
             state = { ...state, total: 0, loading: false }
 
             return state;

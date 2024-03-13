@@ -85,10 +85,10 @@ export const manageUserSlice = createSlice({
             const { count, rows } = action.payload;
             state = { ...state, loading: false, total: count, userList: rows.map((item, index) => ({...item, key: index})) }
             return state;
-        }).addCase(fetchAllUser.pending, (state, action) => {
+        }).addCase(fetchAllUser.pending, (state) => {
             state = { ...state, total: 0, loading: true }
             return state;
-        }).addCase(fetchAllUser.rejected, (state, action) => {
+        }).addCase(fetchAllUser.rejected, (state) => {
             state = { ...state, total: 0, loading: false }
             return state;
         }) 
@@ -99,11 +99,11 @@ export const manageUserSlice = createSlice({
             state = { ...state, loading: false, total: count ,userList: rows.map((item, index) => ({...item, key: index})) }
 
             return state;
-        }).addCase(searchUser.pending, (state, action) => {
+        }).addCase(searchUser.pending, (state) => {
             state = { ...state, total: 0, loading: true }
 
             return state;
-        }).addCase(searchUser.rejected, (state, action) => {
+        }).addCase(searchUser.rejected, (state) => {
             state = { ...state, total: 0, loading: false }
 
             return state;

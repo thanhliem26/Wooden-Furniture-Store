@@ -1,6 +1,6 @@
 import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { Image, Tooltip } from "antd";
-import React, { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 interface Props {
   file: any;
@@ -21,7 +21,7 @@ const ImageComponent = ({ file, onDelete }: Props) => {
           width={200}
           preview={{
             visible: isPreviewVisible,
-            onVisibleChange: (visible, prevVisible) =>
+            onVisibleChange: (visible) =>
               setPreviewVisible(visible),
           }}
           src={urlImage}

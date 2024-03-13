@@ -7,14 +7,10 @@ import {
   TextAreComponent,
 } from "@/components/form";
 import { eventEmitter } from "@/utils/index";
-import Notification from "@/components/notificationSend";
 import { useForm } from "react-hook-form";
 import { schema, FormData, handleSubmitEdit, handleSubmitCreate } from "./constant";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { RootState, useAppSelector } from "@/store/index";
-import { statusCode } from "@/constants/index";
-import categoryApi from "@/api/category";
-import { setCategoryList } from "@/store/manageCategories";
 
 interface Props {
   isEdit: boolean;

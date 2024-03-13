@@ -1,7 +1,11 @@
 import { Col, Row, Tooltip } from "antd";
 import Images from "@/constants/images";
 import lodash from "lodash";
-import { NotificationError, formatCurrency, messageOrderTooLimit } from "@/utils/index";
+import {
+  NotificationError,
+  formatCurrency,
+  messageOrderTooLimit,
+} from "@/utils/index";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/index";
 import orderApi from "@/api/order";
 import Notification from "@/components/notificationSend";
@@ -11,6 +15,7 @@ import { searchOrder } from "@/store/orderUser";
 import { useEffect, useMemo } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { Link } from "react-router-dom";
 
 interface ProductProps {
   dataProduct: topProductStatic;
@@ -40,7 +45,7 @@ const Products = ({ dataProduct }: ProductProps) => {
       };
     }
 
-    const [imageFirst, ...otherImage] = imageList;
+    const [imageFirst] = imageList;
     if (Array.isArray(imageList) && imageFirst) {
       return imageFirst;
     }
@@ -50,11 +55,11 @@ const Products = ({ dataProduct }: ProductProps) => {
     try {
       if (product?.stock_quantity < 1) {
         Notification({
-          type: 'error',
+          type: "error",
           message: "Notification Success",
           description: messageOrderTooLimit(product.stock_quantity, 1),
         });
-  
+
         return;
       }
 
@@ -81,17 +86,15 @@ const Products = ({ dataProduct }: ProductProps) => {
         );
       }
     } catch (error) {
-      NotificationError(error)
+      NotificationError(error);
     }
   };
 
-  //init aos 
+  //init aos
   useEffect(() => {
-    AOS.init({ duration: 1000,
-      once: true
-    });
+    AOS.init({ duration: 1000, once: true });
     AOS.refresh();
-  }, [])
+  }, []);
 
   return (
     <div className="product__main">
@@ -104,10 +107,18 @@ const Products = ({ dataProduct }: ProductProps) => {
             data.map((product, index) => {
               const image = handleURL(product.images);
               return (
-                <Col sm={6} xs={12} key={index} data-aos="fade-left"  data-aos-delay={(index * 100).toString()}>
+                <Col
+                  sm={6}
+                  xs={12}
+                  key={index}
+                  data-aos="fade-left"
+                  data-aos-delay={(index * 100).toString()}
+                >
                   <div className="product_item-content">
                     <div className="item__content-image">
-                      <img src={image.url} alt={product.description} />
+                      <Link to={`/product/${product.id}`}>
+                        <img src={image.url} alt={product.description} />
+                      </Link>
 
                       <div className="shopping_card">
                         {productInOrder.includes(product.id) ? (
@@ -116,10 +127,12 @@ const Products = ({ dataProduct }: ProductProps) => {
                           </div>
                         ) : (
                           <Tooltip placement="top" title="Thêm vào giỏ">
-                            <strong onClick={() => handleAddOrderDetail(product)} className="icon__shopping">
+                            <strong
+                              onClick={() => handleAddOrderDetail(product)}
+                              className="icon__shopping"
+                            >
                               +
                             </strong>
-        
                           </Tooltip>
                         )}
                       </div>

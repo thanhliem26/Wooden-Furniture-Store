@@ -26,7 +26,6 @@ import InputContent from "../../inputContent";
 import styled from "./index.module.scss";
 import { CommentContext } from "./constant";
 import ItemChildren from "./itemChildren";
-import { current } from "@reduxjs/toolkit";
 import { WebSocketContext } from "@/features/user/productDetail/constant";
 
 interface Props {

@@ -3,7 +3,6 @@ import { STAFF_MANAGE_TOKEN, STAFF_MANAGE_USER, STAFF_REFRESH_MANAGE_USER } from
 import Cookies from 'js-cookie';
 import Images from '@/constants/images.ts';
 import lodash from 'lodash';
-import { object } from 'yup';
 
 export const isUserLoggedIn = (): any => localStorage.getItem(STAFF_MANAGE_TOKEN);
 
@@ -33,7 +32,7 @@ export const getUser = () => {
 
     if (isLogin && userInfo) {
         return JSON.parse(userInfo)
-    };
+    }
 
     return null;
 }
@@ -80,9 +79,9 @@ export const reduceImageQuality = async (blob, quality, callback) => {
 export const formatCurrency = (number) => {
     if (!number) return '';
     // Chuyển đổi số thành chuỗi và ngược lại
-    let strNumber = number.toString();
+    const strNumber = number.toString();
     // Biểu thức chính quy để chia nhỏ chuỗi thành các nhóm ba số
-    let regex = /(\d)(?=(\d{3})+(?!\d))/g;
+    const regex = /(\d)(?=(\d{3})+(?!\d))/g;
     // Thay thế mỗi nhóm ba số bằng nhóm ba số đó cộng với dấu phân cách (,)
     return strNumber.replace(regex, "$1,");
 }
@@ -116,7 +115,7 @@ export const handleURL = (images) => {
         };
     }
 
-    const [imageFirst, ...otherImage] = imageList;
+    const [imageFirst] = imageList;
     if (Array.isArray(imageList) && imageFirst) {
         return imageFirst;
     }

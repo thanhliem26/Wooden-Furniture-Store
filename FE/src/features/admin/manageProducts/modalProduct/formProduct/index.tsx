@@ -23,7 +23,6 @@ import lodash from 'lodash';
 import { handleMultiPrevImageS3 } from "@/components/modal/modalChangeInfoUser/content/constant";
 import MarkdownProduct from "../markdown";
 import markDownApi from "@/api/markdown";
-import debounce from "@/utils/debounce";
 
 interface Props {
   isEdit: boolean;

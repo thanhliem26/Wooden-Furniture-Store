@@ -1,4 +1,3 @@
-import React from "react";
 import SingUp from "./singUp";
 import styled from "./index.module.scss";
 

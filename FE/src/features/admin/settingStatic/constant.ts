@@ -1,7 +1,3 @@
-import productApi from "@/api/product";
-import Notification from "@/components/notificationSend";
-import { statusCode } from "@/constants/index";
-import { addProduct, setProductList, setProductSelected } from "@/store/manageProducts";
 import * as yup from "yup";
 
 export const schema = yup

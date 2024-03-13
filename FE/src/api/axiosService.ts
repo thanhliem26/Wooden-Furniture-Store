@@ -43,7 +43,7 @@ axiosService.interceptors.response.use(
 		return response;
 	},
 	async (error: AxiosError) => {
-		const errorData: any = error?.['response']?.['data'];
+		const errorData: unknown = error?.['response']?.['data'];
 
 		Notification({
 			type: "error",
@@ -53,7 +53,7 @@ axiosService.interceptors.response.use(
 
 		switch (error?.['response']?.['status']) {
 			case 401:
-				if (errorData?.message === 'jwt expired') {
+				if (errorData?.['message'] === 'jwt expired') {
 					const refreshToken = authUtil.getRefreshToken();
 
 					if (refreshToken) {
@@ -70,21 +70,23 @@ axiosService.interceptors.response.use(
 				}
 
 				return errorData;
-			case 404:
-				if (errorData?.message === 'Not Found keyStore') {
+			case 404: {
+				if (errorData?.['message'] === 'Not Found keyStore') {
 					removeHeader(HEADER.AUTHORIZATION);
 					authUtil.removeToken()
 					authUtil.removeUser()
 					authUtil.removeRefreshToken();
 					window.location.href = "/login";
 				}
-				
+
 				return errorData;
-			break;
-			case 500:
+			}
+
+				break;
+			case 500: {
 				const url = error.config?.url;
 
-				if (url === import.meta.env.VITE_API_REFRESH_TOKEN &&  errorData?.message === 'jwt expired') {
+				if (url === import.meta.env.VITE_API_REFRESH_TOKEN && errorData?.['message'] === 'jwt expired') {
 					removeHeader(HEADER.AUTHORIZATION);
 					authUtil.removeToken()
 					authUtil.removeUser()
@@ -92,6 +94,8 @@ axiosService.interceptors.response.use(
 					window.location.href = "/login";
 				}
 				return errorData;
+			}
+
 			default:
 				return Promise.reject(error);
 		}

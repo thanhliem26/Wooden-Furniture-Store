@@ -51,7 +51,7 @@ const ModalPreview = ({
 
   return (
     <Modal
-      destroyOnClose={true}
+      destroyOnClose={destroyOnClose}
       isModalOpen={isModalOpen}
       setIsModalOpen={setIsModalOpen}
       onSuccessModal={handleSubmit}

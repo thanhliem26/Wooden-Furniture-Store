@@ -135,7 +135,7 @@ const ProductContent = ({ product }: Props) => {
   };
 
   useEffect(() => {
-    const [imageFirst, ...imageOther] = images;
+    const [imageFirst] = images;
     if (imageFirst) {
       setImageSelected(imageFirst);
     }

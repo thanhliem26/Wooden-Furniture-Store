@@ -11,13 +11,13 @@ const UserFooterLayout = lazy(() => import("@/components/userFooterLayout"));
 const PublicLayoutUser = () => {
   const dispatch = useAppDispatch();
 
-  if (!isUserLoggedIn()) {
-    return <Navigate to="/login" />;
-  }
-
   useEffect(() => {
     dispatch(fetchUserInfo());
   }, []);
+
+  if (!isUserLoggedIn()) {
+    return <Navigate to="/login" />;
+  }
 
   return (
     <>

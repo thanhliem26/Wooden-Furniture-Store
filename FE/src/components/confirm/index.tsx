@@ -1,5 +1,4 @@
-import React from "react";
-import { Button, message, Popconfirm, PopconfirmProps } from "antd";
+import { message, Popconfirm, PopconfirmProps } from "antd";
 
 interface typeConfirm extends PopconfirmProps {
   title: string;

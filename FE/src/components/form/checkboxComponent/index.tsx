@@ -1,7 +1,6 @@
 import { Controller } from "react-hook-form";
 import { Checkbox, Form } from "antd";
 import { CheckboxProps } from "antd";
-import { useState } from "react";
 
 interface typeInputCheckboxComponent extends CheckboxProps {
   name: string;

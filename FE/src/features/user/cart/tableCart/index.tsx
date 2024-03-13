@@ -4,7 +4,6 @@ import type { TableProps } from "antd";
 import styled from "./index.module.scss";
 import orderDetailApi from "@/api/orderDetail";
 import { useAppDispatch, useAppSelector } from "@/store/index";
-import Notification from "@/components/notificationSend";
 import { NotificationError, formatCurrency } from "@/utils/index";
 import { useParams } from "react-router-dom";
 import { TYPE_ADD_MINUS } from "@/constants/index";
@@ -21,7 +20,7 @@ const TableCart = ({dataOrder, setDataOrder}: Props) => {
   const { id } = useParams();
 
   const dispatch = useAppDispatch();
-  const [idDelete, setIdDelete] = useState<Number[]>([]);
+  const [idDelete, setIdDelete] = useState<number[]>([]);
 
   const isUpdate = useMemo(() => {
     const findUpdate = dataOrder.filter((order) => {
@@ -195,7 +194,7 @@ const TableCart = ({dataOrder, setDataOrder}: Props) => {
       dispatch(
         searchOrder({ order_status: "pending", user_id: user_id, limit: 1 })
       );
-    };
+    }
 
   
   };

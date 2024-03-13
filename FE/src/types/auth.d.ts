@@ -2,6 +2,23 @@ interface responseToken extends baseInstance {
     metadata: responseMetadataToken
 }
 
+interface responseMetaUploadImage {
+    ETag: string,
+    ServerSideEncryption: string,
+    Location: string,
+    key: string,
+    Key: string,
+    Bucket: string,
+}
+
+interface responseUploadImage extends baseInstance {
+    metadata: responseMetaUploadImage
+}
+
+interface responseDeleteImage extends baseInstance {
+    metadata: boolean
+}
+
 interface responseMetadataToken {
     user: responseUserToken,
     tokens: responseTokenToken

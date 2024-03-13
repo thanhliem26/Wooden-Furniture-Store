@@ -1,5 +1,5 @@
 import { DownOutlined } from "@ant-design/icons";
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "./index.module.scss";
 
 interface Props {

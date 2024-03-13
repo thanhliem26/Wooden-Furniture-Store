@@ -1,5 +1,5 @@
 import { formatCurrency } from "@/utils/index";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 
 interface Props {
   dataOrder: OrderDetailState[];

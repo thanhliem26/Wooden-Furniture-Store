@@ -31,5 +31,8 @@ export default defineConfig(({command, mode}) => {
       },
       port: env.PORT || 5173,
     },
+    // build: {
+    //   sourcemap: true, 
+    // },
   }
 })

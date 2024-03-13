@@ -97,6 +97,7 @@ const TableManageCategory = ({
       dataIndex: "action",
       key: "action",
       width: 130,
+      //@ts-ignore
       render: (action: unknown, row: CategoryState) => (
         <>
           <ModalCategory

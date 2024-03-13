@@ -14,6 +14,14 @@ const authApi = {
         const url = '/v1/api/access/login';
         return axiosService.post(url, body);
     },
+    uploadFileS3(body): Promise<responseUploadImage> {
+        const url = '/v1/api/access/uploadFIleS3';
+        return axiosService.post(url, body, {headers: {[HEADER.CONTENT_TYPE]: 'multipart/form-data'}});
+    },
+    deleteFileS3(key): Promise<responseDeleteImage> {
+        const url = `/v1/api/access/deleteFileS3/${key}`;
+        return axiosService.delete(url);
+    },
     reFreshToken(refreshToken: string): Promise<responseToken> {
         const url = '/v1/api/access/handleRefreshToken';
         return axiosService.post(url, undefined, {headers: {[HEADER.REFRESHTOKEN]: refreshToken}});

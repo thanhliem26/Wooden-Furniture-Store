@@ -1,6 +1,5 @@
 import { Controller } from "react-hook-form";
 import { Form, Input } from "antd";
-import { InputProps } from "antd";
 
 const { TextArea } = Input;
 
@@ -23,8 +22,6 @@ const InputComponent = ({
   label = "",
   placeholder = "",
   className = "",
-  icon,
-  type = "text",
   ...props
 }: typeInputAreaComponent) => {
 

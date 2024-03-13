@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Col, Row, Form } from "antd";
 import { ButtonComponent, CheckboxComponent, InputComponent } from "@/components/form";
-import { eventEmitter } from "@/utils/index";
+import { NotificationError, eventEmitter } from "@/utils/index";
 import Notification from "@/components/notificationSend";
 import { useForm, useWatch } from "react-hook-form";
 import { schema, FormData } from './constant';
@@ -52,7 +52,7 @@ const ChangePassword = () => {
         });
       }
     } catch (error: unknown) {
-      throw error;
+      NotificationError(error)
     } finally {
       setLoading(false);
     }

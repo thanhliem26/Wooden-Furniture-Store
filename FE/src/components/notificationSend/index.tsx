@@ -1,6 +1,4 @@
-import React from "react";
-import { SmileOutlined } from "@ant-design/icons";
-import { Button, notification } from "antd";
+import { notification } from "antd";
 import { notificationType } from "./constant";
 
 const Notification = ({

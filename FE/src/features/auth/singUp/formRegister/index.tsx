@@ -32,6 +32,7 @@ const FormRegister = () => {
     try {
       setLoading(true);
 
+      //@ts-ignore
       const result = await authApi.singUp(data);
       if (result?.["status"].toString() === "error") {
         Notification({

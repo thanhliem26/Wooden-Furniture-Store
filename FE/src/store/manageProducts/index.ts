@@ -35,7 +35,7 @@ export const manageProductSlice = createSlice({
         setProductList: (state, action: PayloadAction<ProductStateEdit>) => {
             const {id, ...value} = action.payload;
 
-            state.productList = state.productList.map((category: ProductState, index) => {
+            state.productList = state.productList.map((category: ProductState) => {
                 if(category.id === id) {
                     category = {...category, ...value}
                 }
@@ -82,11 +82,11 @@ export const manageProductSlice = createSlice({
             state = { ...state, loading: false, total: count, productList: rows.map((item, index) => ({ ...item, key: index })) }
 
             return state;
-        }).addCase(searchProduct.pending, (state, action) => {
+        }).addCase(searchProduct.pending, (state) => {
             state = { ...state, total: 0, loading: true }
 
             return state;
-        }).addCase(searchProduct.rejected, (state, action) => {
+        }).addCase(searchProduct.rejected, (state) => {
             state = { ...state, total: 0, loading: false }
 
             return state;

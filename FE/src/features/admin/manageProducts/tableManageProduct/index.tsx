@@ -113,7 +113,7 @@ const TableManageCategory = ({
       render: (category_id: number) => {
         const category = handleGetCategory(category_id);
       
-        return <b>{category.name}</b>;
+        return <b>{category?.['name']}</b>;
       },
     },
     {
@@ -121,6 +121,7 @@ const TableManageCategory = ({
       dataIndex: "action",
       key: "action",
       width: 130,
+      //@ts-ignore
       render: (action: unknown, row: ProductState) => (
         <>
           <ModalProduct

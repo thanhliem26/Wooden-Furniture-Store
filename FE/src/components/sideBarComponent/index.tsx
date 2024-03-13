@@ -31,10 +31,10 @@ const SideBar = ({ collapsed, setCollapsed }: Props) => {
       //tablet and phone
       breakpoint={resize.width < 1200 ? "xxl" : undefined}
       collapsedWidth={resize.width < 1200 ? "0" : undefined}
-      onBreakpoint={(broken) => {
+      onBreakpoint={() => {
         setCollapsed((collapse) => !collapse);
       }}
-      onCollapse={(collapsed, type) => {
+      onCollapse={() => {
         setCollapsed((collapse) => !collapse);
       }}
     >

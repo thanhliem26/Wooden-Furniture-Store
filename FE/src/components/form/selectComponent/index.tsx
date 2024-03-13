@@ -1,5 +1,5 @@
 import { Controller } from "react-hook-form";
-import { Form, Input, Select } from "antd";
+import { Form, Select } from "antd";
 import { SelectProps } from "antd";
 import { useEffect } from "react";
 
@@ -22,7 +22,6 @@ const SelectComponent = ({
   label = "",
   placeholder = "",
   className = "",
-  icon,
   defaultValue,
   setValue,
   ...props

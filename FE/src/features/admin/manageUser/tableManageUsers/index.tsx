@@ -115,6 +115,7 @@ const TableManageUsers = ({
       dataIndex: "action",
       key: "action",
       width: 130,
+      //@ts-ignore
       render: (action: unknown, row: UserState) => (
         <>
           <ModalEdit

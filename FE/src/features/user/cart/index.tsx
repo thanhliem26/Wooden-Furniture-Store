@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "./index.module.scss";
 import { Link } from "react-router-dom";
 import { Col, Row } from "antd";
 import TableCart from "./tableCart";
-import { useAppSelector } from "@/store/index";
 import TotalCart from "./TotalCart";
 
 const CartOrder = () => {

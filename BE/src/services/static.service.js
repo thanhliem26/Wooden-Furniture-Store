@@ -36,6 +36,28 @@ class CategoryService {
 
     const staticPg = await CategoryService.getStatic(payload).then(async (response) => {
       const [ static_page ] = response;
+      if(!static_page) {
+        return {
+          type: payload.type,
+          Images: null,
+          ImageSP: null,
+          productShow: {
+            top1: {
+              category_name: '',
+              data: [],
+            },
+            top2: {
+              category_name: '',
+              data: [],
+            },
+            top3: {
+              category_name: '',
+              data: [],
+            }
+          }
+        }
+      }
+
       const { productShow } = static_page;
 
       const ids = productShow ? JSON.parse(productShow) : [];

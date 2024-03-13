@@ -12,7 +12,7 @@ interface Props {
   setNullWhenCancel?: boolean;
 }
 
-const ModalAddUser = ({ isEdit = false, onSuccess, setNullWhenCancel = true,  ...props }: Props) => {
+const ModalAddUser = ({ ...props }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   return (

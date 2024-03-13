@@ -2,7 +2,6 @@ import { useContext, useMemo, useState } from "react";
 import Modal from "@/components/modal";
 import styled from "./index.module.scss";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/index";
-import { setProductSelected } from "@/store/manageProducts";
 import Images from "@/constants/images";
 import {
   NotificationError,

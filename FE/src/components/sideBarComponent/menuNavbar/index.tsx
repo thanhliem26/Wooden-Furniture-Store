@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { iconMenu } from "@/constants/index";
 import { Skeleton } from "antd";
 import { Link, useLocation } from "react-router-dom";
+import { NotificationError } from "@/utils/index";
 
 const skeleton = [
   getItem("Sketon", "1", <Skeleton active avatar />),
@@ -35,7 +36,7 @@ const MenuNavbar = () => {
 
       setMenu(menu);
     } catch (error) {
-      throw error;
+      NotificationError(error)
     } finally {
       setLoading(false);
     }

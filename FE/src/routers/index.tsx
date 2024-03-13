@@ -1,6 +1,5 @@
 import PublicLayout from '@/layouts/PublicLayout';
-import { RouterProvider, createBrowserRouter, Navigate } from 'react-router-dom'
-import { isUserLoggedIn } from '@/utils/index';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import SingInPage from '@/features/auth/singIn';
 import SingUpPage from '@/features/auth/singUp';
 import AdminLayout from '@/layouts/AdminLayout';

@@ -12,17 +12,11 @@ const {
 import { findById } from "../models/repository/user.repo";
 import db from "../models";
 import { validateUser, createNewUser } from "../models/repository/user.repo";
-import { getInfoData } from "../utils";
-
-const RoleShop = {
-  SHOP: "SHOP",
-  WRITER: "WRITER",
-  EDITOR: "EDITOR",
-  ADMIN: "ADMIN",
-};
+import { deleteFIleUpload, getInfoData } from "../utils";
+import { deleteFileS3, uploadFileS3 } from "../utils/aws";
+const fs = require("fs").promises;
 
 class AccessService {
-
   static handleRefreshToken = async (refreshToken) => {
     const foundToken = await tokenService.findByRefreshTokenUsed(refreshToken);
     if (foundToken) {
@@ -75,7 +69,8 @@ class AccessService {
   static login = async ({ email, password, refreshToken = null }) => {
     //check exits email
     const foundUser = await db.User.findOne({ where: { email }, raw: true });
-    if (!foundUser || foundUser.deleteFlg !== 0) throw new BadRequestError("User not registered");
+    if (!foundUser || foundUser.deleteFlg !== 0)
+      throw new BadRequestError("User not registered");
 
     // //check match password
     const match = await bcrypt.compare(password, foundUser.password);
@@ -92,13 +87,12 @@ class AccessService {
       privateKey
     );
 
-   await tokenService.createKeyToken({
+    await tokenService.createKeyToken({
       userId: foundUser.id,
       publicKey,
       privateKey,
       refreshToken: tokens.refreshToken,
     });
-
 
     return {
       user: getInfoData({
@@ -156,6 +150,35 @@ class AccessService {
       code: 200,
       metadata: null,
     };
+  };
+
+  static uploadFileServiceS3 = async (file, data) => {
+    if (!file || !data.nameFile) {
+      throw new BadRequestError("File and nameFile is required!");
+    }
+
+    const pathImage = file.path;
+    const nameImage = data.nameFile;
+
+    try {
+      const fileData = await fs.readFile(pathImage);
+      const fileS3 = await uploadFileS3(fileData, nameImage);
+
+      //delete file in folder upload
+      deleteFIleUpload(pathImage);
+
+      return fileS3;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  static deleteFileServiceS3 = async (key) => {
+    if (!key) {
+      throw new BadRequestError("key is required!");
+    }
+
+    return await deleteFileS3(key);
   };
 }
 

@@ -34,7 +34,7 @@ interface typeInpuUploadComponent extends UploadProps {
   smImage?: number;
 }
 
-const dummyRequest = async ({ file, onSuccess = (txt) => txt }) => {
+const dummyRequest = async ({onSuccess = (txt) => txt }) => {
   setTimeout(() => {
     onSuccess("ok");
   }, 0);
@@ -71,7 +71,6 @@ const UploadComponent = ({
   }, [fileList]);
 
   const handleChange: UploadProps["onChange"] = async ({
-    fileList: newFileList,
     file,
   }) => {
     if (file.status === "uploading") {
@@ -129,7 +128,7 @@ const UploadComponent = ({
     }
   };
 
-  const renderFileList = (fileList, action, disabled = false) => {
+  const renderFileList = (fileList) => {
     return fileList.map((file, index) => {
       if (file.is_delete === true) {
         return null;
@@ -169,7 +168,7 @@ const UploadComponent = ({
     <div className={`${styled["upload__component"]}`}>
       <Row gutter={[16, 16]} className="image__list">
         {/* <div className="image__list"> */}
-          {uploadSelf ? null : renderFileList(fileList, false, false)}
+          {uploadSelf ? null : renderFileList(fileList)}
           {uploadSelf
             ? btnUploadComponent
             : countVisible >= maxCount
@@ -181,7 +180,7 @@ const UploadComponent = ({
       <Controller
         name={name}
         control={control}
-        render={({ field }) => (
+        render={() => (
           <Form.Item label={label} className={`${className} upload__self`}>
             <Upload
               rootClassName="upload__root-class"

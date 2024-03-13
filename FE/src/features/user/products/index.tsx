@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "./index.module.scss";
 import ProductFilter from "./productFilter";
 import { Col, Row } from "antd";
 import ProductItem from "./productItem";
 import { Link } from "react-router-dom";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/index";
-import { pushListProduct, searchProduct } from "@/store/manageProducts";
+import { pushListProduct } from "@/store/manageProducts";
 import productApi from "@/api/product";
 import { NotificationError } from "@/utils/index";
 

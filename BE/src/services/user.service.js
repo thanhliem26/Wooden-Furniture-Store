@@ -19,6 +19,7 @@ class UserService {
   };
 
   static handleGetUserInfo = async (userId) => {
+    console.log("handleGetUserInfo")
     const userInfo = await findById(userId);
 
     return removeElement({
@@ -26,6 +27,7 @@ class UserService {
       field: ["createdAt", "updatedAt", "password", "createdAt"],
     });
   };
+  
 
   static handleGetMenu = async (roleUser) => {
     return menu.reduce((current, next) => {

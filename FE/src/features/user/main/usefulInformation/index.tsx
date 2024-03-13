@@ -1,9 +1,9 @@
-import { Carousel, Slider } from "antd";
-import React, { useState } from "react";
+import { Carousel } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import Images from "@/constants/images";
 
 const UseFulInformation = () => {
+  // eslint-disable-next-line
   const SlickButton = ({ currentSlide, slideCount, children, ...props }) => {
     return <span {...props}>{children}</span>
   };

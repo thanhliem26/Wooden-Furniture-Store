@@ -2,7 +2,7 @@ import { Tabs } from "antd";
 import styled from './index.module.scss';
 import Description from "./description";
 import Stars from './stars'
-import { CommentOutlined, SmileOutlined, StarOutlined } from "@ant-design/icons";
+import { SmileOutlined, StarOutlined } from "@ant-design/icons";
 
 interface Props {
   product: ProductState | null;
