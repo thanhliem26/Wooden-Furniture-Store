@@ -61,7 +61,7 @@ class CommentService {
           sequelize.literal(`(
             (Comment.is_deleted = '0' AND Comment.parent_id IS NOT NULL AND EXISTS (
                 SELECT 1 
-                FROM comments AS pr 
+                FROM Comments AS pr 
                 WHERE pr.id = Comment.parent_id 
                 AND (pr.is_deleted = '0' OR pr.parent_id IS NOT NULL)
                 AND user_comment.deleteFlg = '0'
@@ -111,13 +111,13 @@ class CommentService {
         "updatedAt",
         [
           sequelize.literal(
-            "(SELECT COUNT(*) FROM comments AS c WHERE c.parent_id = Comment.id)"
+            "(SELECT COUNT(*) FROM Comments AS c WHERE c.parent_id = Comment.id)"
           ),
           "countChild_low",
         ],
         [
           sequelize.literal(
-            "(SELECT COUNT(*) FROM comments AS c WHERE c.left > Comment.left AND c.right < Comment.right AND is_deleted = '0')"
+            "(SELECT COUNT(*) FROM Comments AS c WHERE c.left > Comment.left AND c.right < Comment.right AND is_deleted = '0')"
           ),
           "countChild_total",
         ],

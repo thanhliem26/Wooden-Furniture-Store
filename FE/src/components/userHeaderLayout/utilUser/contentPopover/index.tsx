@@ -8,7 +8,7 @@ import { ButtonComponent } from "@/components/form";
 import orderDetailApi from "@/api/orderDetail";
 import { statusCode } from "@/constants/index";
 import Notification from "@/components/notificationSend";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ContentPopover = () => {
   const listOrder = useAppSelector(
@@ -70,7 +70,7 @@ const ContentPopover = () => {
                     <img src={image.url} alt={image.name} />
                   </div>
                   <div className="popover__item-text">
-                    <div className="item__text-name">{order.name}</div>
+                    <div className="item__text-name"><Link to={`/product/${order.productId}`}>{order.name}</Link></div>
                     <div className="item__text-price">
                       {order.quantity} ×
                       <span> {formatCurrency(order.price)}</span>

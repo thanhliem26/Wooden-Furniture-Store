@@ -93,6 +93,15 @@ axiosService.interceptors.response.use(
 					authUtil.removeRefreshToken();
 					window.location.href = "/login";
 				}
+
+				if (errorData?.['message'] === 'invalid signature') {
+					removeHeader(HEADER.AUTHORIZATION);
+					authUtil.removeToken()
+					authUtil.removeUser()
+					authUtil.removeRefreshToken();
+					window.location.href = "/login";
+				}
+
 				return errorData;
 			}
 

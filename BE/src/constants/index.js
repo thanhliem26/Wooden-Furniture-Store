@@ -33,6 +33,13 @@ export const menu = [
     role: [ROLE_USER.ADMIN],
     icon: "manage_service_contract",
   },
+  {
+    id: 5,
+    label: "Screen User",
+    href: "/",
+    role: [ROLE_USER.ADMIN],
+    icon: "manage_service_contract",
+  },
 ];
 
 export const menu_user = [

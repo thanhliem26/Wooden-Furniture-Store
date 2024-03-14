@@ -31,20 +31,27 @@
           flex: 1;
 
           .item__text-name {
-            margin-bottom: 5px;
-            padding: 0;
-            text-overflow: ellipsis;
-            line-height: 1.3;
-            font-size: 1rem;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
 
-            &:hover {
-              color: #e2ba48;
-              cursor: pointer;
+           
+
+            a {
+              margin-bottom: 5px;
+              padding: 0;
+              text-overflow: ellipsis;
+              line-height: 1.3;
+              font-size: 1rem;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+              color: black;
+              &:hover {
+                color: #e2ba48;
+                cursor: pointer;
+              }
             }
+
+           
           }
 
           .item__text-price {
@@ -134,12 +141,22 @@
       .popover__action-see {
         button {
           background-color: black;
+
+          &:hover {
+            background-color: black !important;
+            opacity: 0.8;
+          }
         }
       }
 
       .popover__action-pay {
         button {
           background-color: #d09f11;
+
+          &:hover {
+            background-color: #d09f11 !important;
+            opacity: 0.8;
+          }
         }
       }
     }

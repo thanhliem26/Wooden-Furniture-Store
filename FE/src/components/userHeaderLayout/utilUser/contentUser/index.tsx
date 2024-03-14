@@ -27,7 +27,6 @@ const ContentUser = () => {
 
   const handleLogOut = async () => {
     const refreshToken = authUtil.getRefreshToken();
-
     const { status, message } = await authApi.logOut({ user_id: user.id, refreshToken });
 
     if (status === statusCode.SUCCESS) {
