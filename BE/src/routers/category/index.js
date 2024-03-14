@@ -8,12 +8,12 @@ const { authentication, authenticationV2, isAdmin } = require('../../auth/authUt
 
 //authentication token
 router.use(authentication);
+router.get('/list', asyncHandler(CategoryController.searchCategory));
 
 //role admin
 router.use(isAdmin);
 
 router.post('/create-category', asyncHandler(CategoryController.createNewCategory));
-router.get('/list', asyncHandler(CategoryController.searchCategory));
 router.put('/update', asyncHandler(CategoryController.updateCategory));
 router.delete('/delete/:id', asyncHandler(CategoryController.deleteCategory));
 
