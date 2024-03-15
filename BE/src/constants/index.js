@@ -28,13 +28,20 @@ export const menu = [
   },
   {
     id: 4,
+    label: "Manage News",
+    href: "/admin/manage-news",
+    role: [ROLE_USER.ADMIN],
+    icon: "manage_service_contract",
+  },
+  {
+    id: 5,
     label: "Setting static",
     href: "/admin/setting_static",
     role: [ROLE_USER.ADMIN],
     icon: "manage_service_contract",
   },
   {
-    id: 5,
+    id: 6,
     label: "Screen User",
     href: "/",
     role: [ROLE_USER.ADMIN],

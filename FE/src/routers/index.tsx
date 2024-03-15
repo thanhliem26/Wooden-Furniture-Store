@@ -18,6 +18,7 @@ import SettingStatic from '@/features/admin/settingStatic';
 import CartOrder from '@/features/user/cart';
 import Products from '@/features/user/products';
 import ProductDetail from '@/features/user/productDetail';
+import ManageNews from '@/features/admin/manageNews';
 
 function RouterComponent() {
   const router = createBrowserRouter([
@@ -80,6 +81,10 @@ function RouterComponent() {
         {
           path: "manage-products",
           element: <ManageProduct />
+        },
+        {
+          path: "manage-news",
+          element: <ManageNews />
         },
         {
           path: "setting_static",

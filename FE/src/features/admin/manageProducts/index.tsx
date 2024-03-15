@@ -28,22 +28,21 @@ const ManageCategory = () => {
   };
 
   return (
-    <ProductContext.Provider value={{categoryList: categoryList}}>
+    <ProductContext.Provider value={{ categoryList: categoryList }}>
       <div className={styled["manage__product"]}>
-        <div className='add__product'>
-        <ModalProduct
-          destroyOnClose={true}
-          title="Edit Category"
-          width={800}
-          content={
-            <ButtonComponent
-              className="btn__add-add__product"
-              icon={<ShopOutlined />}
-              label="Add product"
-            />
-          } 
-        />
-      </div>
+        <div className="add__product">
+          <ModalProduct
+            destroyOnClose={true}
+            width={800}
+            content={
+              <ButtonComponent
+                className="btn__add-add__product"
+                icon={<ShopOutlined />}
+                label="Add product"
+              />
+            }
+          />
+        </div>
         <TableManageProduct
           productList={productList}
           loading={loading}

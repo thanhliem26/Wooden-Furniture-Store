@@ -4,60 +4,47 @@ import { statusCode } from "@/constants/index";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "@/store/index";
 import ModalConfirm from "@/components/confirm";
-import { eventEmitter, formatCurrency } from "@/utils/index";
+import { eventEmitter, isJson } from "@/utils/index";
 import Notification from "@/components/notificationSend";
 import InputSearchField from "@/components/admin/inputSearch";
-import {
-  setPagination,
-  deleteProduct,
-} from "@/store/manageProducts";
-import {searchProduct, setProductSelected} from '@/store/manageProducts';
-import ModalProduct from "../modalProduct"; 
-import productApi from "@/api/product";
-import { ProductContext } from "../constant";
-import { useContext } from "react";
+import {searchProduct} from '@/store/manageProducts';
+import ModalProduct from "../modalNews"; 
+import images from "@/constants/images";
+import { deleteNews, searchNews, setNewsSelected, setPagination } from "@/store/manageNews";
+import newsApi from "@/api/news";
 import { handlePrevImageS3 } from "@/components/modal/modalChangeInfoUser/content/constant";
 
 interface Props {
   loading?: boolean;
-  productList: ProductState[];
+  newsList: NewsState[];
   pagination: basePagination;
   total: number;
 }
 
-const TableManageProduct = ({
+const TableManageNews = ({
   loading = false,
-  productList = [],
+  newsList = [],
   pagination,
   total,
 }: Props) => {
-  const categoryContext = useContext(ProductContext);
   const dispatch = useAppDispatch();
 
-  const handleGetCategory = (id) => {
-    const [result] = categoryContext.categoryList.filter((category) => {
-      return category.id === id;
-    })
-
-    return result || {};
-  }
-
-  const handleDeleteProduct = async ({ id, images }) => {
+  const handleDeleteNews = async ({ id, image }) => {
     try {
-      let imageProduct = images ? JSON.parse(images) : [];
-      imageProduct = imageProduct.map((news) => ({...news, is_delete: true}));
+      let imageNews = image && isJson(image) ? JSON.parse(image) : [];
+      imageNews = imageNews.map((news) => ({...news, is_delete: true}));
 
-      const { message, status } = await productApi.deleteProduct(id);
+      const { message, status } = await newsApi.deleteNews(id);
 
       if (status === statusCode.DELETED) {
-        dispatch(deleteProduct(id));
-        await handlePrevImageS3(imageProduct)
+        dispatch(deleteNews(id));
+        await handlePrevImageS3(imageNews)
 
         eventEmitter.emit("submit_modal");
 
         Notification({
           message: message,
-          description: 'Notify delete succes',
+          description: 'Notify delete success!',
         });
       }
     } catch (e: unknown) {
@@ -65,12 +52,12 @@ const TableManageProduct = ({
     }
   };
 
-  const columns: ColumnsType<ProductState> = [
+  const columns: ColumnsType<NewsState> = [
     {
       title: "NAME",
       dataIndex: "name",
       key: "name",
-      width: 100,
+      width: 200,
       render: (name: string) => {
         return (
           <div className="content__name">
@@ -82,52 +69,24 @@ const TableManageProduct = ({
       },
     },
     {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
-      width: 140,
-      render: (description: string) => {
-        return <p className="overflow__text">{description}</p>
+      title: "Image",
+      dataIndex: "image",
+      render: (image: string) => {
+        const [imageNews] = image && isJson(image) ? JSON.parse(image) : [];
+        const url = imageNews?.['url'] ? imageNews?.['url'] : images.StoreEmpty;
+
+        return <div className="contain__image-news">
+          <img src={url} alt="image news" />
+        </div>
       }
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
-      sorter: true,
-      width: 100,
-      render: (price: number) => {
-        return <> {formatCurrency(price)}</>;
-      },
-    },
-    {
-      title: "Stock quantity",
-      dataIndex: "stock_quantity",
-      key: "stock_quantity",
-      sorter: true,
-      width: 70,
-      render: (stock_quantity: number) => {
-        return <> {stock_quantity}</>;
-      },
-    },
-    {
-      title: "Category",
-      dataIndex: "category_id",
-      key: "category_id",
-      width: 70,
-      render: (category_id: number) => {
-        const category = handleGetCategory(category_id);
-      
-        return <b>{category?.['name']}</b>;
-      },
     },
     {
       title: "ACTION",
       dataIndex: "action",
       key: "action",
-      width: 130,
+      width: 200,
       //@ts-ignore
-      render: (action: unknown, row: ProductState) => (
+      render: (action: unknown, row: NewsState) => (
         <>
           <ModalProduct
             destroyOnClose={true}
@@ -138,7 +97,7 @@ const TableManageProduct = ({
               <Tag
                 color="blue"
                 className="tag__action"
-                onClick={() => dispatch(setProductSelected(row))}
+                onClick={() => dispatch(setNewsSelected(row))}
               >
                 <EditOutlined /> EDIT
               </Tag>
@@ -147,7 +106,7 @@ const TableManageProduct = ({
           <ModalConfirm
             title="Delete product"
             description="Are you sure to delete this product?"
-            handleConfirm={() => handleDeleteProduct(row)}
+            handleConfirm={() => handleDeleteNews(row)}
           >
             <Tag color="red" className="tag__action">
               <DeleteOutlined /> DELETE
@@ -162,12 +121,12 @@ const TableManageProduct = ({
   };
 
   return (
-    <div className="table__manage-product">
+    <div className="table__manage-news">
       <div className="table__title">
         <InputSearchField
-          placeholder="Search product"
+          placeholder="Search news"
           pagination={pagination}
-          setFieldSearch={searchProduct}
+          setFieldSearch={searchNews}
           setPagination={setPagination}
         />
       </div>
@@ -181,11 +140,12 @@ const TableManageProduct = ({
         }}
         loading={loading}
         columns={columns}
-        dataSource={productList}
+        dataSource={newsList}
         scroll={{ x: 1000 }}
+        rowKey={'id'}
       />
     </div>
   );
 };
 
-export default TableManageProduct;
+export default TableManageNews;

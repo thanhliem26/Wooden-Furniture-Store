@@ -90,7 +90,7 @@ const UploadComponent = ({
     const cloneImages = lodash.cloneDeep(fileList);
 
     const newFiles = cloneImages.map((image) => {
-      if (image.uid === uid || image.url === uid) {
+      if (image.name === uid || image.url === uid) {
         image.is_delete = true;
       }
 

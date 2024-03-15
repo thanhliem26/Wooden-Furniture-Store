@@ -6,8 +6,8 @@ import {
 import { Tabs } from "antd";
 import styled from "./index.module.scss";
 import { useAppDispatch } from "@/store/index";
-import FormProduct from "./formProduct";
-import { setProductSelected } from "@/store/manageProducts";
+import FormNews from "./formNews";
+import { setNewsSelected } from "@/store/manageNews";
 
 interface Props {
   content: any;
@@ -17,18 +17,18 @@ interface Props {
   isEdit?: boolean;
 }
 
-const ModalProduct = ({isEdit = false,  ...props }: Props) => {
+const ModalNews = ({isEdit = false,  ...props }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
   return (
     <Modal
       footer={[]}
-      className={styled["modal__product"]}
+      className={styled["modal__news"]}
       isModalOpen={isModalOpen}
+      title={isEdit ? 'Edit News' : 'Create News'}
       setIsModalOpen={setIsModalOpen}
-      title={isEdit ? 'Edit Product' : 'Create Product'}
-      onCancelModal={() => dispatch(setProductSelected(null))}
+      onCancelModal={() => dispatch(setNewsSelected(null))}
       {...props}
     >
       <Tabs
@@ -39,10 +39,10 @@ const ModalProduct = ({isEdit = false,  ...props }: Props) => {
             label: (
               <>
                 <ShopOutlined />
-                Product
+                News
               </>
             ),
-            children: <FormProduct isEdit={isEdit}/>,
+            children: <FormNews isEdit={isEdit}/>,
           },
         ]}
       />
@@ -50,4 +50,4 @@ const ModalProduct = ({isEdit = false,  ...props }: Props) => {
   );
 };
 
-export default ModalProduct;
+export default ModalNews;

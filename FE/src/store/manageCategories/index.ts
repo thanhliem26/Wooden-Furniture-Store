@@ -22,7 +22,7 @@ const initialState: state_reducer_manageCategories = {
     total: 0,
 }
 
-export const manageUserSlice = createSlice({
+export const manageCategorySlice = createSlice({
     name: 'manage_categories',
     initialState,
     reducers: {
@@ -99,5 +99,5 @@ export const {
     deleteCategory,
     addCategory,
     setPagination
-} = manageUserSlice.actions
-export default manageUserSlice.reducer
+} = manageCategorySlice.actions
+export default manageCategorySlice.reducer
