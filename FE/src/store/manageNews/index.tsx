@@ -67,6 +67,11 @@ export const manageNewsSlice = createSlice({
 
             state.total = state.total + 1;
         },
+        pushListNews: (state, action: PayloadAction<NewsState[]>) => {
+            state.newsList = [...state.newsList,  ...action.payload]
+
+            return state;
+        },
         setPagination: (state, action: PayloadAction<basePagination>) => {
             state.pagination = { ...state.pagination, ...action.payload };
         }
@@ -98,6 +103,7 @@ export const {
     setNewsList,
     deleteNews,
     addNews,
-    setPagination
+    setPagination,
+    pushListNews
 } = manageNewsSlice.actions
 export default manageNewsSlice.reducer

@@ -49,6 +49,7 @@ class NewsService {
       include: [
         { model: db.Markdowns, as: "Markdown_data", attributes: [] },
       ],
+      order: [["createdAt", "DESC"]],
     };
 
     if (limit !== null) {

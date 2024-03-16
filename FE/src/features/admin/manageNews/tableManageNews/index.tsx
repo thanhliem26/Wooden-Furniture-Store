@@ -61,7 +61,7 @@ const TableManageNews = ({
       render: (name: string) => {
         return (
           <div className="content__name">
-            <div className="content__name-info">
+            <div className="content__name-info overflow__text">
               <h5>{name}</h5>
             </div>
           </div>

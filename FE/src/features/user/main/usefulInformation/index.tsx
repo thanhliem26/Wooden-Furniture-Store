@@ -1,11 +1,19 @@
 import { Carousel } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import Images from "@/constants/images";
+import { useAppDispatch, useAppSelector } from "@/store/index";
+import { useEffect } from "react";
+import { searchNews } from "@/store/manageNews";
+import { isEmpty } from "lodash";
+import moment from "moment";
+import Markdown from "react-markdown";
+import { handleURL } from "@/utils/index";
 
 const UseFulInformation = () => {
+  const newsList = useAppSelector((state) => state.manageNews.newsList);
   // eslint-disable-next-line
   const SlickButton = ({ currentSlide, slideCount, children, ...props }) => {
-    return <span {...props}>{children}</span>
+    return <span {...props}>{children}</span>;
   };
 
   const setting = {
@@ -22,10 +30,11 @@ const UseFulInformation = () => {
         <RightOutlined className="prev_icon" />
       </SlickButton>
     ),
-    prevArrow:
-    <SlickButton currentSlide slideCount>
+    prevArrow: (
+      <SlickButton currentSlide slideCount>
         <LeftOutlined className="next_icon" />
-      </SlickButton>,
+      </SlickButton>
+    ),
     responsive: [
       {
         breakpoint: 576,
@@ -39,6 +48,12 @@ const UseFulInformation = () => {
     ],
   };
 
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(searchNews({ name: "", limit: 10, page: 1 }));
+  }, []);
+
   return (
     <div className="main_useful">
       <div className="main__useful-title">
@@ -46,127 +61,35 @@ const UseFulInformation = () => {
       </div>
 
       <Carousel {...setting}>
-        <div className="useful__content">
-          <div className="useful__content-image">
-            <img src={Images.UI1} alt="" />
-            <div className="useful__content-day">
-              <span className="sp1">08</span>
-              <br />
-              <span className="sp2">Th3</span>
-            </div>
-          </div>
-          <div className="useful__content-description">
-            <h5>Duis luctus elit nisi, et cursus magna pellentesque non.</h5>
-            <div className="is_divider"></div>
-            <p className="text__overflow-2">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              dapibus, massa non viverra
-            </p>
-            <button>Đọc thêm</button>
-          </div>
-        </div>
+        {!isEmpty(newsList) &&
+          newsList.map((news, index) => {
+            const image = handleURL(news.image);
 
-        <div className="useful__content">
-          <div className="useful__content-image">
-            <img src={Images.UI2} alt="" />
-            <div className="useful__content-day">
-              <span className="sp1">08</span>
-              <br />
-              <span className="sp2">Th3</span>
-            </div>
-          </div>
-          <div className="useful__content-description">
-            <h5>
-              Mauris tristique pretium tempus. Vestibulum et accumsan magna.
-            </h5>
-            <div className="is_divider"></div>
-            <p className="text__overflow-2">
-              Donec tempus eu ligula sed blandit. Vivamus vel enim ac quam
-              iaculis rutrum.
-            </p>
-            <button>Đọc thêm</button>
-          </div>
-        </div>
-
-        <div className="useful__content">
-          <div className="useful__content-image">
-            <img src={Images.UI3} alt="" />
-            <div className="useful__content-day">
-              <span className="sp1">08</span>
-              <br />
-              <span className="sp2">Th3</span>
-            </div>
-          </div>
-          <div className="useful__content-description">
-            <h5>
-              Aliquam placerat nisl nec imperdiet vehicula. Phasellus tempus
-              ligula id orci finibus feugiat.
-            </h5>
-            <div className="is_divider"></div>
-            <p className="text__overflow-2">
-              n rutrum tempus purus, ut euismod dui facilisis ac. Fusce semper
-              dignissim diam
-            </p>
-            <button>Đọc thêm</button>
-          </div>
-        </div>
-        <div className="useful__content">
-          <div className="useful__content-image">
-            <img src={Images.UI4} alt="" />
-            <div className="useful__content-day">
-              <span className="sp1">08</span>
-              <br />
-              <span className="sp2">Th3</span>
-            </div>
-          </div>
-          <div className="useful__content-description">
-            <h5>Duis luctus elit nisi, et cursus magna pellentesque non.</h5>
-            <div className="is_divider"></div>
-            <p className="text__overflow-2">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              dapibus, massa non viverra
-            </p>
-            <button>Đọc thêm</button>
-          </div>
-        </div>
-        <div className="useful__content">
-          <div className="useful__content-image">
-            <img src={Images.UI5} alt="" />
-            <div className="useful__content-day">
-              <span className="sp1">08</span>
-              <br />
-              <span className="sp2">Th3</span>
-            </div>
-          </div>
-          <div className="useful__content-description">
-            <h5>Duis luctus elit nisi, et cursus magna pellentesque non.</h5>
-            <div className="is_divider"></div>
-            <p className="text__overflow-2">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              dapibus, massa non viverra
-            </p>
-            <button>Đọc thêm</button>
-          </div>
-        </div>
-        <div className="useful__content">
-          <div className="useful__content-image">
-            <img src={Images.UI6} alt="" />
-            <div className="useful__content-day">
-              <span className="sp1">08</span>
-              <br />
-              <span className="sp2">Th3</span>
-            </div>
-          </div>
-          <div className="useful__content-description">
-            <h5>Duis luctus elit nisi, et cursus magna pellentesque non.</h5>
-            <div className="is_divider"></div>
-            <p className="text__overflow-2">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              dapibus, massa non viverra
-            </p>
-            <button>Đọc thêm</button>
-          </div>
-        </div>
+            return (
+              <div className="useful__content" key={index}>
+                <div className="useful__content-image">
+                <img src={image.url} alt="image news" />
+                  <div className="useful__content-day">
+                    <span className="sp1">
+                      {moment(news.createdAt).format("DD")}
+                    </span>
+                    <br />
+                    <span className="sp2">
+                      TH{moment(news.createdAt).format("M")}
+                    </span>
+                  </div>
+                </div>
+                <div className="useful__content-description">
+                  <h5 className="overflow__text">{news.name}</h5>
+                  <div className="is_divider"></div>
+                  <div className="overflow__text">
+                    <Markdown children={news?.contentMarkdown} />;
+                  </div>
+                  <button>Đọc thêm</button>
+                </div>
+              </div>
+            );
+          })}
       </Carousel>
     </div>
   );

@@ -19,6 +19,7 @@ import CartOrder from '@/features/user/cart';
 import Products from '@/features/user/products';
 import ProductDetail from '@/features/user/productDetail';
 import ManageNews from '@/features/admin/manageNews';
+import News from '@/features/user/news';
 
 function RouterComponent() {
   const router = createBrowserRouter([
@@ -45,6 +46,10 @@ function RouterComponent() {
         {
           path: '/product/:id',
           element: <ProductDetail />
+        },
+        {
+          path: '/news',
+          element: <News />
         },
       ]
     },
