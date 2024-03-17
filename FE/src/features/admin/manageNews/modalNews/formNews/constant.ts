@@ -1,9 +1,7 @@
 import newsApi from "@/api/news";
-import productApi from "@/api/product";
 import Notification from "@/components/notificationSend";
 import { statusCode } from "@/constants/index";
 import { addNews, setNewsList, setNewsSelected } from "@/store/manageNews";
-import { addProduct, setProductList, setProductSelected } from "@/store/manageProducts";
 import * as yup from "yup";
 
 export const schema = yup

@@ -87,6 +87,11 @@
           white-space: nowrap;
           transition: background-color 0.3s, color 0.3s, border 0.3s;
 
+          &:hover {
+            background-color: black;
+            color: white;
+          }
+
           .is-xsmall {
             font-size: 0.7rem;
             font-weight: 500;

@@ -24,7 +24,7 @@ const ProductEvaluate= ({product}: Props) => {
 
   return (
     <div className={styled['main__evaluate']}>
-      <Tabs defaultActiveKey="2" items={items} />
+      <Tabs defaultActiveKey="1" items={items} />
     </div>
   );
 };

@@ -7,7 +7,6 @@ import ModalConfirm from "@/components/confirm";
 import { eventEmitter, isJson } from "@/utils/index";
 import Notification from "@/components/notificationSend";
 import InputSearchField from "@/components/admin/inputSearch";
-import {searchProduct} from '@/store/manageProducts';
 import ModalProduct from "../modalNews"; 
 import images from "@/constants/images";
 import { deleteNews, searchNews, setNewsSelected, setPagination } from "@/store/manageNews";

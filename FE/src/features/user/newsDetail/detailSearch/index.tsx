@@ -1,6 +1,5 @@
-import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import styled from "./index.module.scss";
-import images from "@/constants/images";
 import { useEffect, useState } from "react";
 import { NotificationError, handleURL } from "@/utils/index";
 import newsApi from "@/api/news";

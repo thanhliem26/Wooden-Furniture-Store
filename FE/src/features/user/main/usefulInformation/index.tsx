@@ -1,6 +1,5 @@
 import { Carousel } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import Images from "@/constants/images";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/index";
 import { useEffect } from "react";
 import { searchNews } from "@/store/manageNews";

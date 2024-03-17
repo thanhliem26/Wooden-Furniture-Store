@@ -5,7 +5,7 @@ import {
 } from "../models/repository/news.repo";
 import db, { sequelize } from "../models";
 import { BadRequestError } from "../core/error.response";
-const { Op, where } = require("sequelize");
+const { Op } = require("sequelize");
 
 class NewsService {
   static UpdateNews = async (payload) => {

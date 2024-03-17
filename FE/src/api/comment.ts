@@ -21,6 +21,20 @@ const commentApi = {
         const url = `/v1/api/comment/delete/${id}`
         return axiosService.delete(url)
     },
+
+    //comment news
+    createCommentNews(body: paramCreateNewsComment): Promise<metadataCommentRp> {
+        const url = '/v1/api/comment/create-news';
+        return axiosService.post(url, body);
+    },
+    getListNewsComment(params: paramGetListNewsComment): Promise<metadataComment> {
+        const url = `/v1/api/comment/list-news`;
+        return axiosService.get(url, {params: params})
+    },
+    getListChildrenNewsComment(params: paramGetListChildrenNewsComment): Promise<metadataChildrenCommentRp> {
+        const url = `/v1/api/comment/list-children-news`;
+        return axiosService.get(url, {params: params})
+    },
 }
 
 export default commentApi;

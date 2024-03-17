@@ -1,7 +1,8 @@
 
 interface CommentState {
     id: number,
-    product_id: number,
+    product_id?: number,
+    news_id?: number,
     user_id: number,
     content: string,
     parent_id?: number | null,
@@ -50,14 +51,33 @@ type paramCreateComment = {
     parent_id?: number;
 }
 
+type paramCreateNewsComment = {
+    news_id: number;
+    user_id: number;
+    content: string;
+    parent_id?: number;
+}
+
 type paramGetListComment = {
     product_id: number;
     page?: number;
     limit?: number;
 }
 
+type paramGetListNewsComment = {
+    news_id: number;
+    page?: number;
+    limit?: number;
+}
+
 type paramGetListChildrenComment = {
     parent_id: number;
+    page?: number;
+    limit?: number;
+}
+
+type paramGetListChildrenNewsComment = {
+    news_id: number;
     page?: number;
     limit?: number;
 }

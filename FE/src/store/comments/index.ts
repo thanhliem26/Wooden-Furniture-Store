@@ -12,6 +12,14 @@ export const getListComment = createAsyncThunk(
   }
 );
 
+export const getListNewsComment = createAsyncThunk(
+  "comment/get_list_news_comment",
+  async (params: paramGetListNewsComment): Promise<typeMetadataComment> => {
+    const { metadata } = await commentApi.getListNewsComment(params);
+    return metadata;
+  }
+);
+
 const initialState: state_reducer_comments = {
   commentList: [],
   loading: true,
@@ -210,6 +218,39 @@ export const manageCommentSlice = createSlice({
         return state;
       })
       .addCase(getListComment.rejected, (state) => {
+        state = { ...state, total: 0, loading: false };
+
+        return state;
+      });
+
+      //news
+      builder
+      .addCase(getListNewsComment.fulfilled, (state, action) => {
+        const { count, rows, countParent } = action.payload;
+        state = {
+          ...state,
+          loading: false,
+          total: count,
+          totalParent: countParent,
+          commentList: rows.map((item, index) => ({
+            ...item,
+            commentChildren: [],
+            openChildren: false,
+            pageSize: 10,
+            current: 1,
+            key: index,
+          })),
+        };
+        state.is_call_api = true;
+
+        return state;
+      })
+      .addCase(getListNewsComment.pending, (state) => {
+        state = { ...state, total: 0, loading: true };
+
+        return state;
+      })
+      .addCase(getListNewsComment.rejected, (state) => {
         state = { ...state, total: 0, loading: false };
 
         return state;

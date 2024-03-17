@@ -36,12 +36,13 @@ export default async (expressServer) => {
         const data = JSON.parse(stringData); // Chuyển đổi thành chuỗi
 
         const { room_id, type, data_ws } = data;
-
+        
         switch (type) {
           case TYPE_WS.JOIN_ROOM:
             const product_id = data.room_id;
             rooms[product_id] = rooms[product_id] || new Set();
             rooms[product_id].add(websocketConnection);
+            console.log("🚀 ~ rooms:", rooms)
 
             break;
           case TYPE_WS.LEAVE_ROOM:

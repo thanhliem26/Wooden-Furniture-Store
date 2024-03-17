@@ -24,11 +24,12 @@ module.exports = (sequelize, DataTypes) => {
 
     validateComment = async () => {
       const schema = Joi.object({
-        product_id: Joi.number().required(),
+        product_id: Joi.number(),
+        news_id: Joi.number(),
         user_id: Joi.number().required(),
         content: Joi.string().required(),
         parent_id: Joi.number(),
-      }).unknown(true); // unknown(true): accepts payloads that are not within the defined schema
+      }).or('product_id', 'news_id').unknown(true); // unknown(true): accepts payloads that are not within the defined schema
 
       try {
         const value = await schema.validateAsync({ ...this.dataValues });
@@ -46,6 +47,7 @@ module.exports = (sequelize, DataTypes) => {
   Comment.init(
     {
       product_id: DataTypes.INTEGER,
+      news_id: DataTypes.INTEGER,
       user_id: DataTypes.INTEGER,
       content: DataTypes.TEXT,
       left: DataTypes.INTEGER,

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "./index.module.scss";
-import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import NavBarUser from "./navMobile.tsx";
 import useResizeWindow from "@/hoc/useWindow.tsx";
