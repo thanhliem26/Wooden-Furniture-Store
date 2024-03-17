@@ -28,6 +28,13 @@ class NewsController {
         }).send(res)
     }
 
+    getNewsById = async (req, res, next) => {
+        new SuccessResponse({
+            message: 'get news by id success!',
+            metadata: await NewsService.getNewsById(req.params.id),
+        }).send(res)
+    }
+
     createNews = async (req, res, next) => {
         new CREATED({
             message: 'create a new news success!',

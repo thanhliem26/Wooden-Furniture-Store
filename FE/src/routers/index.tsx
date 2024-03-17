@@ -20,6 +20,7 @@ import Products from '@/features/user/products';
 import ProductDetail from '@/features/user/productDetail';
 import ManageNews from '@/features/admin/manageNews';
 import News from '@/features/user/news';
+import NewsDetail from '@/features/user/newsDetail';
 
 function RouterComponent() {
   const router = createBrowserRouter([
@@ -50,6 +51,10 @@ function RouterComponent() {
         {
           path: '/news',
           element: <News />
+        },
+        {
+          path: '/news/:id',
+          element: <NewsDetail />
         },
       ]
     },

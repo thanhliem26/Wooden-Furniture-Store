@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "./index.module.scss";
-import { SearchOutlined } from "@ant-design/icons";
-import { Link, NavLink } from "react-router-dom";
+import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import NavBarUser from "./navMobile.tsx";
 import useResizeWindow from "@/hoc/useWindow.tsx";
 import Logo from "@/assets/images/logo.png";
@@ -11,6 +11,7 @@ import { searchOrder } from "@/store/orderUser/index.ts";
 import userApi from "@/api/user.ts";
 import { Skeleton } from "antd";
 import { NotificationError } from "@/utils/index.ts";
+import { debounce } from "lodash";
 
 const UserLayoutHeader = () => {
   const resize = useResizeWindow();
@@ -20,14 +21,15 @@ const UserLayoutHeader = () => {
 
   const idUser = useAppSelector((state: RootState) => state.user.id);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const inputRef = useRef();
 
-  useEffect(() => {
-    if (idUser) {
-      dispatch(
-        searchOrder({ order_status: "pending", user_id: idUser, limit: 1 })
-      );
-    }
-  }, [idUser]);
+  const handleSetSearch = (e) => {
+    const name_search = e.target.value;
+    //@ts-ignore
+    inputRef.current.value = '';
+    navigate('/product', {state: {name: name_search}})
+  };
 
   const handleScroll = () => {
     const heightViewPort = window.scrollY;
@@ -47,9 +49,17 @@ const UserLayoutHeader = () => {
       setMenu(metadata);
       setLoading(false);
     } catch (error) {
-      NotificationError(error)
+      NotificationError(error);
     }
   };
+
+  useEffect(() => {
+    if (idUser) {
+      dispatch(
+        searchOrder({ order_status: "pending", user_id: idUser, limit: 1 })
+      );
+    }
+  }, [idUser]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -62,6 +72,7 @@ const UserLayoutHeader = () => {
   useEffect(() => {
     handleGetMenu();
   }, []);
+
 
   const propertyHeader = {
     className: headerFixed
@@ -85,7 +96,12 @@ const UserLayoutHeader = () => {
                 <div className="util__search-input">
                   {resize.width >= 850 ? (
                     <>
-                      <input type="text" placeholder="Tìm kiếm..." />
+                      <input
+                      ref={inputRef}
+                        type="text"
+                        placeholder="Tìm kiếm..."
+                        onChange={debounce(handleSetSearch, 500)}
+                      />
                       <SearchOutlined />
                     </>
                   ) : (

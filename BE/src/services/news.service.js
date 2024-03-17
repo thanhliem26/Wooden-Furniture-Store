@@ -5,7 +5,7 @@ import {
 } from "../models/repository/news.repo";
 import db, { sequelize } from "../models";
 import { BadRequestError } from "../core/error.response";
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 
 class NewsService {
   static UpdateNews = async (payload) => {
@@ -58,6 +58,27 @@ class NewsService {
 
     return await db.News.findAndCountAll(queryOptions);
   };
+
+  static getNewsById = async (id) => {
+    return await db.News.findOne({
+      where: {id: id},
+      attributes: [
+        "id",
+        "name",
+        "image",
+        "id",
+        "markdown_id",
+        "name",
+        "createdAt",
+        "updatedAt",
+        [sequelize.literal("Markdown_data.contentHTML"), "contentHTML"],
+        [sequelize.literal("Markdown_data.contentMarkdown"), "contentMarkdown"],
+      ],
+      include: [
+        { model: db.Markdowns, as: "Markdown_data", attributes: [] },
+      ],
+    });
+  }
 
   static createNews = async (data) => {
     return await createNewsRepo(data);

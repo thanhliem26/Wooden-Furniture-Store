@@ -9,6 +9,7 @@ import lodash from "lodash";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 interface Props {
   handleFetchScroll: () => void;
@@ -46,32 +47,34 @@ const NewsList = ({ handleFetchScroll }: Props) => {
                   data-aos-delay={"200"}
                 >
                   <div className="news__list-item">
-                    <div className="news__item-image">
-                      <div className="news__image">
-                        <img src={image.url} alt="image news" />
-                      </div>
-                      <div className="news__date">
-                        <div className="badge-inner">
-                          <span>{moment(news.createdAt).format("DD")}</span>
-                          <br />
-                          <span className="is-xsmall">
-                            TH{moment(news.createdAt).format("M")}
-                          </span>
+                    <Link to={`/news/${news.id}`}>
+                      <div className="news__item-image">
+                        <div className="news__image">
+                          <img src={image.url} alt="image news" />
+                        </div>
+                        <div className="news__date">
+                          <div className="badge-inner">
+                            <span>{moment(news.createdAt).format("DD")}</span>
+                            <br />
+                            <span className="is-xsmall">
+                              TH{moment(news.createdAt).format("M")}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="news__item-content">
-                      <div className="item__content-name">
-                        <h5 className="overflow__text">{news.name}</h5>
-                      </div>
-                      <div className="is__divider"></div>
+                      <div className="news__item-content">
+                        <div className="item__content-name">
+                          <h5 className="overflow__text">{news.name}</h5>
+                        </div>
+                        <div className="is__divider"></div>
 
-                      <div className="news__item-description">
-                        <div className="overflow__text">
-                          <Markdown children={news?.contentMarkdown} />;
+                        <div className="news__item-description">
+                          <div className="overflow__text">
+                            <Markdown children={news?.contentMarkdown} />;
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   </div>
                 </Col>
               );

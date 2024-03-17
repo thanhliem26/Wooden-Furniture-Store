@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import styled from "./index.module.scss";
 import { SearchOutlined } from "@ant-design/icons";
 import { Slider } from "antd";
@@ -10,6 +10,7 @@ import { searchCategory, setCategorySelected } from "@/store/manageCategories";
 import { debounce } from "lodash";
 import { searchProduct } from "@/store/manageProducts";
 import { setPagination } from "@/store/manageProducts";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface Props {
   sliderPrice: [number, number];
@@ -33,8 +34,11 @@ const ProductFilter = ({
   const categories = useAppSelector(
     (state: RootState) => state.manageCategory.categoryList
   );
+  const location = useLocation();
+  const inputRef = useRef();
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleGetRangePrice = async () => {
     const { metadata } = await productApi.getRangePrice();
@@ -61,7 +65,7 @@ const ProductFilter = ({
     optionQuery.limit = param.pageSize;
     optionQuery.page = param.current;
 
-    dispatch(setPagination({...param}))
+    dispatch(setPagination({ ...param }));
     dispatch(searchProduct({ ...optionQuery }));
   };
 
@@ -83,12 +87,23 @@ const ProductFilter = ({
     handleFilterProduct();
   }, [nameProduct, categorySelected, rangePrice]);
 
+  useEffect(() => {
+    if (location.state?.name) {
+      //@ts-ignore
+      inputRef.current.value = location.state.name;
+      navigate(location.pathname, { replace: true, state: {} }); //remove state when component mounted
+      setNameProduct(location.state.name)
+    }
+    
+  }, [location.state?.name]);
+
   return (
     <div className={styled["product__filter"]}>
       <div className="product__filter-search">
         <BoxContent title="ACTIVE FILTERS">
           <div className="filter__search-input">
             <input
+              ref={inputRef}
               type="text"
               placeholder="Tìm kiếm..."
               onChange={(e) => debounceChangeName(e.target.value)}

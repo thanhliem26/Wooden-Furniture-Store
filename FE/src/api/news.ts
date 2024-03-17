@@ -5,7 +5,7 @@ const newsApi = {
         const url = '/v1/api/news/create';
         return axiosService.post(url, body);
     },
-    searchNews(params = {name: ''}): Promise<metadataNews> {
+    searchNews(params: baseSearchQuery): Promise<metadataNews> {
         const url = `/v1/api/news/list`;
         return axiosService.get(url, {params: params})
     },
@@ -16,6 +16,10 @@ const newsApi = {
     deleteNews(id): Promise<baseDelete> {
         const url = `/v1/api/news/delete/${id}`
         return axiosService.delete(url)
+    },
+    getNewsById(id): Promise<metadataGetNewById> {
+        const url = `/v1/api/news/getById/${id}`;
+        return axiosService.get(url)
     },
 }
 

@@ -1,16 +1,19 @@
 import { Carousel } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import Images from "@/constants/images";
-import { useAppDispatch, useAppSelector } from "@/store/index";
+import { RootState, useAppDispatch, useAppSelector } from "@/store/index";
 import { useEffect } from "react";
 import { searchNews } from "@/store/manageNews";
 import { isEmpty } from "lodash";
 import moment from "moment";
 import Markdown from "react-markdown";
 import { handleURL } from "@/utils/index";
+import { Link } from "react-router-dom";
 
 const UseFulInformation = () => {
-  const newsList = useAppSelector((state) => state.manageNews.newsList);
+  const newsList = useAppSelector(
+    (state: RootState) => state.manageNews.newsList
+  );
   // eslint-disable-next-line
   const SlickButton = ({ currentSlide, slideCount, children, ...props }) => {
     return <span {...props}>{children}</span>;
@@ -67,26 +70,28 @@ const UseFulInformation = () => {
 
             return (
               <div className="useful__content" key={index}>
-                <div className="useful__content-image">
-                <img src={image.url} alt="image news" />
-                  <div className="useful__content-day">
-                    <span className="sp1">
-                      {moment(news.createdAt).format("DD")}
-                    </span>
-                    <br />
-                    <span className="sp2">
-                      TH{moment(news.createdAt).format("M")}
-                    </span>
+                <Link to={`/news/${news.id}`}>
+                  <div className="useful__content-image">
+                    <img src={image.url} alt="image news" />
+                    <div className="useful__content-day">
+                      <span className="sp1">
+                        {moment(news.createdAt).format("DD")}
+                      </span>
+                      <br />
+                      <span className="sp2">
+                        TH{moment(news.createdAt).format("M")}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div className="useful__content-description">
-                  <h5 className="overflow__text">{news.name}</h5>
-                  <div className="is_divider"></div>
-                  <div className="overflow__text">
-                    <Markdown children={news?.contentMarkdown} />;
+                  <div className="useful__content-description">
+                    <h5 className="overflow__text">{news.name}</h5>
+                    <div className="is_divider"></div>
+                    <div className="overflow__text">
+                      <Markdown children={news?.contentMarkdown} />;
+                    </div>
+                    <button>Đọc thêm</button>
                   </div>
-                  <button>Đọc thêm</button>
-                </div>
+                </Link>
               </div>
             );
           })}

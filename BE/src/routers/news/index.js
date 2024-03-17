@@ -10,6 +10,7 @@ const { authentication, isAdmin } = require('../../auth/authUtils');
 router.use(authentication);
 
 router.get('/list', asyncHandler(NewsController.searchNews));
+router.get('/getById/:id', asyncHandler(NewsController.getNewsById));
 
 
 //role admin

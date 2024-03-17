@@ -18,6 +18,10 @@ interface metadataNews extends baseInstance {
     metadata: typeMetadataNews
 }
 
+interface metadataGetNewById extends baseInstance{
+    metadata: NewsState
+}
+
 interface state_reducer_manageNews {
     newsList: NewsState[],
     loading: boolean,

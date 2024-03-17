@@ -11,7 +11,7 @@ import MainPageContext, { defaultValueMainPage } from "./constant";
 const MainPage = () => {
   const [staticHomePage, setStaticHome] =
     useState<StaticPageState>(defaultValueMainPage);
-  const { productShow } = staticHomePage;
+  const productShow = staticHomePage?.productShow;
 
   useEffect(() => {
     handleGetStaticHome();
@@ -32,19 +32,19 @@ const MainPage = () => {
           <Banner />
         </div>
         <div className="main__page-product">
-          <Products dataProduct={productShow.top1} />
+          <Products dataProduct={productShow?.top1} />
         </div>
         <div className="main__page-benefit">
           <Benefit />
         </div>
         <div className="main__page-product">
-          <Products dataProduct={productShow.top2} />
+          <Products dataProduct={productShow?.top2} />
         </div>
         <div className="main__page-bestOffer">
           <BestOffer />
         </div>
         <div className="main__page-product">
-          <Products dataProduct={productShow.top3} />
+          <Products dataProduct={productShow?.top3} />
         </div>
         <div className="main__useful-information">
           <UseFulInformation />
