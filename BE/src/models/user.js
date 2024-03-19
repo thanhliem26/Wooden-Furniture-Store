@@ -67,6 +67,8 @@ module.exports = (sequelize, DataTypes) => {
       deleteFlg: DataTypes.INTEGER,
       avatar: DataTypes.STRING,
       avatar_support: DataTypes.STRING,
+      is_active: DataTypes.ENUM('0', '1'),
+      time_expired: DataTypes.DATE,
     },
     {
       sequelize,

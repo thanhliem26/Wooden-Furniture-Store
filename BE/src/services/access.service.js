@@ -14,6 +14,8 @@ import db from "../models";
 import { validateUser, createNewUser } from "../models/repository/user.repo";
 import { deleteFIleUpload, getInfoData } from "../utils";
 import { deleteFileS3, uploadFileS3 } from "../utils/aws";
+import moment from "moment";
+import { sendMailSingUP } from "../utils/sendMail";
 const fs = require("fs").promises;
 
 class AccessService {
@@ -76,6 +78,10 @@ class AccessService {
     const match = await bcrypt.compare(password, foundUser.password);
     if (!match) throw new AuthFailureError("Password not match to email!");
 
+    if(foundUser && foundUser.is_active === '0') {
+      throw new BadRequestError('Please verify email. Before login!')
+    }
+
     // //create privateKey, public key
     const privateKey = crypto.randomBytes(64).toString("hex");
     const publicKey = crypto.randomBytes(64).toString("hex");
@@ -103,7 +109,29 @@ class AccessService {
     };
   };
 
+  static handleVerifyEmail = async (data, user_exits) => {
+    const privateKey = crypto.randomBytes(64).toString("hex");
+      const publicKey = crypto.randomBytes(64).toString("hex");
+
+      // // generator tokens
+      const tokens = await createTokenPair(
+        { user_id: user_exits.id, email: user_exits.email, is_active: "0" },
+        publicKey,
+        privateKey
+      );
+
+      await tokenService.createKeyToken({
+        userId: user_exits.id,
+        publicKey: publicKey,
+        privateKey: publicKey,
+        refreshToken: tokens.accessToken,
+      });
+
+      sendMailSingUP({ data, token: tokens.accessToken});
+  }
+
   static signUp = async (data) => {
+    const active = data.is_active ? data.is_active : "1";
     //step1: check email exists
     const validateField = await validateUser({ ...data });
     if (!validateField.status) {
@@ -111,44 +139,55 @@ class AccessService {
     }
 
     const { email, password } = data;
-    //step2: check email exists
+    //step2: check email exists and active
     const holderUser = await db.User.findOne({ raw: true, where: { email } });
 
-    if (holderUser) {
+    if (holderUser && holderUser.is_active === '1') {
       throw new BadRequestError("Error: Email already registered");
+    }
+
+    if (holderUser && holderUser.is_active === '0') {
+      const is_expired = moment(holderUser.time_expired).diff(moment(), 'hours')
+      
+      if(is_expired > 0) throw new BadRequestError("Email is created. You need to verify email to login!");
+      
+      await AccessService.handleVerifyEmail(data, newUser)
+      throw new BadRequestError("Please verify the most recent email sent to you!");
     }
 
     //step3: encode password
     const passwordHash = await bcrypt.hash(password, 10);
 
     //step4: create user
+    const newUser = await createNewUser({
+      ...data,
+      password: passwordHash,
+      is_active: active,
+      time_expired: moment().add(1, "day").format(),
+    });
 
-    const newUser = await createNewUser({ ...data, password: passwordHash });
-
-    if (newUser) {
-      //step5: response data
-      return {
-        code: 201,
-        metadata: {
-          user: getInfoData({
-            field: [
-              "id",
-              "fullName",
-              "email",
-              "phoneNumber",
-              "address",
-              "dateOfBirth",
-              "sex",
-            ],
-            object: newUser,
-          }),
-        },
-      };
+    //step5: verify email if not active
+    if (active === "0") {
+      await AccessService.handleVerifyEmail(data, newUser)
     }
 
+    //step6: response data
     return {
-      code: 200,
-      metadata: null,
+      code: 201,
+      metadata: {
+        user: getInfoData({
+          field: [
+            "id",
+            "fullName",
+            "email",
+            "phoneNumber",
+            "address",
+            "dateOfBirth",
+            "sex",
+          ],
+          object: newUser,
+        }),
+      },
     };
   };
 
@@ -179,6 +218,36 @@ class AccessService {
     }
 
     return await deleteFileS3(key);
+  };
+
+  static activeUser = async ({token}) => {
+    const holderToken = await tokenService.findByRefreshTokenByUser(
+      token
+    );
+   
+    if (!holderToken) throw new AuthFailureError("User not registered");
+    const { user_id } = await verifyJWT(
+      token,
+      holderToken.privateKey
+    );
+
+    const foundUser = await  await db.User.findOne({ where: { id: user_id }});
+    if (!foundUser) throw new AuthFailureError("Shop not registered");
+
+    //active user
+    foundUser.is_active = '1';
+    await foundUser.save();
+
+    //refresh token
+    holderToken.refreshToken = '';
+    holderToken.publicKey = '';
+    holderToken.privateKey = '';
+    await holderToken.save();
+
+    return {
+      user_active: true,
+      user_id: user_id,
+    };
   };
 }
 

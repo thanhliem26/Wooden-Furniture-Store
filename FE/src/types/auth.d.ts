@@ -2,6 +2,13 @@ interface responseToken extends baseInstance {
     metadata: responseMetadataToken
 }
 
+interface responseActiveUser extends baseInstance {
+    metadata: {
+        user_active: boolean,
+        user_id: number;
+    }
+}
+
 interface responseMetaUploadImage {
     ETag: string,
     ServerSideEncryption: string,

@@ -22,7 +22,6 @@ interface ProductProps {
 }
 
 const Products = ({ dataProduct }: ProductProps) => {
-  const { category_name, data } = dataProduct;
   const orderId = useAppSelector((state: RootState) => state.order.id);
   const userId = useAppSelector((state: RootState) => state.user.id);
 
@@ -100,11 +99,11 @@ const Products = ({ dataProduct }: ProductProps) => {
     <div className="product__main">
       <div className="product__main-list">
         <div className="product__item-title">
-          <span>{category_name}</span>
+          <span>{dataProduct?.category_name}</span>
         </div>
         <Row gutter={[30, 30]}>
-          {!lodash.isEmpty(data) ? (
-            data.map((product, index) => {
+          {!lodash.isEmpty(dataProduct?.data) ? (
+            dataProduct?.data.map((product, index) => {
               const image = handleURL(product.images);
               return (
                 <Col
@@ -138,7 +137,7 @@ const Products = ({ dataProduct }: ProductProps) => {
                       </div>
                     </div>
                     <div className="item__content-price">
-                      <p className="item__type">{category_name}</p>
+                      <p className="item__type">{dataProduct?.category_name}</p>
                       <p className="item_name">
                         <a>{product.name}</a>
                       </p>

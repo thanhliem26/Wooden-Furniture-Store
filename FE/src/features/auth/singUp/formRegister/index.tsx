@@ -33,7 +33,7 @@ const FormRegister = () => {
       setLoading(true);
 
       //@ts-ignore
-      const result = await authApi.singUp(data);
+      const result = await authApi.singUp({...data, is_active: '0'});
       if (result?.["status"].toString() === "error") {
         Notification({
           type: "error",
@@ -45,10 +45,11 @@ const FormRegister = () => {
 
       Notification({
         message: "Notification Success",
-        description: "Create new user success",
+        description: "Create new user success. Please check email to verify before login!",
+        duration: 10,
       });
 
-      navigate("/login");
+      navigate("/verify-email");
     } catch (error: unknown) {
       if (error?.["response"]?.["data"]?.["status"] === "error") {
         NotificationError(error)

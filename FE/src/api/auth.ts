@@ -29,7 +29,11 @@ const authApi = {
     logOut({user_id, refreshToken}): Promise<baseDelete> {
         const url = '/v1/api/access/logout';
         return axiosService.post(url, {user_id}, {headers: {[HEADER.REFRESHTOKEN]: refreshToken}});
-    }
+    },
+    activeUser(body): Promise<responseActiveUser> {
+        const url = '/v1/api/access/active-user';
+        return axiosService.post(url, body);
+    },
 }
 
 export default authApi;

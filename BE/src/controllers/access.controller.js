@@ -1,7 +1,7 @@
 'use strict'
 
 const AccessService = require("../services/access.service");
-const { OK, CREATED, SuccessResponse } = require('../core/succes.response');
+const { OK, CREATED, SuccessResponse, UPDATED } = require('../core/succes.response');
 class AccessController {
     handleRefreshToken = async (req, res, next) => {
         new SuccessResponse({
@@ -44,6 +44,13 @@ class AccessController {
         new CREATED({
             message: 'delete file success!',
             metadata: await AccessService.deleteFileServiceS3(req.params.key),
+        }).send(res)
+    }
+
+    activeUser = async (req, res, next) => {
+        new UPDATED({
+            message: 'user active success!',
+            metadata: await AccessService.activeUser(req.body),
         }).send(res)
     }
 }

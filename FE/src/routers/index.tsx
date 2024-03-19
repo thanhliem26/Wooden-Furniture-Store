@@ -21,6 +21,8 @@ import ProductDetail from '@/features/user/productDetail';
 import ManageNews from '@/features/admin/manageNews';
 import News from '@/features/user/news';
 import NewsDetail from '@/features/user/newsDetail';
+import Verify from '@/features/misc/Verify';
+import ActiveUser from '@/features/misc/ActiveUser';
 
 function RouterComponent() {
   const router = createBrowserRouter([
@@ -101,6 +103,14 @@ function RouterComponent() {
           element: <SettingStatic />
         },
       ]
+    },
+    {
+      path: "/verify-email",
+      element: <Verify />
+    },
+    {
+      path: "/active-user",
+      element: <ActiveUser />
     },
     {
       path: "/Forbidden",
