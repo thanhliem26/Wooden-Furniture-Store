@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import Notification from "@/components/notificationSend";
 import { setToken, setUser, setRefreshToken, NotificationError } from "@/utils/index";
 import { setHeader } from "@/api/axiosService";
+import ButtonForeign from "./ButtonForeign";
 
 const FormRegister = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -83,12 +84,15 @@ const FormRegister = () => {
           icon={<LockOutlined />}
         />
         <ButtonComponent
-          wrapperCol={{ offset: 8, span: 16 }}
+          // wrapperCol={{ offset: 8, span: 16 }}
           htmlType="submit"
           label="Login"
           className="btn__submit"
           loading={loading}
         />
+        <div className="btn__login-foreign">
+          <ButtonForeign />
+        </div>
       </Form>
     </div>
   );

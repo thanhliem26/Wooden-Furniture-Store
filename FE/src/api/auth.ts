@@ -34,6 +34,10 @@ const authApi = {
         const url = '/v1/api/access/active-user';
         return axiosService.post(url, body);
     },
+    loginProvider(body): Promise<responseToken> {
+        const url = '/v1/api/access/login-provider';
+        return axiosService.post(url, body);
+    },
 }
 
 export default authApi;

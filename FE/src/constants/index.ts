@@ -73,3 +73,9 @@ export const TYPE_WS = {
   DELETE_COMMENT: 'DELETE_COMMENT',
   UPDATE_COMMENT: 'UPDATE_COMMENT',
 }
+
+export const TYPE_PROVIDER_LOGIN = {
+  LOCAL: 'local',
+  GOOGLE: 'google',
+  FACEBOOK: 'facebook',
+}

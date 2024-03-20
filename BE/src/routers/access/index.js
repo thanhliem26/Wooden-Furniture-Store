@@ -11,6 +11,7 @@ const upload = multer({ dest: 'uploads/' });
 //sign up, login
 router.post('/signup', asyncHandler(AccessController.signUp)); 
 router.post('/login', asyncHandler(AccessController.login)); 
+router.post('/login-provider', asyncHandler(AccessController.loginProvider)); 
 router.post('/active-user', asyncHandler(AccessController.activeUser)); 
 
 // authentication token

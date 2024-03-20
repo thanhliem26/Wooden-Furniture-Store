@@ -53,6 +53,13 @@ class AccessController {
             metadata: await AccessService.activeUser(req.body),
         }).send(res)
     }
+
+    loginProvider = async (req, res, next) => {
+        new CREATED({
+            message: 'login success!',
+            metadata: await AccessService.loginProvider(req.body),
+        }).send(res)
+    }
 }
 
 module.exports = new AccessController

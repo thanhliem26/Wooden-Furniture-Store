@@ -1,5 +1,6 @@
 "use strict";
 
+import { TYPE_GENDER, TYPE_LOGIN_PROVIDER, TYPE_ROLE_USER, TYPE_USER_ACTIVE } from "../constants";
 import BaseModel from "../helpers/baseModel";
 import Joi from "joi";
 
@@ -62,13 +63,15 @@ module.exports = (sequelize, DataTypes) => {
       phoneNumber: DataTypes.STRING(25),
       address: DataTypes.STRING,
       dateOfBirth: DataTypes.DATE,
-      sex: DataTypes.ENUM("1", "2", "3"),
-      role_user: DataTypes.ENUM("1", "2", "3"),
+      sex: DataTypes.ENUM(TYPE_GENDER.MALE, TYPE_GENDER.FEMALE, TYPE_GENDER.OTHER),
+      role_user: DataTypes.ENUM(TYPE_ROLE_USER.ADMIN, TYPE_ROLE_USER.USER, TYPE_ROLE_USER.SHIPPER),
       deleteFlg: DataTypes.INTEGER,
       avatar: DataTypes.STRING,
       avatar_support: DataTypes.STRING,
-      is_active: DataTypes.ENUM('0', '1'),
+      is_active: DataTypes.ENUM(TYPE_USER_ACTIVE.NON_ACTIVE, TYPE_USER_ACTIVE.ACTIVE),
       time_expired: DataTypes.DATE,
+      provider: DataTypes.ENUM(TYPE_LOGIN_PROVIDER.LOCAL, TYPE_LOGIN_PROVIDER.FACEBOOK, TYPE_LOGIN_PROVIDER.GOOGLE),
+      uid: DataTypes.STRING,
     },
     {
       sequelize,

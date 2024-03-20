@@ -65,6 +65,8 @@ import Mail from '@/assets/images/icons/mail.png';
 import AvatarSupporting from '@/assets/images/avatar_support.jpg';
 import AvatarDefault from '@/assets/images/avatar_default.jpg';
 import ThreeDot from '@/assets/images/icons/threeDot.svg';
+import Facebook from '@/assets/images/icons/facebook.svg';
+import Google from '@/assets/images/icons/google.svg';
 
 //default
 import DefaultProduct from '@/assets/images/default/default_product.jpg';
@@ -98,6 +100,8 @@ export default {
     SmartPhone,
     Mail,
     ThreeDot,
+    Facebook,
+    Google,
     //Ke tv
     KTV1,
     KTV2,

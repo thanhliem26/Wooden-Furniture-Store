@@ -16,6 +16,7 @@ import { deleteFIleUpload, getInfoData } from "../utils";
 import { deleteFileS3, uploadFileS3 } from "../utils/aws";
 import moment from "moment";
 import { sendMailSingUP } from "../utils/sendMail";
+import { TYPE_LOGIN_PROVIDER } from "../constants";
 const fs = require("fs").promises;
 
 class AccessService {
@@ -70,7 +71,7 @@ class AccessService {
 
   static login = async ({ email, password, refreshToken = null }) => {
     //check exits email
-    const foundUser = await db.User.findOne({ where: { email }, raw: true });
+    const foundUser = await db.User.findOne({ where: { email, provider: TYPE_LOGIN_PROVIDER.LOCAL }, raw: true });
     if (!foundUser || foundUser.deleteFlg !== 0)
       throw new BadRequestError("User not registered");
 
@@ -78,8 +79,8 @@ class AccessService {
     const match = await bcrypt.compare(password, foundUser.password);
     if (!match) throw new AuthFailureError("Password not match to email!");
 
-    if(foundUser && foundUser.is_active === '0') {
-      throw new BadRequestError('Please verify email. Before login!')
+    if (foundUser && foundUser.is_active === "0") {
+      throw new BadRequestError("Please verify email. Before login!");
     }
 
     // //create privateKey, public key
@@ -109,26 +110,67 @@ class AccessService {
     };
   };
 
+  static loginProvider = async (data) => {
+    if (!data.provider || !data.uid) throw new BadRequestError("provider, uid is required!");
+
+    const filter = {uid: data.uid, provider: data.provider};
+
+    const update = { ...data, password: data.uid};
+    const options = { upsert: true };
+
+    const userProvider = await db.User.findOneAndUpdate({
+      filter: filter,
+      values: update,
+      options: options,
+    });
+
+    // //create privateKey, public key
+    const privateKey = crypto.randomBytes(64).toString("hex");
+    const publicKey = crypto.randomBytes(64).toString("hex");
+
+    // // generator tokens
+    const tokens = await createTokenPair(
+      { user_id: userProvider.id, email: userProvider.email, role_user: userProvider.role_user },
+      publicKey,
+      privateKey
+    );
+
+    await tokenService.createKeyToken({
+      userId: userProvider.id,
+      publicKey,
+      privateKey,
+      refreshToken: tokens.refreshToken,
+    });
+
+    return {
+      user: getInfoData({
+        field: ["id", "fullName", "email"],
+        object: userProvider,
+      }),
+      tokens,
+    };
+  };
+
   static handleVerifyEmail = async (data, user_exits) => {
     const privateKey = crypto.randomBytes(64).toString("hex");
-      const publicKey = crypto.randomBytes(64).toString("hex");
+    const publicKey = crypto.randomBytes(64).toString("hex");
 
-      // // generator tokens
-      const tokens = await createTokenPair(
-        { user_id: user_exits.id, email: user_exits.email, is_active: "0" },
-        publicKey,
-        privateKey
-      );
+    // // generator tokens
+    const tokens = await createTokenPair(
+      { user_id: user_exits.id, email: user_exits.email, is_active: "0" },
+      publicKey,
+      privateKey
+    );
 
-      await tokenService.createKeyToken({
-        userId: user_exits.id,
-        publicKey: publicKey,
-        privateKey: publicKey,
-        refreshToken: tokens.accessToken,
-      });
+    await tokenService.createKeyToken({
+      userId: user_exits.id,
+      publicKey: publicKey,
+      privateKey: publicKey,
+      refreshToken: tokens.accessToken,
+    });
 
-      sendMailSingUP({ data, token: tokens.accessToken});
-  }
+    sendMailSingUP({ data, token: tokens.accessToken });
+  };
 
   static signUp = async (data) => {
     const active = data.is_active ? data.is_active : "1";
@@ -142,17 +184,25 @@ class AccessService {
     //step2: check email exists and active
     const holderUser = await db.User.findOne({ raw: true, where: { email } });
 
-    if (holderUser && holderUser.is_active === '1') {
+    if (holderUser && holderUser.is_active === "1") {
       throw new BadRequestError("Error: Email already registered");
     }
 
-    if (holderUser && holderUser.is_active === '0') {
-      const is_expired = moment(holderUser.time_expired).diff(moment(), 'hours')
-      
-      if(is_expired > 0) throw new BadRequestError("Email is created. You need to verify email to login!");
-      
-      await AccessService.handleVerifyEmail(data, newUser)
-      throw new BadRequestError("Please verify the most recent email sent to you!");
+    if (holderUser && holderUser.is_active === "0") {
+      const is_expired = moment(holderUser.time_expired).diff(
+        moment(),
+        "hours"
+      );
+
+      if (is_expired > 0)
+        throw new BadRequestError(
+          "Email is created. You need to verify email to login!"
+        );
+
+      await AccessService.handleVerifyEmail(data, newUser);
+      throw new BadRequestError(
+        "Please verify the most recent email sent to you!"
+      );
     }
 
     //step3: encode password
@@ -168,7 +218,7 @@ class AccessService {
 
     //step5: verify email if not active
     if (active === "0") {
-      await AccessService.handleVerifyEmail(data, newUser)
+      await AccessService.handleVerifyEmail(data, newUser);
     }
 
     //step6: response data
@@ -220,28 +270,23 @@ class AccessService {
     return await deleteFileS3(key);
   };
 
-  static activeUser = async ({token}) => {
-    const holderToken = await tokenService.findByRefreshTokenByUser(
-      token
-    );
-   
-    if (!holderToken) throw new AuthFailureError("User not registered");
-    const { user_id } = await verifyJWT(
-      token,
-      holderToken.privateKey
-    );
+  static activeUser = async ({ token }) => {
+    const holderToken = await tokenService.findByRefreshTokenByUser(token);
 
-    const foundUser = await  await db.User.findOne({ where: { id: user_id }});
+    if (!holderToken) throw new AuthFailureError("User not registered");
+    const { user_id } = await verifyJWT(token, holderToken.privateKey);
+
+    const foundUser = await await db.User.findOne({ where: { id: user_id } });
     if (!foundUser) throw new AuthFailureError("Shop not registered");
 
     //active user
-    foundUser.is_active = '1';
+    foundUser.is_active = "1";
     await foundUser.save();
 
     //refresh token
-    holderToken.refreshToken = '';
-    holderToken.publicKey = '';
-    holderToken.privateKey = '';
+    holderToken.refreshToken = "";
+    holderToken.publicKey = "";
+    holderToken.privateKey = "";
     await holderToken.save();
 
     return {

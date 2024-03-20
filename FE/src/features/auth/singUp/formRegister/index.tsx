@@ -107,7 +107,6 @@ const FormRegister = () => {
           icon={<LockOutlined />}
         />
         <ButtonComponent
-          wrapperCol={{ offset: 8, span: 16 }}
           htmlType="submit"
           label="Register"
           className="btn__submit"
