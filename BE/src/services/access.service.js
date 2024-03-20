@@ -182,7 +182,7 @@ class AccessService {
 
     const { email, password } = data;
     //step2: check email exists and active
-    const holderUser = await db.User.findOne({ raw: true, where: { email } });
+    const holderUser = await db.User.findOne({ raw: true, where: { email, provider: TYPE_LOGIN_PROVIDER.LOCAL } });
 
     if (holderUser && holderUser.is_active === "1") {
       throw new BadRequestError("Error: Email already registered");
