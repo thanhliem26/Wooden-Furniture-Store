@@ -4,13 +4,17 @@ import { MenuOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import NavMobile from "./navMobile";
 
-const NavBarUser = () => {
+interface Props {
+  menu: metadataMenu[],
+}
+
+const NavBarUser = ({menu}: Props) => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
 
   return (
     <div className={styled["nav__user"]}>
       <MenuOutlined style={{fontSize: '22px'}} onClick={() => setOpenMenu((prev) => !prev)} />
-      {openMenu ? createPortal(<NavMobile setOpenMenu={setOpenMenu}/>, document.body) : ""}
+      {openMenu ? createPortal(<NavMobile menu={menu} setOpenMenu={setOpenMenu}/>, document.body) : ""}
     </div>
   );
 };

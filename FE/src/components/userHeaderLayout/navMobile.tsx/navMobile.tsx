@@ -1,15 +1,20 @@
+import { Link } from "react-router-dom";
 import styled from "./index.module.scss";
 import {
   CloseOutlined,
   SearchOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
+import { useAppSelector } from "@/store/index";
 
 interface Props {
   setOpenMenu: (value) => void;
+  menu: metadataMenu[]
 }
 
-const NavMobile = ({setOpenMenu}: Props) => {
+const NavMobile = ({setOpenMenu, menu}: Props) => {
+  const orderId = useAppSelector((state) => state.order.id);
+
   return (
     <div className={styled["nav__user-mobile"]}>
       <div className="user__background" onClick={() => setOpenMenu((prev: boolean) => !prev)}></div>
@@ -22,17 +27,12 @@ const NavMobile = ({setOpenMenu}: Props) => {
             </div>
           </div>
           <div className="mobile__nav-menu">
-            <div className="nav__menu-item">GIỚI THIỆU</div>
-            <div className="nav__menu-item">BÀN GHẾ</div>
-            <div className="nav__menu-item">BÀN GHẾ SOPHA</div>
-            <div className="nav__menu-item">KỆ TIVI</div>
-            <div className="nav__menu-item">TIN TỨC</div>
-            <div className="nav__menu-item">LIÊN HỆ</div>
-            <div className="nav__menu-item">ĐĂNG NHẬP</div>
+            {menu && menu.map((item, index) => {
+              return  <div className="nav__menu-item" key={index}><Link to={item.href}>{item.label}</Link></div>;
+            })}
             <div className="nav__menu-item">
-              GIỎ HÀNG <ShoppingCartOutlined />
+              <Link to={`/cart/${orderId}`}>GIỎ HÀNG <ShoppingCartOutlined /></Link>
             </div>
-            <div className="nav__menu-item">FACEBOOK</div>
           </div>
         </div>
       </div>

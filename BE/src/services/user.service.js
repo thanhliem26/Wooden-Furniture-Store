@@ -1,7 +1,7 @@
 ("use strict");
 import { findById } from "../models/repository/user.repo";
 import db from "../models";
-import { menu, menu_user } from "../constants";
+import { menu, menu_user, TYPE_ROLE_USER } from "../constants";
 import { getInfoData, removeElement } from "../utils";
 const bcrypt = require("bcrypt");
 const { Op } = require("sequelize");
@@ -19,7 +19,6 @@ class UserService {
   };
 
   static handleGetUserInfo = async (userId) => {
-    console.log("handleGetUserInfo")
     const userInfo = await findById(userId);
 
     return removeElement({
@@ -42,8 +41,10 @@ class UserService {
   };
 
   static handleGetMenuUser = async (roleUser) => {
+    const role = roleUser ? roleUser : TYPE_ROLE_USER.USER;
+  
     return menu_user.reduce((current, next) => {
-      if (next.role.includes(Number(roleUser))) {
+      if (next.role.includes(Number(role))) {
         current.push(
           getInfoData({ field: ["id", "href", "label"], object: next })
         );

@@ -105,7 +105,7 @@ const UserLayoutHeader = () => {
                       <SearchOutlined />
                     </>
                   ) : (
-                    <NavBarUser />
+                    <NavBarUser menu={menu}/>
                   )}
                 </div>
               </div>

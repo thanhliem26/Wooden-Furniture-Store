@@ -10,6 +10,7 @@ const CartOrder = () => {
 
   return (
     <div className={styled["cart__main"]}>
+      <div className="cart__main-container">
       <div className="cart__main-title cart__order">
         <div className="main__title-link">
           <Link to="/">Trang chủ</Link>
@@ -19,14 +20,16 @@ const CartOrder = () => {
       </div>
       <div className="cart__main-content  cart__order">
         <Row gutter={[16, 16]}>
-          <Col span={16} className="main__content-update">
+          <Col span={24} md={16} className="main__content-update">
             <TableCart dataOrder={dataOrder} setDataOrder={setDataOrder} />
           </Col>
-          <Col span={8} className="main__content-information">
+          <Col span={24} md={8} className="main__content-information">
             <TotalCart dataOrder={dataOrder}/>
           </Col>
         </Row>
       </div>
+      </div>
+      
     </div>
   );
 };

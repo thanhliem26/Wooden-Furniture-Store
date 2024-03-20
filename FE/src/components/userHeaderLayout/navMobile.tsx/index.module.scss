@@ -62,12 +62,16 @@
         .mobile__nav-menu {
           padding: 20px 0;
           .nav__menu-item {
-            color: rgba(102,102,102,0.85);
             font-size: 14px;
             padding: 15px 0 15px 20px;
             font-weight: 500;
             text-transform: uppercase;
             border-top: 1px solid #e7dede;
+
+            a {
+              text-decoration: none;
+              color: rgba(102,102,102,0.85);
+            }
 
             .anticon-shopping-cart {
               font-size: 16px;
