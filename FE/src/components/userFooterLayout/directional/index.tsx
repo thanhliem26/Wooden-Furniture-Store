@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 
 const Directional = () => {
   return (
@@ -7,11 +8,11 @@ const Directional = () => {
         </div>
         <div className="directional__list">
             <ul>
-                <li><a>Trang chủ</a></li>
-                <li><a>Về chúng tôi</a></li>
-                <li><a>Sản phẩm</a></li>
-                <li><a>Điểm tin hữu ích</a></li>
-                <li><a>Liên hệ</a></li>
+                <li><Link to='/'>Trang chủ</Link></li>
+                <li><Link to='/introduce'>Về chúng tôi</Link></li>
+                <li><Link to='/product'>Sản phẩm</Link></li>
+                <li><Link to='/news'>Điểm tin hữu ích</Link></li>
+                <li><Link to='/contact'>Liên hệ</Link></li>
             </ul>
         </div>
     </div>

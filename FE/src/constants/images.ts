@@ -71,6 +71,7 @@ import Google from '@/assets/images/icons/google.svg';
 //default
 import DefaultProduct from '@/assets/images/default/default_product.jpg';
 import StoreEmpty from '@/assets/images/default/store-empty.png';
+import ContactDefault from '@/assets/images/default/contact.jpg';
 
 export default {
     SingIn,
@@ -137,5 +138,6 @@ export default {
     AvatarDefault,
     //default
     DefaultProduct,
-    StoreEmpty
+    StoreEmpty,
+    ContactDefault
 }

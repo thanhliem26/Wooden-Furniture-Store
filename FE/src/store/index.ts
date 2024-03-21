@@ -9,6 +9,7 @@ import manageProductReducer from './manageProducts';
 import orderUser from './orderUser';
 import manageCommentReducer from './comments';
 import manageNewsReducer from './manageNews';
+import manageContactReducer from './manageContact';
 
 export const store = configureStore({
   reducer: {
@@ -18,7 +19,8 @@ export const store = configureStore({
     manageCategory: manageCategoryReducer,
     manageProduct: manageProductReducer,
     comments: manageCommentReducer,
-    manageNews: manageNewsReducer
+    manageNews: manageNewsReducer,
+    manageContact: manageContactReducer
   },
 })
 

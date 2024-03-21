@@ -3,7 +3,7 @@ import { Form, Input } from "antd";
 
 const { TextArea } = Input;
 
-interface typeInputAreaComponent  {
+interface typeInputAreaComponent{
   name: string,
   control: any,
   errors?: any,
@@ -13,6 +13,7 @@ interface typeInputAreaComponent  {
   icon?: React.ReactNode,
   type?: string,
   rows?: number,
+  disabled?: boolean,
 }
 
 const InputComponent = ({

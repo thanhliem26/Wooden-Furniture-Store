@@ -35,13 +35,20 @@ export const menu = [
   },
   {
     id: 5,
+    label: "Contact",
+    href: "/admin/manage-contact",
+    role: [ROLE_USER.ADMIN],
+    icon: "manage_service_contract",
+  },
+  {
+    id: 6,
     label: "Setting static",
     href: "/admin/setting_static",
     role: [ROLE_USER.ADMIN],
     icon: "manage_service_contract",
   },
   {
-    id: 6,
+    id: 7,
     label: "Screen User",
     href: "/",
     role: [ROLE_USER.ADMIN],

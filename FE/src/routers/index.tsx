@@ -23,6 +23,8 @@ import News from '@/features/user/news';
 import NewsDetail from '@/features/user/newsDetail';
 import Verify from '@/features/misc/Verify';
 import ActiveUser from '@/features/misc/ActiveUser';
+import Contact from '@/features/user/contact';
+import ManageContact from '@/features/admin/manageContact';
 
 function RouterComponent() {
   const router = createBrowserRouter([
@@ -57,6 +59,10 @@ function RouterComponent() {
         {
           path: '/news/:id',
           element: <NewsDetail />
+        },
+        {
+          path: '/contact',
+          element: <Contact />
         },
       ]
     },
@@ -101,6 +107,10 @@ function RouterComponent() {
         {
           path: "setting_static",
           element: <SettingStatic />
+        },
+        {
+          path: "manage-contact",
+          element: <ManageContact />
         },
       ]
     },
