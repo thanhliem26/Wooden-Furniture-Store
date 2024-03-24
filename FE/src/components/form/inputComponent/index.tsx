@@ -1,5 +1,5 @@
 import { Controller } from "react-hook-form";
-import { Form, Input, InputProps } from "antd";
+import { ColProps, Form, Input, InputProps } from "antd";
 
 interface typeInputComponent extends InputProps {
   name: string,
@@ -10,6 +10,7 @@ interface typeInputComponent extends InputProps {
   className?: string,
   icon?: React.ReactNode,
   type?: string,
+  labelCol?: ColProps,
 }
 
 const InputComponent = ({
@@ -21,6 +22,7 @@ const InputComponent = ({
   className = "",
   icon,
   type = "text",
+  labelCol,
   ...props
 }: typeInputComponent) => {
   return (
@@ -28,7 +30,7 @@ const InputComponent = ({
       name={name}
       control={control}
       render={({ field }) => (
-        <Form.Item label={label} className={className}>
+        <Form.Item label={label} className={className} labelCol={labelCol} >
           <Input
             {...field}
             placeholder={placeholder}

@@ -43,8 +43,12 @@ const ContentPopover = () => {
     }
   };
 
-  const handleNavigate  = async () => {
+  const handleNavigate  = () => {
     navigate(`/cart/${orderId}`)
+  }
+
+  const handleNavigatePay = () => {
+    navigate('/pay')
   }
 
   useEffect(() => {
@@ -111,7 +115,7 @@ const ContentPopover = () => {
               label="Thanh Toán"
               className="btn__tab popover__action popover__action-pay"
               type="default"
-              // onClick={handleClose}
+              onClick={handleNavigatePay}
             />
           </div>
         </>

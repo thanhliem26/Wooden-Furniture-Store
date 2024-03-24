@@ -5,9 +5,11 @@ import { useMemo, useState } from "react";
 interface Props {
   file: any;
   onDelete: any;
+  disabled: boolean;
 }
 
-const ImageComponent = ({ file, onDelete }: Props) => {
+const ImageComponent = ({ file, onDelete, disabled = false }: Props) => {
+  console.log("🚀 ~ disabled:", disabled)
   const [isPreviewVisible, setPreviewVisible] = useState(false);
   const urlImage = useMemo(() => {
     return file.origin === "aws" ? file.url : file.thumbUrl;
@@ -26,7 +28,7 @@ const ImageComponent = ({ file, onDelete }: Props) => {
           }}
           src={urlImage}
         />}
-        <div className="action__image">
+        {!disabled &&  <div className="action__image">
           <span onClick={() => setPreviewVisible(!isPreviewVisible)}>
             <Tooltip title={"Preview image"}>
               <EyeOutlined />
@@ -40,7 +42,8 @@ const ImageComponent = ({ file, onDelete }: Props) => {
               </Tooltip>
             </span>
           )}
-        </div>
+        </div>}
+       
       </div>
     </div>
   );

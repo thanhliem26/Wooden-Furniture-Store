@@ -35,20 +35,27 @@ export const menu = [
   },
   {
     id: 5,
+    label: "Manage order",
+    href: "/admin/manage-order",
+    role: [ROLE_USER.ADMIN],
+    icon: "manage_service_contract",
+  },
+  {
+    id: 6,
     label: "Contact",
     href: "/admin/manage-contact",
     role: [ROLE_USER.ADMIN],
     icon: "manage_service_contract",
   },
   {
-    id: 6,
+    id: 7,
     label: "Setting static",
     href: "/admin/setting_static",
     role: [ROLE_USER.ADMIN],
     icon: "manage_service_contract",
   },
   {
-    id: 7,
+    id: 8,
     label: "Screen User",
     href: "/",
     role: [ROLE_USER.ADMIN],
@@ -124,4 +131,13 @@ export const TYPE_ROLE_USER = {
 export const TYPE_USER_ACTIVE = {
   NON_ACTIVE: '0',
   ACTIVE: '1',
+}
+
+export const ORDER_STATUS = {
+  PENDING: 'pending',
+  WAIT_CONFIRMATION: 'wait_confirmation',
+  CONFIRMED: 'confirmed',
+  SHIPPED: 'shipped',
+  CANCELLED: 'cancelled',
+  DELIVERED: 'delivered',
 }

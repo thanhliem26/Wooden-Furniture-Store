@@ -55,6 +55,11 @@ module.exports = (sequelize, DataTypes) => {
         "cancelled",
         "delivered"
       ),
+      name: DataTypes.STRING,
+      phone_number: DataTypes.STRING,
+      email: DataTypes.STRING,
+      address: DataTypes.STRING,
+      note: DataTypes.TEXT,
     },
     {
       sequelize,

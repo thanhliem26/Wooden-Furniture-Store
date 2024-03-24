@@ -1,5 +1,5 @@
 import { Controller } from "react-hook-form";
-import { Form, Input } from "antd";
+import { ColProps, Form, Input } from "antd";
 
 const { TextArea } = Input;
 
@@ -14,6 +14,7 @@ interface typeInputAreaComponent{
   type?: string,
   rows?: number,
   disabled?: boolean,
+  labelCol?: ColProps,
 }
 
 const InputComponent = ({
@@ -23,6 +24,7 @@ const InputComponent = ({
   label = "",
   placeholder = "",
   className = "",
+  labelCol,
   ...props
 }: typeInputAreaComponent) => {
 
@@ -31,7 +33,7 @@ const InputComponent = ({
       name={name}
       control={control}
       render={({ field }) => (
-        <Form.Item label={label} className={className}>
+        <Form.Item label={label} className={className} labelCol={labelCol}>
           <TextArea
             {...field}
             placeholder={placeholder}

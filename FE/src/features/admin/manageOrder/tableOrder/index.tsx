@@ -1,48 +1,44 @@
 import { Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { statusCode } from "@/constants/index";
-import moment from "moment";
+import { STATUS_ORDER_COLOR, statusCode } from "@/constants/index";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "@/store/index";
 import ModalConfirm from "@/components/confirm";
 import { eventEmitter } from "@/utils/index";
 import Notification from "@/components/notificationSend";
 import InputSearchField from "@/components/admin/inputSearch";
-import {
-  deleteContact,
-  setContactSelected,
-  setPagination,
-} from "@/store/manageContact";
-import ModalContact from "../modalContact";
-import { searchContact } from "@/store/manageContact";
-import contactApi from "@/api/contact";
+import ModalOrder from "../modalOrder";
+import { deleteOrderAll, searchOrderAll, setOrderSelected, setPagination } from "@/store/orderUser";
+import orderApi from "@/api/order";
+
 interface Props {
   loading?: boolean;
-  contactList: ContactState[];
+  orderList: OrderState[];
   pagination: basePagination;
   total: number;
 }
 
-const TableManageContact = ({
+const TableManageNews = ({
   loading = false,
-  contactList = [],
+  orderList = [],
   pagination,
   total,
 }: Props) => {
   const dispatch = useAppDispatch();
 
-  const handleDeleteContact = async ({ id }) => {
+  const handleDeleteOrder = async (data: Partial<OrderState>) => {
     try {
-      const { message, status } = await contactApi.deleteContact(id);
+      const { id } = data;
+
+      const { message, status } = await orderApi.deleteOrder(id);
 
       if (status === statusCode.DELETED) {
-        dispatch(deleteContact(id));
-
+        dispatch(deleteOrderAll(id));
         eventEmitter.emit("submit_modal");
 
         Notification({
-          message: "Notify success",
-          description: message,
+          message: message,
+          description: "Notify delete success!",
         });
       }
     } catch (e: unknown) {
@@ -50,7 +46,7 @@ const TableManageContact = ({
     }
   };
 
-  const columns: ColumnsType<ContactState> = [
+  const columns: ColumnsType<OrderState> = [
     {
       title: "NAME",
       dataIndex: "name",
@@ -58,7 +54,7 @@ const TableManageContact = ({
       render: (name: string) => {
         return (
           <div className="content__name">
-            <div className="content__name-info">
+            <div className="content__name-info overflow__text">
               <h5>{name}</h5>
             </div>
           </div>
@@ -66,71 +62,77 @@ const TableManageContact = ({
       },
     },
     {
-      title: "TELEPHONE",
+      title: "PHONE NUMBER",
       dataIndex: "phone_number",
       key: "phone_number",
-    },
-    {
-      title: "ADDRESS",
-      dataIndex: "address",
-      key: "address",
-    },
-    {
-      title: "STATUS",
-      dataIndex: "is_read",
-      key: "is_read",
-      width: 50,
-      align: 'center',
-      render: (is_read: string) => {
+      render: (phone_number: string) => {
         return (
-          <>
-            {+is_read === 1 ? (
-              <Tag color="green">READ</Tag>
-            ) : (
-              <Tag color="orange">UNREAD</Tag>
-            )}{" "}
-          </>
+          <div className="content__name">
+            <div className="content__name-info overflow__text">
+              <h5>{phone_number}</h5>
+            </div>
+          </div>
         );
       },
     },
     {
-      title: "CREATED AT",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      sorter: true,
-      width: 150,
+      title: "Address",
+      dataIndex: "address",
+      key: "address",
+      render: (address: string) => {
+        return (
+          <div className="content__name">
+            <div className="content__name-info overflow__text">
+              <h5>{address}</h5>
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      title: "STATUS",
+      dataIndex: "order_status",
+      key: "order_status",
+      width: 100,
       align: 'center',
-      render: (date: string) => {
-        return <> {moment(date).format("DD-MM-YYYY")}</>;
+      render: (order_status: string) => {
+        return (
+          <Tag
+            color={STATUS_ORDER_COLOR[order_status]}
+            className="tag__action"
+          >
+            {order_status}
+          </Tag>
+        );
       },
     },
     {
       title: "ACTION",
       dataIndex: "action",
       key: "action",
-      align: 'center',
       width: 200,
+      align:'center',
       //@ts-ignore
-      render: (action: unknown, row: ContactState) => (
+      render: (action: unknown, row: OrderState) => (
         <>
-          <ModalContact
+          <ModalOrder
             destroyOnClose={true}
-            title="View Contact"
             width={800}
+            isEdit={true}
             content={
               <Tag
                 color="blue"
                 className="tag__action"
-                onClick={() => dispatch(setContactSelected(row))}
+                onClick={() => dispatch(setOrderSelected(row))}
               >
-                <EditOutlined /> VIEW
+                <EditOutlined /> EDIT
               </Tag>
             }
           />
           <ModalConfirm
-            title="Delete user"
-            description="Are you sure to delete this user?"
-            handleConfirm={() => handleDeleteContact(row)}
+            title="Delete product"
+            description="Are you sure to delete this product?"
+            handleConfirm={() => handleDeleteOrder(row)}
           >
             <Tag color="red" className="tag__action">
               <DeleteOutlined /> DELETE
@@ -145,16 +147,17 @@ const TableManageContact = ({
   };
 
   return (
-    <div className="table__manage-contact">
+    <div className="table__manage-order">
       <div className="table__title">
         <InputSearchField
-          placeholder="Search Contact"
+          placeholder="Search order"
           pagination={pagination}
-          setFieldSearch={searchContact}
+          setFieldSearch={searchOrderAll}
           setPagination={setPagination}
         />
       </div>
       <Table
+        // size="large"
         pagination={{
           ...pagination,
           total: total,
@@ -163,12 +166,12 @@ const TableManageContact = ({
         }}
         loading={loading}
         columns={columns}
-        dataSource={contactList}
+        dataSource={orderList}
         scroll={{ x: 1000 }}
-        rowKey={'id'}
+        rowKey={"id"}
       />
     </div>
   );
 };
 
-export default TableManageContact;
+export default TableManageNews;

@@ -1,13 +1,14 @@
+import { ORDER_STATUS } from "../../constants";
 import { BadRequestError } from "../../core/error.response";
-const { Op } = require("sequelize");
 import db, { sequelize } from "../index";
+import { sendMailOrderForShop, sendMailWhenOrder } from "../../utils/sendMail";
 
 const validateOrder = async (payload) => {
   const newOrder = await db.Orders.build({
     ...payload,
   });
 
- return await newOrder.validateOrder();
+  return await newOrder.validateOrder();
 };
 
 const createNewOrder = async (payload) => {
@@ -19,9 +20,17 @@ const createNewOrder = async (payload) => {
 
   //add quantity
   const { user_id } = payload;
+  const user = await db.User.findByPk(user_id);
+  const { fullName, phoneNumber, email, address } = user;
 
   const filter = { order_status: "pending", user_id };
-  const update = { ...payload };
+  const update = {
+    ...payload,
+    name: fullName,
+    phone_number: phoneNumber,
+    email,
+    address,
+  };
   const options = { upsert: true };
 
   return await db.Orders.findOneAndUpdate({
@@ -38,8 +47,28 @@ const updateOrder = async (payload) => {
 
   //add quantity
   const order = await db.Orders.findByPk(payload.id);
-  if(!order) {
+  if (!order) {
     throw new BadRequestError("Order not exits!");
+  }
+
+  //sendMail user
+  const orderDetail = await db.OrderDetail.findAll({
+    where: { order_id: order.id },
+    attributes: [
+      "quantity",
+      [sequelize.literal("product_data.name"), "name"],
+      [sequelize.literal("product_data.price"), "price"],
+    ],
+    include: [{ model: db.Products, as: "product_data", attributes: [] }],
+    raw: true,
+  });
+
+  if (
+    order.order_status === ORDER_STATUS.PENDING &&
+    payload?.order_status === ORDER_STATUS.WAIT_CONFIRMATION
+  ) {
+    sendMailWhenOrder({ orderDetail, order });
+    sendMailOrderForShop({ orderDetail, order });
   }
 
   for (let property in payload) {

@@ -18,6 +18,7 @@ class UserService {
           { name: { [Op.like]: `%${valueSearch}%` } },
           { email: { [Op.like]: `%${valueSearch}%` } },
           { phone_number: { [Op.like]: `%${valueSearch}%` } },
+          { address: { [Op.like]: `%${valueSearch}%` } },
         ],
       },
       limit: limit,

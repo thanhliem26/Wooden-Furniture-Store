@@ -37,7 +37,6 @@ export const getUser = () => {
     return null;
 }
 
-
 export const removeUser = () => localStorage.removeItem(STAFF_MANAGE_USER);
 
 export { default as eventEmitter } from './emitter.ts';

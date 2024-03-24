@@ -30,10 +30,18 @@ const deleteFIleUpload = (path) => {
   });
 }
 
+const formatCurrency = (number) => {
+  if (!number) return '';
+  const strNumber = number.toString();
+  const regex = /(\d)(?=(\d{3})+(?!\d))/g;
+  return strNumber.replace(regex, "$1,");
+}
+
 module.exports = {
   getInfoData,
   removeElement,
   isJson,
   isNumber,
-  deleteFIleUpload
+  deleteFIleUpload,
+  formatCurrency
 };

@@ -1,5 +1,6 @@
 import { formatCurrency } from "@/utils/index";
 import { useMemo } from "react";
+import { Link } from "react-router-dom";
 
 interface Props {
   dataOrder: OrderDetailState[];
@@ -24,7 +25,7 @@ const TotalCart = ({ dataOrder }: Props) => {
           <div className="cart__item-price">{formatCurrency(total)} ₫</div>
         </div>
       </div>
-      <div className="total__cart-btn">Tiến hành thanh toán</div>
+      <Link to='/pay' className="total__cart-btn">Tiến hành thanh toán</Link>
     </div>
   );
 };

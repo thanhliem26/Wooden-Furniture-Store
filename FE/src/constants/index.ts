@@ -79,3 +79,12 @@ export const TYPE_PROVIDER_LOGIN = {
   GOOGLE: 'google',
   FACEBOOK: 'facebook',
 }
+
+export const STATUS_ORDER_COLOR = {
+  pending: 'grey',
+  wait_confirmation: 'cyan',
+  confirmed: 'lime',
+  shipped :'blue',
+  cancelled: 'red',
+  delivered: 'green'
+}

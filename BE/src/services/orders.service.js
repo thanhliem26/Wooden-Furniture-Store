@@ -1,8 +1,6 @@
 ("use strict");
-import { includes } from "lodash";
-import db, { sequelize } from "../models";
+import db from "../models";
 import { createNewOrder, updateOrder } from '../models/repository/orders.repo';
-const { Op } = require("sequelize");
 
 class OrderService {
   static UpdateOrder = async (payload) => {
@@ -54,6 +52,7 @@ class OrderService {
   static createOrder = async (data) => {
     return await createNewOrder(data)
   };
+  
 }
 
 module.exports = OrderService;

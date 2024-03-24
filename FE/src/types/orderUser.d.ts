@@ -2,7 +2,11 @@ interface state_reducer_orderUser {
     id: number | null,
     order_status: string,
     loading: boolean,
-    list_order: orderItem[]
+    list_order: orderItem[],
+    pagination: basePagination,
+    total: number,
+    list__order_all: OrderState[],
+    orderSelected: OrderState,
 }
 
 interface orderItem {
@@ -18,8 +22,8 @@ interface orderItem {
 }
 
 interface paramSearchOrder {
-    order_status: string,
-    user_id: number,
+    order_status?: string,
+    user_id?: number,
     limit?: number,
 }
 
@@ -41,6 +45,11 @@ interface OrderState {
     user_id: number,
     order_status: string,
     order_detail: OrderDetailState[],
+    name: string,
+    email: string,
+    phone_number: string,
+    address: string,
+    note: string,
     createdAt: string,
     updatedAt: string,
 }

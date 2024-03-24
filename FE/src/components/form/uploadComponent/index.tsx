@@ -57,6 +57,7 @@ const UploadComponent = ({
   mdImage = 12,
   spanImage = 12,
   smImage = 12,
+  disabled,
   ...props
 }: typeInpuUploadComponent) => {
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -136,7 +137,7 @@ const UploadComponent = ({
 
       return (
         <Col md={mdImage} span={spanImage} sm={smImage}  key={index}>
-          <ImageComponent file={file} onDelete={() => handleDelete(file.url || file.name)} />
+          <ImageComponent file={file} onDelete={() => handleDelete(file.url || file.name)} disabled={disabled}/>
         </Col>
       );
     });
@@ -169,9 +170,9 @@ const UploadComponent = ({
       <Row gutter={[16, 16]} className="image__list">
         {/* <div className="image__list"> */}
           {uploadSelf ? null : renderFileList(fileList)}
-          {uploadSelf
+          {uploadSelf && !disabled
             ? btnUploadComponent
-            : countVisible >= maxCount
+            : countVisible >= maxCount || disabled
             ? null
             : btnUploadComponent}
         {/* </div> */}
@@ -195,7 +196,7 @@ const UploadComponent = ({
               onChange={handleChange}
               {...props}
             >
-              {uploadSelf
+              {uploadSelf && !disabled
                 ? btnUploadComponent
                 : countVisible >= maxCount
                 ? null

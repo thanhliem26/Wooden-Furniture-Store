@@ -25,6 +25,8 @@ import Verify from '@/features/misc/Verify';
 import ActiveUser from '@/features/misc/ActiveUser';
 import Contact from '@/features/user/contact';
 import ManageContact from '@/features/admin/manageContact';
+import PayComponent from '@/features/user/pay';
+import ManageOrder from '@/features/admin/manageOrder';
 
 function RouterComponent() {
   const router = createBrowserRouter([
@@ -63,6 +65,10 @@ function RouterComponent() {
         {
           path: '/contact',
           element: <Contact />
+        },
+        {
+          path: "pay",
+          element: <PayComponent />
         },
       ]
     },
@@ -111,6 +117,10 @@ function RouterComponent() {
         {
           path: "manage-contact",
           element: <ManageContact />
+        },
+        {
+          path: "manage-order",
+          element: <ManageOrder />
         },
       ]
     },
