@@ -5,6 +5,7 @@ import { useEffect, lazy, Suspense } from "react";
 import { useAppDispatch } from "../store";
 import { fetchUserInfo } from "@/store/user";
 import { Skeleton } from "antd";
+import { getActiveAboutUs } from "@/store/aboutUs";
 
 const UserFooterLayout = lazy(() => import("@/components/userFooterLayout"));
 
@@ -17,6 +18,10 @@ const PublicLayoutUser = () => {
       dispatch(fetchUserInfo());
     }
   }, []);
+
+  useEffect(() => {
+    dispatch(getActiveAboutUs());
+  }, [])
 
   if (!isUserLoggedIn()) {
     return <Navigate to="/login" />;

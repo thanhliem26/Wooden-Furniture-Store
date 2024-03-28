@@ -69,7 +69,7 @@ const FormNews = ({ isEdit }: Props) => {
       const { metadata } = await markDownApi.createMarkdown({
         contentHTML: markdown.html,
         contentMarkdown: markdown.text,
-        markdown_id:
+        id:
           isEdit && newsSelected?.markdown_id
             ? newsSelected?.markdown_id
             : null,

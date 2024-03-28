@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import styled from "./index.module.scss";
 import { SearchOutlined } from "@ant-design/icons";
 import { Link, NavLink, useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ import { RootState, useAppDispatch, useAppSelector } from "@/store/index.ts";
 import { searchOrder } from "@/store/orderUser/index.ts";
 import userApi from "@/api/user.ts";
 import { Skeleton } from "antd";
-import { NotificationError } from "@/utils/index.ts";
+import { isJson, NotificationError } from "@/utils/index.ts";
 import { debounce } from "lodash";
 
 const UserLayoutHeader = () => {
@@ -23,6 +23,14 @@ const UserLayoutHeader = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const inputRef = useRef();
+
+  const activeAbout = useAppSelector((state) => state.aboutUs.aboutUsSelected);
+
+  const logo = useMemo(() => {
+    return isJson(activeAbout?.logo)
+      ? JSON.parse(activeAbout?.logo)[0].url
+      : Logo;
+  }, [activeAbout]);
 
   const handleSetSearch = (e) => {
     const name_search = e.target.value;
@@ -114,7 +122,7 @@ const UserLayoutHeader = () => {
                   <img
                     width="200"
                     height="100"
-                    src={Logo}
+                    src={logo}
                     alt="noithatbanghe"
                   />
                 </Link>

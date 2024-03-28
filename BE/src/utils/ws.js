@@ -25,15 +25,11 @@ export default async (expressServer) => {
     "connection",
     function connection(websocketConnection, connectionRequest) {
       const [_path, params] = connectionRequest?.url?.split("?");
-
-      // const queryParams = new URLSearchParams(params);
-      // const Authorization = queryParams.get('Authorization');
-      // console.log("🚀 ~ queryParams:", Authorization)
-
+      
       websocketConnection.on("message", (buffer) => {
-        const binaryData = Buffer.from(buffer); // Dữ liệu binary
+        const binaryData = Buffer.from(buffer);
         const stringData = binaryData.toString("utf-8");
-        const data = JSON.parse(stringData); // Chuyển đổi thành chuỗi
+        const data = JSON.parse(stringData); 
 
         const { room_id, type, data_ws } = data;
         

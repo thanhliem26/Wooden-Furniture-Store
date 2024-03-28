@@ -4,60 +4,55 @@ import { statusCode } from "@/constants/index";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "@/store/index";
 import ModalConfirm from "@/components/confirm";
-import { eventEmitter, formatCurrency } from "@/utils/index";
+import { eventEmitter } from "@/utils/index";
 import Notification from "@/components/notificationSend";
 import InputSearchField from "@/components/admin/inputSearch";
-import {
-  setPagination,
-  deleteProduct,
-} from "@/store/manageProducts";
-import {searchProduct, setProductSelected} from '@/store/manageProducts';
-import ModalProduct from "../modalProduct"; 
-import productApi from "@/api/product";
-import { ProductContext } from "../constant";
-import { useContext } from "react";
+import ModalProduct from "../modalAboutUs";
 import { handlePrevImageS3 } from "@/components/modal/modalChangeInfoUser/content/constant";
+import {
+  deleteAboutUs,
+  searchAboutUs,
+  setAboutUsSelected,
+  setPagination,
+} from "@/store/aboutUs";
+import aboutUsApi from "@/api/aboutUs";
 
 interface Props {
   loading?: boolean;
-  productList: ProductState[];
+  aboutUsList: AboutUsState[];
   pagination: basePagination;
   total: number;
 }
 
 const TableManageProduct = ({
   loading = false,
-  productList = [],
+  aboutUsList = [],
   pagination,
   total,
 }: Props) => {
-  const categoryContext = useContext(ProductContext);
   const dispatch = useAppDispatch();
 
-  const handleGetCategory = (id) => {
-    const [result] = categoryContext.categoryList.filter((category) => {
-      return category.id === id;
-    })
-
-    return result || {};
-  }
-
-  const handleDeleteProduct = async ({ id, images }) => {
+  const handleDeleteAboutUs = async (payload: AboutUsState) => {
+    const { image, logo, id } = payload;
     try {
-      let imageProduct = images ? JSON.parse(images) : [];
-      imageProduct = imageProduct.map((news) => ({...news, is_delete: true}));
+      let imageDelete = image ? JSON.parse(image) : [];
+      imageDelete = imageDelete.map((news) => ({ ...news, is_delete: true }));
 
-      const { message, status } = await productApi.deleteProduct(id);
+      let logoDelete = logo ? JSON.parse(logo) : [];
+      logoDelete = logoDelete.map((news) => ({ ...news, is_delete: true }));
+
+      const { message, status } = await aboutUsApi.deleteAboutUs(id);
 
       if (status === statusCode.DELETED) {
-        dispatch(deleteProduct(id));
-        await handlePrevImageS3(imageProduct)
+        dispatch(deleteAboutUs(id));
+        await handlePrevImageS3(imageDelete);
+        await handlePrevImageS3(logoDelete);
 
         eventEmitter.emit("submit_modal");
 
         Notification({
           message: message,
-          description: 'Notify delete succes',
+          description: "Notify delete succes",
         });
       }
     } catch (e: unknown) {
@@ -65,7 +60,7 @@ const TableManageProduct = ({
     }
   };
 
-  const columns: ColumnsType<ProductState> = [
+  const columns: ColumnsType<AboutUsState> = [
     {
       title: "NAME",
       dataIndex: "name",
@@ -82,45 +77,37 @@ const TableManageProduct = ({
       },
     },
     {
-      title: "DESCRIPTION",
-      dataIndex: "description",
-      key: "description",
-      render: (description: string) => {
-        return <p className="overflow__text">{description}</p>
-      }
-    },
-    {
-      title: "PRICE",
-      dataIndex: "price",
-      key: "price",
-      sorter: true,
-      width: 130,
-      align: 'center',
-      render: (price: number) => {
-        return <> {formatCurrency(price)}</>;
+      title: "ADDRESS",
+      dataIndex: "address",
+      key: "address",
+      render: (address: string) => {
+        return <p className="overflow__text">{address}</p>;
       },
     },
     {
-      title: "STOCK QUANTITY",
-      dataIndex: "stock_quantity",
-      key: "stock_quantity",
+      title: "PHONE NUMBER",
+      dataIndex: "phone_number",
+      key: "phone_number",
       sorter: true,
       width: 130,
-      align:'center',
-      render: (stock_quantity: number) => {
-        return <> {stock_quantity}</>;
+      align: "center",
+      render: (phone_number: number) => {
+        return <> {phone_number}</>;
       },
     },
     {
-      title: "CATEGORY",
-      dataIndex: "category_id",
-      key: "category_id",
+      title: "ACTIVE",
+      dataIndex: "is_active",
+      key: "is_active",
+      sorter: true,
       width: 130,
-      align: 'center',
-      render: (category_id: number) => {
-        const category = handleGetCategory(category_id);
-      
-        return <b>{category?.['name']}</b>;
+      align: "center",
+      render: (is_active: number) => {
+        return (
+          <Tag color={+is_active === 1 ? "green" : "grey"}>
+            {+is_active === 1 ? "ACTIVE" : "NON ACTIVE"}
+          </Tag>
+        );
       },
     },
     {
@@ -128,9 +115,9 @@ const TableManageProduct = ({
       dataIndex: "action",
       key: "action",
       width: 180,
-      align: 'center',
+      align: "center",
       //@ts-ignore
-      render: (action: unknown, row: ProductState) => (
+      render: (action: unknown, row: AboutUsState) => (
         <>
           <ModalProduct
             destroyOnClose={true}
@@ -141,7 +128,7 @@ const TableManageProduct = ({
               <Tag
                 color="blue"
                 className="tag__action"
-                onClick={() => dispatch(setProductSelected(row))}
+                onClick={() => dispatch(setAboutUsSelected(row))}
               >
                 <EditOutlined /> EDIT
               </Tag>
@@ -150,7 +137,7 @@ const TableManageProduct = ({
           <ModalConfirm
             title="Delete product"
             description="Are you sure to delete this product?"
-            handleConfirm={() => handleDeleteProduct(row)}
+            handleConfirm={() => handleDeleteAboutUs(row)}
           >
             <Tag color="red" className="tag__action">
               <DeleteOutlined /> DELETE
@@ -160,6 +147,7 @@ const TableManageProduct = ({
       ),
     },
   ];
+
   const onChangePagination = (page: number, size: number) => {
     dispatch(setPagination({ current: page, pageSize: size }));
   };
@@ -168,9 +156,9 @@ const TableManageProduct = ({
     <div className="table__manage-product">
       <div className="table__title">
         <InputSearchField
-          placeholder="Search product"
+          placeholder="Search about us"
           pagination={pagination}
-          setFieldSearch={searchProduct}
+          setFieldSearch={searchAboutUs}
           setPagination={setPagination}
         />
       </div>
@@ -184,8 +172,9 @@ const TableManageProduct = ({
         }}
         loading={loading}
         columns={columns}
-        dataSource={productList}
+        dataSource={aboutUsList}
         scroll={{ x: 1000 }}
+        rowKey={"id"}
       />
     </div>
   );

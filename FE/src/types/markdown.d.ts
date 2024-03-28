@@ -1,7 +1,7 @@
 type paramCreateMarkdown = {
     contentHTML: string,
     contentMarkdown: string,
-    markdown_id?: number | null;
+    id: number | null;
 }
 
 type MarkdownState = {

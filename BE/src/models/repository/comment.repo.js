@@ -1,6 +1,6 @@
 import { BadRequestError } from "../../core/error.response";
-const { Op, where } = require("sequelize");
-import db, { sequelize } from "../index";
+const { Op } = require("sequelize");
+import db from "../index";
 
 const validateComment = async (payload) => {
   const newComment = await db.Comment.build({

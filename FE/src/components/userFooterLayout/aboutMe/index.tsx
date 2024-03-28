@@ -1,5 +1,8 @@
+import { useAppSelector } from "@/store/index";
 
 const AboutMe = () => {
+  const activeAbout = useAppSelector((state) => state.aboutUs.aboutUsSelected);
+
   return (
     <div className="aboutMe layout__footer-contain">
       <div className="aboutMe__title">
@@ -7,16 +10,13 @@ const AboutMe = () => {
       </div>
       <div className="aboutMe__content">
         <div className="aboutMe__content-field">
-          <p><span>Address:</span>Đồ gỗ Thành Lành - Xóm 31 Hải Minh - Hải Hậu - Nam Định</p>
+          <p><span>Address:</span>{activeAbout?.address}</p>
         </div>
         <div className="aboutMe__content-field">
-          <p><span>Telephone:</span> 0866759002</p>
+          <p><span>Telephone:</span> {activeAbout?.phone_number}</p>
         </div>
-        {/* <div className="aboutMe__content-field">
-          <p><span>Email:</span> phamvanliem26122002@gmail.com</p>
-        </div> */}
         <div className="aboutMe__content-field">
-          <p><span>Email:</span> phamvanliem26122002@gmail.com</p>
+          <p><span>Email:</span> {activeAbout?.email}</p>
         </div>
       </div>
     </div>

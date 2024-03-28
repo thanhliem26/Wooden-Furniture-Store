@@ -1,23 +1,22 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch } from "@/store/index";
 import { Col, Row, Form } from "antd";
 import {
   ButtonComponent,
   InputComponent,
   SelectComponent,
-  TextAreComponent,
 } from "@/components/form";
-import { eventEmitter } from "@/utils/index";
+import { eventEmitter, isJson } from "@/utils/index";
 import { useForm } from "react-hook-form";
 import {
   schema,
   FormData,
   handleSubmitEdit,
   handleSubmitCreate,
+  optionActive,
 } from "./constant";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { RootState, useAppSelector } from "@/store/index";
-import { ProductContext } from "../../constant";
+import { useAppSelector } from "@/store/index";
 import UploadComponent from "@/components/form/uploadComponent";
 import lodash from 'lodash';
 import { handleMultiPrevImageS3 } from "@/components/modal/modalChangeInfoUser/content/constant";
@@ -28,19 +27,16 @@ interface Props {
   isEdit: boolean;
 }
 
-const FormProduct = ({ isEdit }: Props) => {
+const FormAboutUs = ({ isEdit }: Props) => {
   const dispatch = useAppDispatch();
 
   const [loading, setLoading] = useState<boolean>(false);
-  const productSelected = useAppSelector(
-    (state: RootState) => state.manageProduct.productSelected
-  );
+  const aboutUsSelected = useAppSelector((state) => state.aboutUs.aboutUsSelected);
 
   const [imageDefault, setImageDefault] = useState([]);
+  const [logoDefault, setLogoDefault] = useState([]);
   const [markdown, setMarkDown] = useState({html: '', text: ''});
   const [showMarkDown, setShowMarkdown] = useState(false)
- 
-  const categoryContext = useContext(ProductContext);
 
   const {
     handleSubmit,
@@ -51,13 +47,15 @@ const FormProduct = ({ isEdit }: Props) => {
     // use resolver to validate with yup
     resolver: yupResolver(schema),
     defaultValues: {
-      id: productSelected?.id,
-      name: productSelected?.name,
-      description: productSelected?.description || '',
-      price: productSelected?.price,
-      stock_quantity: productSelected?.stock_quantity,
-      category_id: productSelected?.category_id,
-      images: productSelected?.images && JSON.parse(productSelected?.images),
+      id: aboutUsSelected?.id,
+      name: aboutUsSelected?.name,
+      address: aboutUsSelected?.address || '',
+      address_link: aboutUsSelected?.address_link,
+      email: aboutUsSelected?.email,
+      image: isJson(aboutUsSelected?.image) ? JSON.parse(aboutUsSelected?.image) : [],
+      logo: isJson(aboutUsSelected?.logo) ? JSON.parse(aboutUsSelected?.logo) : [],
+      phone_number: aboutUsSelected?.phone_number || '',
+      is_active: aboutUsSelected?.is_active || '0',
     },
   });
 
@@ -65,23 +63,29 @@ const FormProduct = ({ isEdit }: Props) => {
     try {
       setLoading(true);
       const dataValue = lodash.cloneDeep(data);
-      const { images } = dataValue;
+      const dataMarkdown = lodash.cloneDeep(markdown);
+      const { image, logo } = dataValue;
 
-      const imagesUpload = !lodash.isEmpty(images)
-      ? await handleMultiPrevImageS3(images)
+      const imagesUpload = !lodash.isEmpty(image)
+      ? await handleMultiPrevImageS3(image)
       : "";
-      dataValue.images = typeof imagesUpload === 'string' ? imagesUpload : JSON.stringify(imagesUpload);
- 
+      dataValue.image = typeof imagesUpload === 'string' ? imagesUpload : JSON.stringify(imagesUpload);
+
+      const imagesUploadLogo = !lodash.isEmpty(logo)
+      ? await handleMultiPrevImageS3(logo)
+      : "";
+      dataValue.logo = typeof imagesUploadLogo === 'string' ? imagesUploadLogo : JSON.stringify(imagesUploadLogo);
+
       const { metadata } = await markDownApi.createMarkdown({
-        contentHTML: markdown.html, 
-        contentMarkdown: markdown.text,
-        id: isEdit && productSelected?.markdown_id ? productSelected?.markdown_id : null,
+        contentHTML: dataMarkdown.html, 
+        contentMarkdown: dataMarkdown.text,
+        id: isEdit && aboutUsSelected?.markdown_id ? aboutUsSelected?.markdown_id : null,
       })
 
       const { id } = metadata;
       dataValue.markdown_id = id;
-      dataValue.contentHTML = markdown.html;
-      dataValue.contentMarkdown = markdown.text;
+      dataValue.contentHTML = dataMarkdown.html;
+      dataValue.contentMarkdown = dataMarkdown.text;
       
       isEdit
         ? handleSubmitEdit(dataValue, dispatch, eventEmitter)
@@ -109,13 +113,16 @@ const FormProduct = ({ isEdit }: Props) => {
   };
 
   useEffect(() => {
-    const imageShow = productSelected?.images ? JSON.parse(productSelected?.images) : [];
+    const imageShow = isJson(aboutUsSelected?.image) ? JSON.parse(aboutUsSelected?.image) : [];
     setImageDefault(imageShow);
 
-    handleEditorChange({html: productSelected?.contentHTML || '', text: productSelected?.contentMarkdown || ''})
+    const logo = isJson(aboutUsSelected?.logo) ? JSON.parse(aboutUsSelected?.logo) : [];
+    setLogoDefault(logo);
+
+    handleEditorChange({html: aboutUsSelected?.contentHTML || '', text: aboutUsSelected?.contentMarkdown || ''})
     
     setShowMarkdown(true)
-  }, [productSelected])
+  }, [aboutUsSelected])
 
   return (
     <div className="change__field-product">
@@ -125,98 +132,104 @@ const FormProduct = ({ isEdit }: Props) => {
         onFinishFailed={onFinishFailed}
       >
         <Row gutter={[16, 16]}>
+        <Col md={6} span={24}>
+              Active
+            </Col>
+            <Col md={18} span={24}>
+              <SelectComponent
+                name="is_active"
+                control={control}
+                errors={errors}
+                className="remove__border"
+                options={optionActive}
+              />
+            </Col>
+
           <Col md={6} span={24}>
-            Select Category <span className="required">*</span>
-          </Col>
-          <Col md={18} span={24}>
-            <SelectComponent
-              name="category_id"
-              control={control}
-              errors={errors}
-              placeholder="Category"
-              className="remove__border"
-              options={categoryContext.categoryList.map((category) => ({
-                label: category.name,
-                value: category.id,
-              }))}
-              showSearch
-              filterOption={(input, option) => {
-                if(option && option.label) {
-                  //@ts-ignore
-                  return  option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-                }
-                return true;
-                
-              }}
-            />
-          </Col>
-          <Col md={6} span={24}>
-            Product Name <span className="required">*</span>
+            Name <span className="required">*</span>
           </Col>
           <Col md={18} span={24}>
             <InputComponent
               name="name"
               control={control}
               errors={errors}
-              placeholder="Name product"
-              className="remove__border"
             />
           </Col>
+
           <Col md={6} span={24}>
-            Product Image <span className="required">*</span>
+            Address <span className="required">*</span>
+          </Col>
+          <Col md={18} span={24}>
+            <InputComponent
+              name="address"
+              control={control}
+              errors={errors}
+            />
+          </Col>
+
+          <Col md={6} span={24}>
+            Address Link<span className="required">*</span>
+          </Col>
+          <Col md={18} span={24}>
+            <InputComponent
+              name="address_link"
+              control={control}
+              errors={errors}
+            />
+          </Col>
+
+          <Col md={6} span={24}>
+            Phone Number<span className="required">*</span>
+          </Col>
+          <Col md={18} span={24}>
+            <InputComponent
+              name="phone_number"
+              control={control}
+              errors={errors}
+            />
+          </Col>
+
+          <Col md={6} span={24}>
+           Email<span className="required">*</span>
+          </Col>
+          <Col md={18} span={24}>
+            <InputComponent
+              name="email"
+              control={control}
+              errors={errors}
+            />
+          </Col>
+
+          <Col md={6} span={24}>
+            Logo <span className="required">*</span>
           </Col>
           <Col md={18} span={24}>
             <UploadComponent
-              name="images"
+              name="logo"
               control={control}
               errors={errors}
               className="remove__border"
               setValue={setValue}
-              maxCount={5}
+              maxCount={1}
+              defaultValue={logoDefault}
+            />
+          </Col>
+
+          <Col md={6} span={24}>
+            Image <span className="required">*</span>
+          </Col>
+          <Col md={18} span={24}>
+            <UploadComponent
+              name="image"
+              control={control}
+              errors={errors}
+              className="remove__border"
+              setValue={setValue}
+              maxCount={1}
               defaultValue={imageDefault}
             />
           </Col>
-          <Col md={6} span={24}>
-            Price <span className="required">*</span>
-          </Col>
-          <Col md={18} span={24}>
-            <InputComponent
-              name="price"
-              control={control}
-              errors={errors}
-              placeholder="Price product"
-              className="remove__border"
-              type="number"
-              min={0}
-            />
-          </Col>
-          <Col md={6} span={24}>
-            Stock quantity <span className="required">*</span>
-          </Col>
-          <Col md={18} span={24}>
-            <InputComponent
-              name="stock_quantity"
-              control={control}
-              errors={errors}
-              placeholder="Stock quantity product"
-              className="remove__border"
-              type="number"
-              min={0}
-            />
-          </Col>
-          <Col md={6} span={24}>
-            Product description
-          </Col>
-          <Col md={18} span={24}>
-            <TextAreComponent
-              name="description"
-              control={control}
-              errors={errors}
-              placeholder="Description product"
-              className="remove__border"
-              rows={4}
-            />
-          </Col>
+
           <Col md={24} span={24}>
             Markdown
           </Col>
@@ -245,4 +258,4 @@ const FormProduct = ({ isEdit }: Props) => {
   );
 };
 
-export default FormProduct;
+export default FormAboutUs;

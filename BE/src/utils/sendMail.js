@@ -33,11 +33,9 @@ const sendMailOauth2 = async () => {
 
     return transporter;
   } catch (error) {
-    console.log("error", error);
+    console.log("error send Mail", error);
   }
 };
-
-sendMailOauth2();
 
 export const sendMailSingUP = async ({ data, token }) => {
   // send mail with defined transport object

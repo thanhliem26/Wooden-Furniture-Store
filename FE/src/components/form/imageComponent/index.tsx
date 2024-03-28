@@ -9,7 +9,6 @@ interface Props {
 }
 
 const ImageComponent = ({ file, onDelete, disabled = false }: Props) => {
-  console.log("🚀 ~ disabled:", disabled)
   const [isPreviewVisible, setPreviewVisible] = useState(false);
   const urlImage = useMemo(() => {
     return file.origin === "aws" ? file.url : file.thumbUrl;

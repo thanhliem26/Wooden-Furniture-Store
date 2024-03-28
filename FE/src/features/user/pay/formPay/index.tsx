@@ -12,6 +12,8 @@ import styled from './index.module.scss';
 import { forwardRef, useImperativeHandle } from "react";
 import orderApi from "@/api/order";
 import { isEmpty } from 'lodash';
+import { RootState, useAppDispatch, useAppSelector } from "@/store/index";
+import { searchOrder } from "@/store/orderUser";
 
 interface Props {
   order_id: number;
@@ -27,6 +29,9 @@ const FormPay = ({order_id, dataOrder}: Props, ref) => {
   } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
+
+  const dispatch = useAppDispatch();
+  const idUser = useAppSelector((state: RootState) => state.user.id);
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -46,6 +51,9 @@ const FormPay = ({order_id, dataOrder}: Props, ref) => {
         description: message,
       });
 
+      dispatch(
+        searchOrder({ order_status: "pending", user_id: idUser, limit: 1 })
+      );
       reset();
     } catch (error: unknown) {
       NotificationError(error);

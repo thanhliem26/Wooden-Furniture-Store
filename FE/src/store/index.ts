@@ -10,6 +10,7 @@ import orderUser from './orderUser';
 import manageCommentReducer from './comments';
 import manageNewsReducer from './manageNews';
 import manageContactReducer from './manageContact';
+import aboutUsReducer from './aboutUs';
 
 export const store = configureStore({
   reducer: {
@@ -20,7 +21,8 @@ export const store = configureStore({
     manageProduct: manageProductReducer,
     comments: manageCommentReducer,
     manageNews: manageNewsReducer,
-    manageContact: manageContactReducer
+    manageContact: manageContactReducer,
+    aboutUs: aboutUsReducer,
   },
 })
 

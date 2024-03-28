@@ -67,9 +67,6 @@ export const handlePrevImageS3 = async (fileList) => {
     { ImageDelete: [], ImageUpload: [], imageUPloaded: [] }
   );
   const { ImageDelete, ImageUpload, imageUPloaded } = classifyImage;
-  console.log("🚀 ~ imageUPloaded:", imageUPloaded)
-  console.log("🚀 ~ ImageUpload:", ImageUpload)
-  console.log("🚀 ~ ImageDelete:", ImageDelete)
 
   ImageDelete.forEach((image) => {
     if (image.url) deleteFileS3(image.name);

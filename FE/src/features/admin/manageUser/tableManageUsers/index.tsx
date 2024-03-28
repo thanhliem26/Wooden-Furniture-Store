@@ -58,7 +58,6 @@ const TableManageUsers = ({
       title: "NAME",
       dataIndex: "fullName",
       key: "fullName",
-      width: 100,
       render: (name: string, row: UserState) => {
         const avatar = row.avatar && JSON.parse(row.avatar);
        
@@ -82,14 +81,14 @@ const TableManageUsers = ({
       title: "ADDRESS",
       dataIndex: "address",
       key: "address",
-      width: 140,
     },
     {
       title: "DATE OF BIRTH",
       dataIndex: "dateOfBirth",
       key: "dateOfBirth",
       sorter: true,
-      width: 100,
+      width: 150,
+      align: 'center',
       render: (date: string) => {
         return <> {moment(date).format("DD-MM-YYYY")}</>;
       },
@@ -98,7 +97,8 @@ const TableManageUsers = ({
       title: "PHONE NUMBER",
       dataIndex: "phoneNumber",
       key: "phoneNumber",
-      width: 70,
+      width: 130,
+      align: 'center'
     },
     {
       title: "ROLE",
@@ -114,7 +114,8 @@ const TableManageUsers = ({
       title: "ACTION",
       dataIndex: "action",
       key: "action",
-      width: 130,
+      width: 180,
+      align: 'center',
       //@ts-ignore
       render: (action: unknown, row: UserState) => (
         <>

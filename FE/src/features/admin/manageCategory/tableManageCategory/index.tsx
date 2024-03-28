@@ -55,7 +55,6 @@ const TableManageCategory = ({
       title: "NAME",
       dataIndex: "name",
       key: "name",
-      width: 100,
       render: (name: string) => {
         return (
           <div className="content__name">
@@ -67,27 +66,28 @@ const TableManageCategory = ({
       },
     },
     {
-      title: "Description",
+      title: "DESCRIPTION",
       dataIndex: "description",
       key: "description",
-      width: 140,
     },
     {
-      title: "Created At",
+      title: "CREATED AT",
       dataIndex: "createdAt",
       key: "createdAt",
       sorter: true,
-      width: 100,
+      width: 130,
+      align: 'center',
       render: (date: string) => {
         return <> {moment(date).format("DD-MM-YYYY")}</>;
       },
     },
     {
-      title: "Updated At",
+      title: "UPDATED AT",
       dataIndex: "updatedAt",
       key: "updatedAt",
       sorter: true,
-      width: 70,
+      width: 130,
+      align: 'center',
       render: (date: string) => {
         return <> {moment(date).format("DD-MM-YYYY")}</>;
       },
@@ -96,7 +96,8 @@ const TableManageCategory = ({
       title: "ACTION",
       dataIndex: "action",
       key: "action",
-      width: 130,
+      width: 180,
+      align: 'center',
       //@ts-ignore
       render: (action: unknown, row: CategoryState) => (
         <>

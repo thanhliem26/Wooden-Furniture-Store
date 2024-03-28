@@ -17,8 +17,4 @@ router.post('/create-category', asyncHandler(CategoryController.createNewCategor
 router.put('/update', asyncHandler(CategoryController.updateCategory));
 router.delete('/delete/:id', asyncHandler(CategoryController.deleteCategory));
 
-//authentication refreshToken
-// router.use(authenticationV2);
-
-
 module.exports = router;

@@ -1,8 +1,20 @@
 import styled from "./index.module.scss";
 import Image from "@/constants/images";
+import { useAppSelector } from "@/store/index";
+import { isJson } from "@/utils/index";
 import { Col, Row } from "antd";
+import { useMemo } from "react";
+import Markdown from "react-markdown";
 
 const Introduce = () => {
+  const activeAbout = useAppSelector((state) => state.aboutUs.aboutUsSelected);
+
+  const image = useMemo(() => {
+    return isJson(activeAbout?.image)
+      ? JSON.parse(activeAbout?.image)[0].url
+      : Image.Introduce;
+  }, [activeAbout]);
+
   return (
     <div className={styled["introduce__main"]}>
       <div className="introduce__main-title">
@@ -10,7 +22,9 @@ const Introduce = () => {
         <div className="divider"></div>
       </div>
       <div className="introduce__main-banner">
-        <div className="main__banner-image fill"></div>
+        <div className="main__banner-image fill">
+          <img src={image} alt="" />
+        </div>
       </div>
       <div className="introduce__main-contact">
         <Row>
@@ -21,20 +35,14 @@ const Introduce = () => {
                   <img src={Image.Agenda} alt="agenda" />
                 </div>
                 <div className="item__name">
-                  <h3>Thành Lành Shop</h3>
+                  <h3>{activeAbout?.name}</h3>
                 </div>
               </div>
               <div className="contact__item-content">
-                <p>
-                  Đồ gỗ Thành Lành - Xóm 31 <br />
-                  Hải Minh - Hải Hậu - Nam Định
-                </p>
+                <p>{activeAbout?.address}</p>
               </div>
               <div className="contact__item-btn">
-                <a
-                  href="https://maps.app.goo.gl/TenU5dxPa6bf6HVT7"
-                  target="blank"
-                >
+                <a href={activeAbout?.address_link} target="blank">
                   CLICK ME!
                 </a>
               </div>
@@ -51,10 +59,10 @@ const Introduce = () => {
                 </div>
               </div>
               <div className="contact__item-content">
-                <p>0866759002</p>
+                <p>{activeAbout?.phone_number}</p>
               </div>
               <div className="contact__item-btn">
-                <a href="tel:0866759002">CLICK ME!</a>
+                <a href={`tel:${activeAbout?.phone_number}`}>CLICK ME!</a>
               </div>
             </div>
           </Col>
@@ -69,11 +77,11 @@ const Introduce = () => {
                 </div>
               </div>
               <div className="contact__item-content">
-                <p>phamvanliem26122002@gmail.com</p>
+                <p>{activeAbout?.email}</p>
               </div>
               <div className="contact__item-btn">
                 <a
-                  href="https://mail.google.com/mail/?view=cm&fs=1&to=phamvanliem26122002@gmail.com"
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=${activeAbout?.email}`}
                   target="_blank"
                 >
                   CLICK ME!
@@ -82,6 +90,9 @@ const Introduce = () => {
             </div>
           </Col>
         </Row>
+      </div>
+      <div className="introduce__main-markdown">
+        <Markdown children={activeAbout?.contentMarkdown} />
       </div>
     </div>
   );

@@ -68,7 +68,7 @@ const TableManageNews = ({
       },
     },
     {
-      title: "Image",
+      title: "IMAGE",
       dataIndex: "image",
       render: (image: string) => {
         const [imageNews] = image && isJson(image) ? JSON.parse(image) : [];
