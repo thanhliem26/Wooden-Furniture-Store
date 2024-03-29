@@ -29,15 +29,13 @@ const DetailContent = ({ news }: Props) => {
     (state: RootState) => state.comments.is_call_api
   );
   const ws = useRef<WebSocket | null>(null);
+  const timeOutWs = useRef<NodeJS.Timeout>();
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    // URL của máy chủ WebSocket
     const wsUrl = import.meta.env.VITE_API_URL_WS;
-    // Tạo một kết nối WebSocket
     ws.current = new WebSocket(wsUrl);
-    // Sự kiện được kích hoạt khi kết nối thành công
     ws.current.onopen = () => {
       console.log("Connected to WebSocket server");
 
@@ -52,10 +50,18 @@ const DetailContent = ({ news }: Props) => {
     ws.current.onerror = (error) => {
       console.error("WebSocket error:", error);
     };
-    //xử lí khi websocket đã bị đóng(vd: đóng tab, mất mạng, server mất kết nối, ...),
-    //Ko thê gửi đến ws khi đã ở trạng thái close
+  
     ws.current.onclose = () => {
       console.log("Disconnected from WebSocket server");
+
+      timeOutWs.current = setInterval(() => {
+        if(ws.current.readyState === STATUS_WS.CLOSED) {
+          console.log("re-connect websocket")
+          ws.current = new WebSocket(wsUrl);
+        } else {
+          clearInterval(timeOutWs.current);
+        }
+      }, 5000)
     };
     const handleBeforeUnload = () => {
       if (ws?.current?.readyState === STATUS_WS.OPEN) {
@@ -70,6 +76,10 @@ const DetailContent = ({ news }: Props) => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
       if (ws?.current?.readyState === STATUS_WS.OPEN) {
         handleBeforeUnload();
+      }
+
+      if(timeOutWs.current) {
+        clearInterval(timeOutWs.current)
       }
     };
   }, [id]);

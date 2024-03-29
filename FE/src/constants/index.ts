@@ -67,6 +67,8 @@ export const STATUS_WS = {
 }
 
 export const TYPE_WS = {
+  PING: 'PING',
+  PONG: 'PONG',
   JOIN_ROOM: 'JOIN_ROOM',
   LEAVE_ROOM: 'LEAVE_ROOM',
   ADD_COMMENT: 'ADD_COMMENT',

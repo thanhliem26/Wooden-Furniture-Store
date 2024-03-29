@@ -22,7 +22,8 @@ const ProductDetail = () => {
   const is_call = useAppSelector(
     (state: RootState) => state.comments.is_call_api
   );
-  const ws = useRef<WebSocket | null>(null);
+  const ws = useRef<WebSocket>();
+  const timeOutWs = useRef<NodeJS.Timeout>();
 
   const dispatch = useAppDispatch();
 
@@ -41,11 +42,11 @@ const ProductDetail = () => {
 
   //
   useEffect(() => {
-    // URL của máy chủ WebSocket
+    // URL server websocket
     const wsUrl = import.meta.env.VITE_API_URL_WS;
-    // Tạo một kết nối WebSocket
+    // create a connect server websocket
     ws.current = new WebSocket(wsUrl);
-    // Sự kiện được kích hoạt khi kết nối thành công
+    //connect success
     ws.current.onopen = () => {
       console.log("Connected to WebSocket server");
 
@@ -57,11 +58,22 @@ const ProductDetail = () => {
     ws.current.onerror = (error) => {
       console.error("WebSocket error:", error);
     };
+
     //xử lí khi websocket đã bị đóng(vd: đóng tab, mất mạng, server mất kết nối, ...),
     //Ko thê gửi đến ws khi đã ở trạng thái close
     ws.current.onclose = () => {
       console.log("Disconnected from WebSocket server");
+
+      timeOutWs.current = setInterval(() => {
+        if(ws.current.readyState === STATUS_WS.CLOSED) {
+          console.log("re-connect websocket")
+          ws.current = new WebSocket(wsUrl);
+        } else {
+          clearInterval(timeOutWs.current);
+        }
+      }, 5000)
     };
+
     const handleBeforeUnload = () => {
       if (ws?.current?.readyState === STATUS_WS.OPEN) {
         sendingWS(ws.current, { type: TYPE_WS.LEAVE_ROOM, room_id: id });
@@ -76,6 +88,10 @@ const ProductDetail = () => {
       if (ws?.current?.readyState === STATUS_WS.OPEN) {
         handleBeforeUnload();
       }
+
+      if(timeOutWs.current) {
+        clearInterval(timeOutWs.current)
+      }
     };
   }, [id]);
   //
@@ -88,6 +104,10 @@ const ProductDetail = () => {
       const dataWS = JSON.parse(event.data);
 
       switch (dataWS.type) {
+        case TYPE_WS.PING: {
+          sendingWS(ws.current, { type: TYPE_WS.PONG});
+          break;
+        }
         case TYPE_WS.ADD_COMMENT: {
           if (dataWS.parent_id) {
             dispatch(
