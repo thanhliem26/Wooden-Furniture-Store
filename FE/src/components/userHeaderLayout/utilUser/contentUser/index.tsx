@@ -8,6 +8,7 @@ import {
   EditOutlined,
   LogoutOutlined,
   SettingOutlined,
+  ShoppingOutlined,
 } from "@ant-design/icons";
 import ModalChangeInfoUser from "@/components/modal/modalChangeInfoUser";
 import ModalChangePassword from "./ModelChangePassword";
@@ -15,25 +16,30 @@ import { setUserSelected } from "@/store/manageUser";
 import { fetchUserInfo } from "@/store/user";
 import authApi from "@/api/auth";
 import * as authUtil from "@/utils/index";
-import { HEADER, statusCode } from "@/constants/index";
+import { HEADER, statusCode, TYPE_PROVIDER_LOGIN } from "@/constants/index";
 import { removeHeader } from "@/api/axiosService";
 import Notification from "@/components/notificationSend";
+import { useNavigate } from "react-router-dom";
 
 const ContentUser = () => {
   const user = useAppSelector((state: RootState) => state.user);
   const [avatar, setAvatar] = useState<string>(Images.AvatarDefault);
+  const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
 
   const handleLogOut = async () => {
     const refreshToken = authUtil.getRefreshToken();
-    const { status, message } = await authApi.logOut({ user_id: user.id, refreshToken });
+    const { status, message } = await authApi.logOut({
+      user_id: user.id,
+      refreshToken,
+    });
 
     if (status === statusCode.SUCCESS) {
       Notification({
-        message: 'Notify success',
+        message: "Notify success",
         description: message,
-      })
+      });
 
       removeHeader(HEADER.AUTHORIZATION);
       authUtil.removeToken();
@@ -44,9 +50,14 @@ const ContentUser = () => {
     }
   };
 
+  const handleRedirect = () => {
+    navigate('/purchase')
+  }
+
   const items: MenuProps["items"] = [
     {
       key: "1",
+      className: user.provider !== TYPE_PROVIDER_LOGIN.LOCAL && "hidden",
       label: (
         <ModalChangeInfoUser
           title="Edit user"
@@ -66,6 +77,7 @@ const ContentUser = () => {
     },
     {
       key: "2",
+      className: user.provider !== TYPE_PROVIDER_LOGIN.LOCAL && "hidden",
       label: (
         <ModalChangePassword
           title="Change Password"
@@ -82,6 +94,15 @@ const ContentUser = () => {
     },
     {
       key: "3",
+      label: (
+        <div onClick={handleRedirect}>
+          <ShoppingOutlined className="icon__dropdown"/>
+          Purchase order
+        </div>
+      ),
+    },
+    {
+      key: "4",
       label: (
         <div className="user__logOut" onClick={handleLogOut}>
           <LogoutOutlined className="icon__dropdown" />
@@ -110,7 +131,7 @@ const ContentUser = () => {
       arrow={{ pointAtCenter: true }}
       overlayClassName={styled["content__user"]}
     >
-       <img src={avatar} alt="avatar" />
+      <img src={avatar} alt="avatar" />
     </Dropdown>
   );
 };

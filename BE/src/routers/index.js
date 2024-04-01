@@ -20,6 +20,7 @@ router.use('/v1/api/comment', require('./comment'));
 router.use('/v1/api/news', require('./news'));
 router.use('/v1/api/userContact', require('./userContact'));
 router.use('/v1/api/about-us', require('./aboutUs'));
+router.use('/v1/api/evaluate', require('./evaluate'));
 
 router.get('/', (req, res, next) => {
     return res.status(200).json({

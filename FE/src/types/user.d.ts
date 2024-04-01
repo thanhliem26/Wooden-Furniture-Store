@@ -12,6 +12,10 @@ interface UserState {
     avatar: string,
     avatar_support: string,
     key?: number,
+    time_expired?: string | null,
+    uid?: string | null,
+    provider?: 'local' | 'google' | 'facebook',
+    is_active?: '0' | '1'
 }
 
 interface UserStateEdit {

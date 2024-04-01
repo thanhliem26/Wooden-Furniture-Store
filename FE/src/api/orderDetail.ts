@@ -9,13 +9,18 @@ const orderDetailApi = {
         const url = `/v1/api/orderDetail/get-orderDetail-byId`;
         return axiosService.get(url, {params: params})
     },
-    // updateProduct(body): Promise<baseUpdate> {
-    //     const url = `/v1/api/product/update/`
-    //     return axiosService.put(url, body)
-    // },
+    getOrderDetail(): Promise<orderDetailList> {
+        const url = `/v1/api/orderDetail/get-orderDetail`
+        return axiosService.get(url)
+    },
     deleteOrderDetail(id): Promise<baseDelete> {
         const url = `/v1/api/orderDetail/delete/${id}`
         return axiosService.delete(url)
+    },
+    updateOrderDetail(body: paramUpdateOrderDetail): Promise<baseUpdate> {
+        console.log("🚀 ~ body:", body)
+        const url = `/v1/api/orderDetail/update`
+        return axiosService.patch(url, body)
     },
 }
 

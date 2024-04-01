@@ -16,12 +16,9 @@ const PublicLayoutUser = () => {
     const token = getToken();
     if (token) {
       dispatch(fetchUserInfo());
+      dispatch(getActiveAboutUs());
     }
   }, []);
-
-  useEffect(() => {
-    dispatch(getActiveAboutUs());
-  }, [])
 
   if (!isUserLoggedIn()) {
     return <Navigate to="/login" />;

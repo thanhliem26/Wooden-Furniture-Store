@@ -39,14 +39,20 @@ class OrderService {
         "quantity",
       ], include: [{ model: db.Products, as: "product_data"}] }],
       offset: (page - 1) * limit,
+      order: [["createdAt", "DESC"]],
     }
   
-
     if (limit !== null) {
       queryOptions.limit = limit;
     }
 
-    return await db.Orders.findAndCountAll(queryOptions);
+    const count = await db.Orders.count();
+    const result = await db.Orders.findAndCountAll(queryOptions);
+
+    return {
+      count: count,
+      rows: result.rows,
+    };
   };
 
   static createOrder = async (data) => {

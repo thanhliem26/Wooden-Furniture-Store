@@ -1,26 +1,23 @@
-import {
-  InputComponent,
-  TextAreComponent,
-} from "@/components/form";
+import { InputComponent, TextAreComponent } from "@/components/form";
 import Notification from "@/components/notificationSend";
 import { NotificationError } from "@/utils/index";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Col, Form, Row } from "antd";
 import { useForm } from "react-hook-form";
 import { FormData, schema } from "./constant";
-import styled from './index.module.scss';
+import styled from "./index.module.scss";
 import { forwardRef, useImperativeHandle } from "react";
 import orderApi from "@/api/order";
-import { isEmpty } from 'lodash';
-import { RootState, useAppDispatch, useAppSelector } from "@/store/index";
-import { searchOrder } from "@/store/orderUser";
+import { isEmpty } from "lodash";
+import { useAppDispatch } from "@/store/index";
+import { resetOrderList } from "@/store/orderUser";
 
 interface Props {
   order_id: number;
-  dataOrder: OrderDetailState[]
+  dataOrder: OrderDetailState[];
 }
 
-const FormPay = ({order_id, dataOrder}: Props, ref) => {
+const FormPay = ({ order_id, dataOrder }: Props, ref) => {
   const {
     handleSubmit,
     control,
@@ -31,29 +28,30 @@ const FormPay = ({order_id, dataOrder}: Props, ref) => {
   });
 
   const dispatch = useAppDispatch();
-  const idUser = useAppSelector((state: RootState) => state.user.id);
 
   const onSubmit = async (data: FormData) => {
     try {
-      if(!dataOrder || isEmpty(dataOrder)) {
+      if (!dataOrder || isEmpty(dataOrder)) {
         Notification({
           message: "Notify warning",
-          description: 'Bạn vui lòng order trước khi đặt hàng!',
+          description: "Bạn vui lòng order trước khi đặt hàng!",
         });
 
         return;
       }
 
-      const { message } = await orderApi.updateOrder({...data, id: order_id, order_status: 'wait_confirmation'});
-  
+      const { message } = await orderApi.updateOrder({
+        ...data,
+        id: order_id,
+        order_status: "wait_confirmation",
+      });
+
       Notification({
         message: "Notify success",
         description: message,
       });
 
-      dispatch(
-        searchOrder({ order_status: "pending", user_id: idUser, limit: 1 })
-      );
+      dispatch(resetOrderList());
       reset();
     } catch (error: unknown) {
       NotificationError(error);
@@ -63,11 +61,11 @@ const FormPay = ({order_id, dataOrder}: Props, ref) => {
   useImperativeHandle(ref, () => {
     return {
       submit: handleSubmit(onSubmit),
-    }
-  })
+    };
+  });
 
   return (
-    <div className={styled['form__pay']}>
+    <div className={styled["form__pay"]}>
       <Form name="change__field-category" onFinish={handleSubmit(onSubmit)}>
         <Row gutter={[16, 0]}>
           <Col span={24} md={12}>
@@ -76,7 +74,7 @@ const FormPay = ({order_id, dataOrder}: Props, ref) => {
               control={control}
               errors={errors}
               className="remove__border"
-              labelCol={{span: 24}}
+              labelCol={{ span: 24 }}
               label="Họ và tên"
             />
           </Col>
@@ -86,27 +84,27 @@ const FormPay = ({order_id, dataOrder}: Props, ref) => {
               control={control}
               errors={errors}
               className="remove__border"
-              labelCol={{span: 24}}
+              labelCol={{ span: 24 }}
               label="Số điện thoại"
             />
           </Col>
-          <Col span={24} >
+          <Col span={24}>
             <InputComponent
               name="email"
               control={control}
               errors={errors}
               className="remove__border"
-              labelCol={{span: 24}}
+              labelCol={{ span: 24 }}
               label="Email"
             />
           </Col>
-          <Col span={24} >
+          <Col span={24}>
             <InputComponent
               name="address"
               control={control}
               errors={errors}
               className="remove__border"
-              labelCol={{span: 24}}
+              labelCol={{ span: 24 }}
               label="Địa chỉ"
             />
           </Col>
@@ -118,7 +116,7 @@ const FormPay = ({order_id, dataOrder}: Props, ref) => {
               label="Ghi chú về đơn hàng"
               className="remove__border"
               rows={4}
-              labelCol={{span: 24}}
+              labelCol={{ span: 24 }}
             />
           </Col>
         </Row>

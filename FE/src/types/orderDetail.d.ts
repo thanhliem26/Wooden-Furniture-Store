@@ -20,3 +20,8 @@ interface paramSearchOrderDetail {
     id: number,
     user_id: number,
 }
+
+interface paramUpdateOrderDetail {
+    id: number,
+    evaluate_id: number,
+}

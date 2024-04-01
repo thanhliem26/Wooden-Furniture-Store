@@ -92,7 +92,7 @@ const FormCategory = () => {
               placeholder="ROLE"
               className="remove__border"
               options={optionStatusOrder}
-            />
+            />  
           </Col>
           <Col md={6} span={24}>
             Name

@@ -4,7 +4,7 @@ const express = require('express');
 const CategoryController = require('../../controllers/category.controller');
 const router = express.Router();
 const  asyncHandler = require('../../helpers/asyncHandler');
-const { authentication, authenticationV2, isAdmin } = require('../../auth/authUtils');
+const { authentication, isAdmin } = require('../../auth/authUtils');
 
 //authentication token
 router.use(authentication);

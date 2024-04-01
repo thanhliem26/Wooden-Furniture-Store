@@ -1,7 +1,7 @@
 'use strict'
 
 const OrderDetailService = require("../services/orderDetail.service");
-const { OK, CREATED, SuccessResponse, UPDATED, DELETED } = require('../core/succes.response');
+const { CREATED, SuccessResponse, UPDATED, DELETED } = require('../core/succes.response');
 
 class OrderController {
     deleteOrderDetail = async (req, res, next) => {
@@ -25,6 +25,20 @@ class OrderController {
         new CREATED({
             message: 'create a new order detail success!',
             metadata: await OrderDetailService.createOrderDetail(req.body),
+        }).send(res)
+    }
+
+    updateOrderDetail = async (req, res, next) => {
+        new UPDATED({
+            message: 'update order detail success!',
+            metadata: await OrderDetailService.updateOrderDetail(req.body),
+        }).send(res)
+    }
+
+    getListOrderDetailExcludePending = async (req, res, next) => {
+        new SuccessResponse({
+            message: 'get list order detail success!',
+            metadata: await OrderDetailService.getOrderDetailExcludePending(req.query, req.user.user_id),
         }).send(res)
     }
 

@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       OrderDetail.belongsTo(models.Orders, { foreignKey: "order_id", as: "order_detail" })
       OrderDetail.belongsTo(models.Products, { foreignKey: "productId", as: "product_data" })
+      OrderDetail.belongsTo(models.Evaluate, { foreignKey: "evaluate_id", as: "evaluate_data" })
     }
 
     validateOrderDetail = async () => {
@@ -38,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     order_id: DataTypes.INTEGER,
     productId: DataTypes.INTEGER,
     quantity: DataTypes.INTEGER,
+    evaluate_id: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'OrderDetail',

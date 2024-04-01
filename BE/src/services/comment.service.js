@@ -7,7 +7,7 @@ import {
   NotFoundError,
 } from "../core/error.response";
 import { isNumber } from "../utils";
-const { Op, where } = require("sequelize");
+const { Op } = require("sequelize");
 
 class CommentService {
   static UpdateComment = async (payload, user) => {

@@ -121,6 +121,10 @@
   color: red !important;
 }
 
+.hidden {
+  display: none !important;
+}
+
 .fill {
   position: absolute;
   top: 0;

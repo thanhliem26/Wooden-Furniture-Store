@@ -90,3 +90,12 @@ export const STATUS_ORDER_COLOR = {
   cancelled: 'red',
   delivered: 'green'
 }
+
+export const STATUS_ORDER = {
+  PENDING: 'pending',
+  WAIT_CONFIRMATION: 'wait_confirmation',
+  CONFIRMED: 'confirmed',
+  SHIPPED: 'shipped',
+  CANCELLED: 'cancelled',
+  DELIVERED: 'delivered',
+}

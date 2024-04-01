@@ -39,6 +39,11 @@ export const orderUser = createSlice({
     name: 'order_user',
     initialState,
     reducers: {
+        resetOrderList: (state) => {
+            state.list_order = [];
+            state.id = null;
+            state.total = 0;
+        },
         deleteOrder: (state, action: PayloadAction<number>) => {
             state.list_order = state.list_order.filter((item) => {
                 return item.orderDetailId !== action.payload;
@@ -144,6 +149,7 @@ export const {
     deleteOrderAll, 
     deleteOrder, 
     editItemInOrderAll, 
-    setPagination 
+    setPagination,
+    resetOrderList
 } = orderUser.actions
 export default orderUser.reducer
