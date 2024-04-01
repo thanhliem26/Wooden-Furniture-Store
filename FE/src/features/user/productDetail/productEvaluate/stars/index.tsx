@@ -10,6 +10,14 @@ import StarFull from "@/components/starFull";
 import StarEmpty from "@/components/starEmpty";
 import { Progress } from "antd";
 
+const starEmpty = [
+  {name: '5 stars', value: 5},
+  {name: '4 stars', value: 4},
+  {name: '3 stars', value: 3},
+  {name: '2 stars', value: 2},
+  {name: '2 stars', value: 1},
+]
+
 const Stars = () => {
   const { id } = useParams();
   const [evaluateList, setEvaluateList] = useState<EvaluateState[]>([]);
@@ -36,7 +44,7 @@ const Stars = () => {
       return current + next.count * next.value;
     }, 0);
 
-    return (total / count).toFixed(2);
+    return total ? (total / count).toFixed(2) : '0';
   }, [stars, count]);
 
   useEffect(() => {
@@ -51,7 +59,7 @@ const Stars = () => {
         </div>
         <div className="evaluate__star-number">
           <div className="star__number-count">
-            {stars.map((star, index) => {
+            {!isEmpty(stars) ? stars.map((star, index) => {
               const widthSplit = starTotal.split(".")[1];
               const widthStar =
                 Math.floor(Number(starTotal)) === star.value
@@ -68,9 +76,17 @@ const Stars = () => {
                   <StarEmpty />
                 </div>
               );
+            }) : Array.apply(null, Array(5)).map((_, index) => {
+              return (
+                <div className="evaluate__item-star" key={index}>
+                  <div className="star__full">
+                    <StarFull />
+                  </div>
+                </div>
+              );
             })}
             <div className="star__number-title">
-              {Number(starTotal).toFixed(1)}
+              {starTotal !== '0' ? Number(starTotal).toFixed(1) : 5}
             </div>
           </div>
           <div className="star__number-countReview">
@@ -80,7 +96,7 @@ const Stars = () => {
           </div>
         </div>
         <div className="evaluate__star-progress">
-          {stars.map((star, index) => {
+          {!isEmpty(stars) ? stars.map((star, index) => {
             return (
               <div className="star__progress-item" key={index}>
                 <div className="progress__item-name">
@@ -95,6 +111,25 @@ const Stars = () => {
                   />
                 </div>
               </div>
+            );
+          }) :  starEmpty.map((_, index) => {
+            return (
+              <div className="star__progress-item" key={index}>
+                <div className="progress__item-name">
+                  <span>{_.name}</span>
+                </div>
+                <div className="progress__item-sc">
+                  <Progress
+                    size={[500, 10]}
+                    strokeColor={"#e87400"}
+                    percent={0}
+                    format={(percent) => `0 (${percent}%)`}
+                  />
+                </div>
+              </div>
+              // <div className="evaluate__star" key={index}>
+              // <StarFull /> 
+              // </div>
             );
           })}
           {/* <div className="star__progress-item">
