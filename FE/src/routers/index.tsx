@@ -45,7 +45,7 @@ function RouterComponent() {
           element: <Introduce />
         },
         {
-          path: '/cart/:id',
+          path: '/cart',
           element: <CartOrder />
         },
         {

@@ -1,6 +1,6 @@
 import EvaluateApi from "@/api/evaluate";
 import { isJson, NotificationError } from "@/utils/index";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import Images from "@/constants/images";
 import styled from "./index.module.scss";
@@ -8,48 +8,57 @@ import { isEmpty } from "lodash";
 import moment from "moment";
 import StarFull from "@/components/starFull";
 import StarEmpty from "@/components/starEmpty";
-import { Progress } from "antd";
-
-const starEmpty = [
-  {name: '5 stars', value: 5},
-  {name: '4 stars', value: 4},
-  {name: '3 stars', value: 3},
-  {name: '2 stars', value: 2},
-  {name: '2 stars', value: 1},
-]
+import { Progress, Spin } from "antd";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useAppDispatch, useAppSelector } from "@/store/index";
+import { getListEvaluate, pushEvaluateList, setPagination } from "@/store/evaluate";
 
 const Stars = () => {
   const { id } = useParams();
-  const [evaluateList, setEvaluateList] = useState<EvaluateState[]>([]);
-  const [count, setCount] = useState<number>(0);
-  const [countReview, setCountReview] = useState<number>(0);
-  const [stars, setStar] = useState<countStar[]>([]);
+  const evaluateList = useAppSelector((state) => state.evaluate.evaluateList);
+  const count = useAppSelector((state) => state.evaluate.total);
+  const countReview = useAppSelector((state) => state.evaluate.totalReview);
+  const stars = useAppSelector((state) => state.evaluate.countStar);
+  const pagination = useAppSelector((state) => state.evaluate.pagination);
 
-  const handleGetList = async () => {
-    try {
-      const { metadata } = await EvaluateApi.getListEvaluate({
-        product_id: id,
-      });
-      setEvaluateList(metadata.rows);
-      setCount(metadata.count);
-      setCountReview(metadata.countReview);
-      setStar(metadata.countStar.reverse());
-    } catch (error) {
-      NotificationError(error);
-    }
-  };
+  const dispatch = useAppDispatch();
 
   const starTotal = useMemo(() => {
     const total = stars.reduce((current, next) => {
+      console.log("🚀 ~ next:", next)
       return current + next.count * next.value;
     }, 0);
+    console.log("🚀 ~ total:", total, count)
 
     return total ? (total / count).toFixed(2) : '0';
   }, [stars, count]);
+  console.log("🚀 ~ starTotal:", starTotal)
+
+  const handleScrollPage = async (param = { pageSize: 10, current: 1 }) => {
+    const optionQuery: any = {};
+
+    optionQuery.product_id = id;
+    optionQuery.limit = param.pageSize;
+    optionQuery.page = param.current;
+
+    try {
+      const { metadata } = await EvaluateApi.getListEvaluate({...optionQuery});
+      const { rows } = metadata;
+      dispatch(pushEvaluateList(rows))
+    } catch(error) {
+      NotificationError(error)
+    }
+  };
+
+  const handleFetchScroll = async () => {
+    const paginationNext = {...pagination, pageSize: pagination.pageSize, current: pagination.current + 1}
+    handleScrollPage(paginationNext)
+    dispatch(setPagination({...paginationNext}))
+  };
 
   useEffect(() => {
-    handleGetList();
-  }, []);
+    dispatch(getListEvaluate({product_id: id, limit: pagination.pageSize, page: pagination.current}))
+  }, [])
 
   return (
     <div className={styled["evaluate__main"]}>
@@ -59,7 +68,7 @@ const Stars = () => {
         </div>
         <div className="evaluate__star-number">
           <div className="star__number-count">
-            {!isEmpty(stars) ? stars.map((star, index) => {
+            {stars.map((star, index) => {
               const widthSplit = starTotal.split(".")[1];
               const widthStar =
                 Math.floor(Number(starTotal)) === star.value
@@ -76,14 +85,6 @@ const Stars = () => {
                   <StarEmpty />
                 </div>
               );
-            }) : Array.apply(null, Array(5)).map((_, index) => {
-              return (
-                <div className="evaluate__item-star" key={index}>
-                  <div className="star__full">
-                    <StarFull />
-                  </div>
-                </div>
-              );
             })}
             <div className="star__number-title">
               {starTotal !== '0' ? Number(starTotal).toFixed(1) : 5}
@@ -96,7 +97,7 @@ const Stars = () => {
           </div>
         </div>
         <div className="evaluate__star-progress">
-          {!isEmpty(stars) ? stars.map((star, index) => {
+          {stars.map((star, index) => {
             return (
               <div className="star__progress-item" key={index}>
                 <div className="progress__item-name">
@@ -112,40 +113,17 @@ const Stars = () => {
                 </div>
               </div>
             );
-          }) :  starEmpty.map((_, index) => {
-            return (
-              <div className="star__progress-item" key={index}>
-                <div className="progress__item-name">
-                  <span>{_.name}</span>
-                </div>
-                <div className="progress__item-sc">
-                  <Progress
-                    size={[500, 10]}
-                    strokeColor={"#e87400"}
-                    percent={0}
-                    format={(percent) => `0 (${percent}%)`}
-                  />
-                </div>
-              </div>
-              // <div className="evaluate__star" key={index}>
-              // <StarFull /> 
-              // </div>
-            );
           })}
-          {/* <div className="star__progress-item">
-            <div className="progress__item-name">
-              <span>5 stars</span>
-            </div>
-            <div className="progress__item-sc">
-            <Progress size={[500, 10]} strokeColor={'#e87400'} percent={30} format={(percent) => percent + '% hihi'}/>
-           
-          
-            </div>
-          </div> */}
         </div>
       </div>
       <div className="evaluate__list">
-        {!isEmpty(evaluateList) &&
+      <InfiniteScroll
+            dataLength={evaluateList.length}
+            next={handleFetchScroll}
+            hasMore={evaluateList.length < count}
+            loader={<Spin />}
+          >
+           {!isEmpty(evaluateList) &&
           evaluateList.map((evaluate, index) => {
             const { user_evaluate, createdAt, star } = evaluate;
             const image = isJson(user_evaluate?.avatar)
@@ -180,6 +158,7 @@ const Stars = () => {
               </div>
             );
           })}
+          </InfiniteScroll>
       </div>
     </div>
   );

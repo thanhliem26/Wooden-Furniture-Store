@@ -138,7 +138,7 @@ const ProductSame = ({ product }: Props) => {
                     >
                       {productInOrder.includes(product.id) ? (
                         <Link
-                          to={`/cart/${orderId}`}
+                          to={`/cart`}
                           className="shopping__card-exists"
                         >
                           Xem giỏ hàng →

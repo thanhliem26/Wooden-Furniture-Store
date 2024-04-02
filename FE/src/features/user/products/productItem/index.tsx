@@ -129,7 +129,7 @@ const ProductItem = ({handleScrollPage}: Props) => {
                       </Link>
                       <div className="shopping_card" onClick={(e) => e.preventDefault()}>
                           {productInOrder.includes(product.id) ? (
-                            <Link to={`/cart/${orderId}`} className="shopping__card-exists">
+                            <Link to={`/cart`} className="shopping__card-exists">
                               Xem giỏ hàng →
                             </Link>
                           ) : (

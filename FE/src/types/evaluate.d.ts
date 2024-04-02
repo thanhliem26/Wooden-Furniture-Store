@@ -17,6 +17,15 @@ interface metadataListEvaluated {
     countStar: countStar[]
 }
 
+type state_reducer_evaluate = {
+    evaluateList: EvaluateState[],
+    loading: boolean,
+    total: number,
+    totalReview: number,
+    pagination: basePagination,
+    countStar: countStar[],
+}
+
 interface countStar {
     name: string,
     count: number,

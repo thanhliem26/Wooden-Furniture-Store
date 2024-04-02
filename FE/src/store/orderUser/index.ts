@@ -33,6 +33,12 @@ const initialState: state_reducer_orderUser = {
         pageSize: 10,
     },
     total: 0,
+    userInfo: {
+        name: '',
+        address: '',
+        email: '',
+        phone_number: ''
+    }
 }
 
 export const orderUser = createSlice({
@@ -91,7 +97,7 @@ export const orderUser = createSlice({
             const [orderField] = rows;
 
             if(orderField) {
-                const { id, order_status, order_detail } = orderField;
+                const { id, order_status, order_detail, address, name, email, phone_number } = orderField;
 
                 const list_order = order_detail.map(({ product_data, ...orderDetail }) => {
                     return {
@@ -107,7 +113,7 @@ export const orderUser = createSlice({
                     }
                 })
     
-                state = { ...state, loading: false, id, order_status, list_order };
+                state = { ...state, loading: false, id, order_status, list_order, userInfo: {name, email, address, phone_number} };
             }
             state.total = count;
 

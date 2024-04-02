@@ -74,7 +74,7 @@ const ContentInfoChange = ({
       role_user: userSelected?.role_user,
       address: userSelected?.address || "",
       // @ts-ignores
-      dateOfBirth: dayjs(userSelected?.dateOfBirth),
+      dateOfBirth: userSelected?.dateOfBirth ? dayjs(userSelected?.dateOfBirth) : dayjs(new Date()),
       phoneNumber: userSelected?.phoneNumber || "",
       sex: userSelected?.sex,
       id: userSelected?.id,

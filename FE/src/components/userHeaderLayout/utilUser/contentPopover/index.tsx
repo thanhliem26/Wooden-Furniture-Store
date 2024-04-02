@@ -14,7 +14,6 @@ const ContentPopover = () => {
   const listOrder = useAppSelector(
     (state: RootState) => state.order.list_order
   );
-  const orderId = useAppSelector((state) => state.order.id);
   const navigate = useNavigate();
   const popoverRef = useRef<HTMLDivElement>(null);
 
@@ -44,7 +43,7 @@ const ContentPopover = () => {
   };
 
   const handleNavigate  = () => {
-    navigate(`/cart/${orderId}`)
+    navigate(`/cart`)
   }
 
   const handleNavigatePay = () => {

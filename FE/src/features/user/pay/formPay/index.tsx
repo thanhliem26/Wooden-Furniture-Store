@@ -6,10 +6,10 @@ import { Col, Form, Row } from "antd";
 import { useForm } from "react-hook-form";
 import { FormData, schema } from "./constant";
 import styled from "./index.module.scss";
-import { forwardRef, useImperativeHandle } from "react";
+import { forwardRef, useEffect, useImperativeHandle } from "react";
 import orderApi from "@/api/order";
 import { isEmpty } from "lodash";
-import { useAppDispatch } from "@/store/index";
+import { useAppDispatch, useAppSelector } from "@/store/index";
 import { resetOrderList } from "@/store/orderUser";
 
 interface Props {
@@ -18,9 +18,12 @@ interface Props {
 }
 
 const FormPay = ({ order_id, dataOrder }: Props, ref) => {
+  const orderInfo = useAppSelector((state) => state.order.userInfo);
+
   const {
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
     reset,
   } = useForm<FormData>({
@@ -63,6 +66,13 @@ const FormPay = ({ order_id, dataOrder }: Props, ref) => {
       submit: handleSubmit(onSubmit),
     };
   });
+
+  useEffect(() => {
+    setValue('name', orderInfo.name)
+    setValue('address', orderInfo.address)
+    setValue('email', orderInfo.email)
+    setValue('phone_number', orderInfo.phone_number)
+  }, [orderInfo])
 
   return (
     <div className={styled["form__pay"]}>

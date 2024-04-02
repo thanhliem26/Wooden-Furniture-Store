@@ -5,7 +5,6 @@ import {
   SearchOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
-import { useAppSelector } from "@/store/index";
 
 interface Props {
   setOpenMenu: (value) => void;
@@ -13,8 +12,6 @@ interface Props {
 }
 
 const NavMobile = ({setOpenMenu, menu}: Props) => {
-  const orderId = useAppSelector((state) => state.order.id);
-
   return (
     <div className={styled["nav__user-mobile"]}>
       <div className="user__background" onClick={() => setOpenMenu((prev: boolean) => !prev)}></div>
@@ -31,7 +28,7 @@ const NavMobile = ({setOpenMenu, menu}: Props) => {
               return  <div className="nav__menu-item" key={index}><Link to={item.href}>{item.label}</Link></div>;
             })}
             <div className="nav__menu-item">
-              <Link to={`/cart/${orderId}`}>GIỎ HÀNG <ShoppingCartOutlined /></Link>
+              <Link to='/cart'>GIỎ HÀNG <ShoppingCartOutlined /></Link>
             </div>
           </div>
         </div>

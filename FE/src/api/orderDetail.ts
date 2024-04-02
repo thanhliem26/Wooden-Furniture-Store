@@ -18,7 +18,6 @@ const orderDetailApi = {
         return axiosService.delete(url)
     },
     updateOrderDetail(body: paramUpdateOrderDetail): Promise<baseUpdate> {
-        console.log("🚀 ~ body:", body)
         const url = `/v1/api/orderDetail/update`
         return axiosService.patch(url, body)
     },

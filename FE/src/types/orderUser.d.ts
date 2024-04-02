@@ -7,6 +7,13 @@ interface state_reducer_orderUser {
     total: number,
     list__order_all: OrderState[],
     orderSelected: OrderState,
+    userInfo: {
+        name: string,
+        phone_number: string,
+        email: string,
+        address: string,
+        
+    }
 }
 
 interface orderItem {

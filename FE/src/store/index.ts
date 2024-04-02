@@ -11,6 +11,7 @@ import manageCommentReducer from './comments';
 import manageNewsReducer from './manageNews';
 import manageContactReducer from './manageContact';
 import aboutUsReducer from './aboutUs';
+import evaluateReducer from './evaluate';
 
 export const store = configureStore({
   reducer: {
@@ -23,6 +24,7 @@ export const store = configureStore({
     manageNews: manageNewsReducer,
     manageContact: manageContactReducer,
     aboutUs: aboutUsReducer,
+    evaluate: evaluateReducer,
   },
 })
 

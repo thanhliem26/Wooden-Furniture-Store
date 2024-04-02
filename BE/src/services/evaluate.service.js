@@ -32,6 +32,14 @@ class CategoryService {
       queryOptions.limit = limit;
     }
 
+    const initValueCountStar = [
+      {name: '1 stars', count: 0, value: 1},
+      {name: '2 stars', count: 0, value: 2},
+      {name: '3 stars', count: 0, value: 3},
+      {name: '4 stars', count: 0, value: 4},
+      {name: '5 stars', count: 0, value: 5},
+    ]
+
     const countStar = await db.Evaluate.findAll({
       where: {
         product_id: query.product_id,
@@ -73,18 +81,26 @@ class CategoryService {
           "star_5_count",
         ],
       ],
+      include: [
+        {
+          model: db.User,
+          as: "user_evaluate",
+          where: { deleteFlg: "0" },
+        },
+      ],
       raw: true,
-      group: ["star"],
+      group: ["star", "user_evaluate.id"],
+      
     }).then((response) => {
       return response.reduce((acc, curr) => {
-        acc[0] = acc[0]?.name ? {name: '1 stars', count: acc[0].count + curr.star_1_count, value: 1} : {name: '1 stars', count: curr.star_1_count, value: 1};
-        acc[1] = acc[1]?.name ? {name: '2 stars', count: acc[1].count + curr.star_2_count, value: 2} : {name: '2 stars', count: curr.star_2_count, value: 2};
-        acc[2] = acc[2]?.name ? {name: '3 stars', count: acc[2].count + curr.star_3_count, value: 3} : {name: '3 stars', count: curr.star_3_count, value: 3};
-        acc[3] = acc[3]?.name ? {name: '4 stars', count: acc[3].count + curr.star_4_count, value: 4} : {name: '4 stars', count: curr.star_4_count, value: 4};
-        acc[4] = acc[4]?.name ? {name: '5 stars', count: acc[4].count + curr.star_5_count, value: 5} : {name: '5 stars', count: curr.star_5_count, value: 5};
+        acc[0] = {...acc[0], count: acc[0].count + curr.star_1_count};
+        acc[1] = {...acc[1], count: acc[1].count + curr.star_2_count};
+        acc[2] = {...acc[2], count: acc[2].count + curr.star_3_count};
+        acc[3] = {...acc[3], count: acc[3].count + curr.star_4_count};
+        acc[4] = {...acc[4], count: acc[4].count + curr.star_5_count};
         
         return acc;
-      }, []);
+      }, initValueCountStar);
     });
 
     const countReview = await db.Evaluate.count({
@@ -95,6 +111,13 @@ class CategoryService {
           [Op.not]: "",
         },
       },
+      include: [
+        {
+          model: db.User,
+          as: "user_evaluate",
+          where: { deleteFlg: "0" },
+        },
+      ],
       raw: true,
     });
 

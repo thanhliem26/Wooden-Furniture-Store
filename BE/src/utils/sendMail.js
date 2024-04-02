@@ -43,7 +43,7 @@ export const sendMailSingUP = async ({ data, token }) => {
     const transporter = await sendMailOauth2();
 
     await transporter.sendMail({
-      from: `"Đồ gỗ Thành Lành 👻"<${process.env.EMAIL_ROOT}>`,
+      from: `"Đồ gỗ Thành Lành"<${process.env.EMAIL_ROOT}>`,
       to: data.email,
       subject: "Verify Email ✔",
       html: `<!DOCTYPE html>
@@ -68,7 +68,7 @@ export const sendMailSingUP = async ({ data, token }) => {
   }
 };
 
-export const sendMailWhenOrder = async ({ orderDetail, order }) => {
+export const sendMailWhenOrder = async ({ orderDetail, order, activeAB }) => {
   // send mail with defined transport object
   try {
     const transporter = await sendMailOauth2();
@@ -81,7 +81,7 @@ export const sendMailWhenOrder = async ({ orderDetail, order }) => {
       <body>
         <p>Kính gửi Quý khách hàng thân mến,</p>
         <p>Chúng tôi hy vọng email này tìm được Quý khách trong tình trạng tốt lành.</p>
-        <p>Cảm ơn Quý khách đã lựa chọn <strong>[Đồ gỗ Thành Lành]</strong> 
+        <p>Cảm ơn Quý khách đã lựa chọn <strong>[${activeAB.name}]</strong> 
         để đáp ứng nhu cầu về sản phẩm đồ gỗ của mình. 
         Chúng tôi rất vui mừng xác nhận việc nhận được đơn hàng gần đây của Quý khách. 
         Sự ưu tiên của Quý khách đối với sự tinh tế và thiết kế sang trọng đã được thể hiện, 
@@ -112,18 +112,18 @@ export const sendMailWhenOrder = async ({ orderDetail, order }) => {
         Điều này bao gồm xác nhận thông tin vận chuyển, 
         đảm bảo các thông số kỹ thuật của sản phẩm và giải quyết mọi thắc mắc hoặc lo lắng mà Quý khách có thể gặp phải.</p>
         <p>Nếu Quý khách có bất kỳ thắc mắc hoặc cần hỗ trợ thêm, 
-        xin vui lòng liên hệ với đội ngũ dịch vụ khách hàng của chúng tôi qua email <strong>[Địa chỉ Email ########]</strong> 
-        hoặc số điện thoại <strong>[Số Điện thoại ###########]</strong>.</p>
+        xin vui lòng liên hệ với đội ngũ dịch vụ khách hàng của chúng tôi
+        số điện thoại <strong>[Số Điện thoại ${activeAB.phone_number}]</strong>.</p>
         <p>Một lần nữa, chúng tôi xin chân thành cảm ơn Quý khách đã lựa chọn <strong>
-        [Đồ gỗ Thành Lành]</strong>. Chúng tôi chân thành đánh giá cao sự hợp tác của Quý khách và rất mong được phục vụ Quý khách.</p>
+        [${activeAB.name}]</strong>. Chúng tôi chân thành đánh giá cao sự hợp tác của Quý khách và rất mong được phục vụ Quý khách.</p>
         <p>Trân trọng,</p>
-        <br>Đồ gỗ Thành Lành
+        <br>${activeAB.name}
       </body>
     </html>
     `;
 
     await transporter.sendMail({
-      from: `"Đồ gỗ Thành Lành👻"<${process.env.EMAIL_ROOT}>`,
+      from: `"Đồ gỗ Thành Lành"<${process.env.EMAIL_ROOT}>`,
       to: order.email,
       subject: "Xác nhận Đơn hàng Sản phẩm ",
       html: htmlContent,
@@ -133,7 +133,7 @@ export const sendMailWhenOrder = async ({ orderDetail, order }) => {
   }
 };
 
-export const sendMailOrderForShop = async ({ orderDetail, order }) => {
+export const sendMailOrderForShop = async ({ orderDetail, order, activeAB }) => {
   // send mail with defined transport object
   try {
     const transporter = await sendMailOauth2();
@@ -147,7 +147,7 @@ export const sendMailOrderForShop = async ({ orderDetail, order }) => {
      </head>
      <body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0;">
      <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-     <p><strong>Kính gửi [Đồ gỗ Thành Lành],</strong></p>
+     <p><strong>Kính gửi [${activeAB.name}],</strong></p>
      <p>Chúng tôi gửi đến bạn một thông báo về đơn hàng mới từ một khách hàng. Dưới đây là thông tin chi tiết:</p>
      <ul>
      <li><strong>Tên khách hàng:</strong> ${order.name}</li>
@@ -174,14 +174,14 @@ export const sendMailOrderForShop = async ({ orderDetail, order }) => {
      <p>Vui lòng liên hệ với khách hàng sớm nhất có thể để xác nhận đơn hàng và sắp xếp giao hàng. Nếu cần thêm thông tin, đừng ngần ngại liên hệ với khách hàng qua email hoặc số điện thoại được cung cấp.</p>
      <p>Xin cảm ơn và chúc bạn một ngày làm việc hiệu quả!</p>
      <p>Trân trọng,</p>
-     <p>[Đồ gỗ Thành Lành]</p>
+     <p>[${activeAB.name}]</p>
      </div>
      </body>
      </html>
      `;
 
     await transporter.sendMail({
-      from: `"Đồ gỗ Thành Lành👻"<${process.env.EMAIL_ROOT}>`,
+      from: `"Đồ gỗ Thành Lành"<${process.env.EMAIL_ROOT}>`,
       to: process.env.EMAIL_ROOT,
       subject: "Xác nhận Đơn hàng Sản phẩm",
       html: htmlContent,

@@ -5,7 +5,6 @@ import styled from "./index.module.scss";
 import orderDetailApi from "@/api/orderDetail";
 import { useAppDispatch, useAppSelector } from "@/store/index";
 import { NotificationError, formatCurrency } from "@/utils/index";
-import { useParams } from "react-router-dom";
 import { TYPE_ADD_MINUS } from "@/constants/index";
 import lodash from "lodash";
 import { searchOrder } from "@/store/orderUser";
@@ -17,7 +16,7 @@ interface Props {
 
 const TableCart = ({dataOrder, setDataOrder}: Props) => {
   const user_id = useAppSelector((state) => state.user.id);
-  const { id } = useParams();
+  const id = useAppSelector((state) => state.order.id);
 
   const dispatch = useAppDispatch();
   const [idDelete, setIdDelete] = useState<number[]>([]);
@@ -161,7 +160,7 @@ const TableCart = ({dataOrder, setDataOrder}: Props) => {
     if (user_id) {
       handleGetOrderDetail();
     }
-  }, [user_id]);
+  }, [user_id, id]);
 
   const handleUpdate = async () => {
     if(isUpdate) {
