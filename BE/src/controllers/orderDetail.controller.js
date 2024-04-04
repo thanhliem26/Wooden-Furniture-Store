@@ -42,6 +42,13 @@ class OrderController {
         }).send(res)
     }
 
+    getListStatistical = async (req, res, next) => {
+        new SuccessResponse({
+            message: 'get list order statistical success!',
+            metadata: await OrderDetailService.getOrderDetailToStatistical(req.query),
+        }).send(res)
+    }
+
 }
 
 module.exports = new OrderController

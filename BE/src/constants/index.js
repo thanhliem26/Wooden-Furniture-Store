@@ -63,6 +63,13 @@ export const menu = [
   },
   {
     id: 9,
+    label: "Statistical",
+    href: "/admin/statistical",
+    role: [ROLE_USER.ADMIN],
+    icon: "manage_service_contract",
+  },
+  {
+    id: 10,
     label: "Screen User",
     href: "/",
     role: [ROLE_USER.ADMIN],

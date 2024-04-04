@@ -21,6 +21,10 @@ const orderDetailApi = {
         const url = `/v1/api/orderDetail/update`
         return axiosService.patch(url, body)
     },
+    getListStatistical(params: paramGetStatistical): Promise<listStatisticalOrderDetail> {
+        const url = `/v1/api/orderDetail/get-statistical`
+        return axiosService.get(url, {params: params})
+    },
 }
 
 export default orderDetailApi;

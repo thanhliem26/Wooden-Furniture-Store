@@ -29,6 +29,7 @@ import PayComponent from '@/features/user/pay';
 import ManageOrder from '@/features/admin/manageOrder';
 import AboutUS from '@/features/admin/aboutUs';
 import Purchase from '@/features/user/purchase';
+import Statistical from '@/features/admin/statistical';
 
 function RouterComponent() {
   const router = createBrowserRouter([
@@ -69,11 +70,11 @@ function RouterComponent() {
           element: <Contact />
         },
         {
-          path: "pay",
+          path: "/pay",
           element: <PayComponent />
         },
         {
-          path: "purchase",
+          path: "/purchase",
           element: <Purchase />
         },
       ]
@@ -131,6 +132,10 @@ function RouterComponent() {
         {
           path: "about-us",
           element: <AboutUS />
+        },
+        {
+          path: "statistical",
+          element: <Statistical />
         },
       ]
     },

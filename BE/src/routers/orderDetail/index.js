@@ -16,5 +16,6 @@ router.delete('/delete/:id', asyncHandler(OrderDetailController.deleteOrderDetai
 router.patch('/update', asyncHandler(OrderDetailController.updateOrderDetail));
 //role admin
 router.use(isAdmin);
+router.get('/get-statistical', asyncHandler(OrderDetailController.getListStatistical));
 
 module.exports = router;
