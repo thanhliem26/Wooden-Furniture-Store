@@ -150,14 +150,16 @@ class OrderService {
       order: [["productId", "ASC"]],
     });
 
+    console.log("check order detail::::::::::::::::::::::")
+
     let statistical_order = await db.OrderDetail.findAll({
       attributes: [
         [
-          sequelize.fn("YEAR", sequelize.col("Order_detail.createdAt")),
+          sequelize.fn("YEAR", sequelize.col("OrderDetail.createdAt")),
           "statistical_year",
         ],
         [
-          sequelize.literal(`DATE_FORMAT(Order_detail.createdAt, '%Y-%m')`),
+          sequelize.literal(`DATE_FORMAT(OrderDetail.createdAt, '%Y-%m')`),
           "statistical_month",
         ],
         [sequelize.fn("COUNT", "*"), "statistical_count"],
@@ -169,7 +171,7 @@ class OrderService {
       },
       group: [
         sequelize.fn("YEAR", sequelize.col("createdAt")),
-        sequelize.literal(`DATE_FORMAT(Order_detail.createdAt, '%Y-%m')`),
+        sequelize.literal(`DATE_FORMAT(OrderDetail.createdAt, '%Y-%m')`),
       ],
       include: [
         {
@@ -187,6 +189,8 @@ class OrderService {
       ],
       raw: true,
     });
+
+    console.log('qua ko::::::::::::::::::::::::')
 
     statistical_order = months.map((item) => {
       const orderItem = statistical_order.find((order) => {
