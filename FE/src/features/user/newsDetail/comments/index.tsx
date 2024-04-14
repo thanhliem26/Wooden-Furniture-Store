@@ -95,7 +95,7 @@ const CommentNews = ({ news }: Props) => {
       </div>
       <div className="news__comment-content">
         <div className="input__content-field">
-          <InputContent avatar={avatar} callback={handleSubmit} />
+          {!!user.id && <InputContent avatar={avatar} callback={handleSubmit} />}
         </div>
         <div className="modal__comment-list">
           <ListComment news={news} />

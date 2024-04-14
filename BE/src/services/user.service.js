@@ -43,7 +43,7 @@ class UserService {
   static handleGetMenuUser = async (roleUser) => {
     const role = roleUser ? roleUser : TYPE_ROLE_USER.USER;
   
-    return menu_user.reduce((current, next) => {
+    const result  = menu_user.reduce((current, next) => {
       if (next.role.includes(Number(role))) {
         current.push(
           getInfoData({ field: ["id", "href", "label"], object: next })
@@ -52,6 +52,7 @@ class UserService {
 
       return current;
     }, []);
+    return result;
   };
 
 

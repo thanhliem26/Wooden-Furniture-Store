@@ -291,7 +291,7 @@ const ItemContent = ({ comment, news }: Props) => {
               </div>
             </div>
             <div className="main__comment-reply">
-              <div className="comment__reply-action">
+              {!!user.id &&   <div className="comment__reply-action">
                 <div className="main__comment-like">
                   <button>
                     <span>Like</span>
@@ -323,7 +323,8 @@ const ItemContent = ({ comment, news }: Props) => {
                     />
                   ) : null}
                 </div>
-              </div>
+              </div>}
+            
               <div className="comment__reply-update">
                 {checkIsExistReply(comment.id) ? (
                   <div className="reply__update-input">

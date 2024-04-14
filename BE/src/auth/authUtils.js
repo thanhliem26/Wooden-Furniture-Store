@@ -34,17 +34,18 @@ const createTokenPair = async (payload, publicKey, privateKey) => {
 };
 
 const authentication = asyncHandler(async (req, res, next) => {
-  if(req.url === '/handleRefreshToken') {
+  const userId = req.headers[HEADER.CLIENT_ID];
+  const accessToken = req.headers[HEADER.AUTHORIZATION];
+
+  if(req.url === '/handleRefreshToken' || (req.url === '/menu-user' && (!userId || !accessToken))) {
     return next();
   }
 
-  const userId = req.headers[HEADER.CLIENT_ID];
   if (!userId) throw new AuthFailureError("Invalid Request user_id!");
-
+  
   const keyStore = await findByUserId(userId);
   if (!keyStore) throw new NotFoundError("Not Found keyStore");
 
-  const accessToken = req.headers[HEADER.AUTHORIZATION];
   if (!accessToken) throw new AuthFailureError("Inavlid Request access token");
 
   const isTokenValidate = await validateToken({

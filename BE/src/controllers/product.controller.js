@@ -60,6 +60,9 @@ class ProductController {
         new SuccessResponse({
             message: 'get list product success!',
             metadata: await ProductService.getListProductDifferent(req.query),
+            options: {
+                ...req.query
+            }
         }).send(res)
     }
 }

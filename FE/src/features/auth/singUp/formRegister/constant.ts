@@ -37,6 +37,5 @@ export const schema = yup
     )
     .required("Repeat Password is required"),
 })
-.required();
 
 export type FormData = yup.InferType<typeof schema>;

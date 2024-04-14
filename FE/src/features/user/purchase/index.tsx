@@ -13,35 +13,49 @@ import { useEffect, useState } from "react";
 import orderDetailApi from "@/api/orderDetail";
 import { NotificationError } from "@/utils/index";
 import { STATUS_ORDER } from "@/constants/index";
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from "lodash";
+import { useAppSelector } from "@/store/index";
+import { useNavigate } from "react-router-dom";
 
 const Purchase = () => {
-  const [orderDetailList, setOrderDetailList] = useState<metadataOrderList[]>([]);
+  const userId = useAppSelector((state) => state.user.id);
+  const navigate = useNavigate();
+  const [orderDetailList, setOrderDetailList] = useState<metadataOrderList[]>(
+    []
+  );
   const handleGetOrderList = async () => {
     try {
-      const { metadata} = await orderDetailApi.getOrderDetail();
+      const { metadata } = await orderDetailApi.getOrderDetail();
       setOrderDetailList(metadata);
-    } catch(error) {
-      NotificationError(error)
+    } catch (error) {
+      NotificationError(error);
     }
-  }
-
-  useEffect(() => {
-    handleGetOrderList();
-  }, [])
+  };
 
   const handleUpdateOrderDetail = (data) => {
     let cloneList = cloneDeep(orderDetailList);
     cloneList = cloneList.map((order) => {
-      if(order.id === data.id) {
+      if (order.id === data.id) {
         order.evaluate_id = data.evaluate_id;
       }
 
       return order;
-    })
+    });
 
     setOrderDetailList(cloneList);
-  }
+  };
+
+  useEffect(() => {
+    if(!userId) {
+      navigate('/Forbidden')
+    }
+  }, [userId])
+
+  useEffect(() => {
+    if(userId) {
+      handleGetOrderList();
+    }
+  }, []);
 
   return (
     <div className={styled["main__purchase"]}>
@@ -58,7 +72,7 @@ const Purchase = () => {
                     Tất cả
                   </>
                 ),
-                children: <ContentOrder orderDetailList={orderDetailList}/>,
+                children: <ContentOrder orderDetailList={orderDetailList} />,
               },
               {
                 key: "2",
@@ -68,7 +82,12 @@ const Purchase = () => {
                     Chờ xác nhận
                   </>
                 ),
-                children: <ContentOrder orderDetailList={orderDetailList} type={STATUS_ORDER.WAIT_CONFIRMATION}/>
+                children: (
+                  <ContentOrder
+                    orderDetailList={orderDetailList}
+                    type={STATUS_ORDER.WAIT_CONFIRMATION}
+                  />
+                ),
               },
               {
                 key: "3",
@@ -78,7 +97,12 @@ const Purchase = () => {
                     Xác nhận
                   </>
                 ),
-                children: <ContentOrder orderDetailList={orderDetailList} type={STATUS_ORDER.CONFIRMED}/>
+                children: (
+                  <ContentOrder
+                    orderDetailList={orderDetailList}
+                    type={STATUS_ORDER.CONFIRMED}
+                  />
+                ),
               },
               {
                 key: "4",
@@ -88,7 +112,12 @@ const Purchase = () => {
                     Đang giao hàng
                   </>
                 ),
-                children: <ContentOrder orderDetailList={orderDetailList} type={STATUS_ORDER.SHIPPED}/>
+                children: (
+                  <ContentOrder
+                    orderDetailList={orderDetailList}
+                    type={STATUS_ORDER.SHIPPED}
+                  />
+                ),
               },
               {
                 key: "5",
@@ -98,7 +127,12 @@ const Purchase = () => {
                     Hủy đơn
                   </>
                 ),
-                children: <ContentOrder orderDetailList={orderDetailList} type={STATUS_ORDER.CANCELLED}/>
+                children: (
+                  <ContentOrder
+                    orderDetailList={orderDetailList}
+                    type={STATUS_ORDER.CANCELLED}
+                  />
+                ),
               },
               {
                 key: "6",
@@ -108,7 +142,13 @@ const Purchase = () => {
                     Giao thành công
                   </>
                 ),
-                children: <ContentOrder orderDetailList={orderDetailList} type={STATUS_ORDER.DELIVERED} handleUpdateOrderDetail={handleUpdateOrderDetail}/>
+                children: (
+                  <ContentOrder
+                    orderDetailList={orderDetailList}
+                    type={STATUS_ORDER.DELIVERED}
+                    handleUpdateOrderDetail={handleUpdateOrderDetail}
+                  />
+                ),
               },
             ]}
           />

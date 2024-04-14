@@ -94,7 +94,6 @@ const ModalComment = ({ product, ...props }: Props) => {
       title=""
       isModalOpen={isModalOpen}
       setIsModalOpen={setIsModalOpen}
-      //   onCancelModal={() => dispatch(setProductSelected(null))}
       {...props}
     >
       <div className="modal__comment-title">
@@ -110,7 +109,7 @@ const ModalComment = ({ product, ...props }: Props) => {
         )}
       </div>
       <div className="input__content-field">
-        <InputContent avatar={avatar} callback={handleSubmit} />
+        {!!user.id && <InputContent avatar={avatar} callback={handleSubmit} />}
       </div>
 
       <div className="modal__comment-list">

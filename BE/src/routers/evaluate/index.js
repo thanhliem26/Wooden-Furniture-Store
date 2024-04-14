@@ -6,9 +6,9 @@ const router = express.Router();
 const  asyncHandler = require('../../helpers/asyncHandler');
 const { authentication } = require('../../auth/authUtils');
 
+router.get('/list', asyncHandler(EvaluateController.getListEvaluate));
 //authentication token
 router.use(authentication);
-router.get('/list', asyncHandler(EvaluateController.getListEvaluate));
 router.get('/:id', asyncHandler(EvaluateController.getEvaluate));
 router.post('/create', asyncHandler(EvaluateController.createNewEvaluate));
 

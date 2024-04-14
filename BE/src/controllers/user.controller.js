@@ -44,7 +44,7 @@ class UserController {
   menuUser = async (req, res, next) => {
     new SuccessResponse({
       message: "Get menu user success!",
-      metadata: await UserService.handleGetMenuUser(req.user.role_user),
+      metadata: await UserService.handleGetMenuUser(req?.user?.role_user),
     }).send(res);
   };
 

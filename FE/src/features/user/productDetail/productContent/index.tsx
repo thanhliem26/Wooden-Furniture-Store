@@ -65,7 +65,7 @@ const ProductContent = ({ product }: Props) => {
       if (quantity > product?.stock_quantity) {
         Notification({
           type: "error",
-          message: "Notification Success",
+          message: "Notification Error",
           description: messageOrderTooLimit(product.stock_quantity, quantity),
         });
 
@@ -93,6 +93,15 @@ const ProductContent = ({ product }: Props) => {
   };
 
   const handleAddOrder = async () => {
+    if(!userId) {
+      Notification({
+        type: "error",
+        message: "Notification Error",
+        description: 'Vui lòng login trước khi order',
+      });
+
+      return;
+    }
     const orderExist = listOrder.find(
       (order) => order.productId === product?.id
     );
@@ -107,7 +116,7 @@ const ProductContent = ({ product }: Props) => {
     if (totalQuantity > orderExist.stock_quantity) {
       Notification({
         type: "error",
-        message: "Notification Success",
+        message: "Notification Error",
         description: messageOrderTooLimit(
           orderExist.stock_quantity,
           totalQuantity

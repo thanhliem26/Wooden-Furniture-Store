@@ -6,10 +6,9 @@ const router = express.Router();
 const  asyncHandler = require('../../helpers/asyncHandler');
 const { authentication, isAdmin } = require('../../auth/authUtils');
 
+router.post('/create', asyncHandler(UserContactController.createContact));
 //authentication token
 router.use(authentication);
-router.post('/create', asyncHandler(UserContactController.createContact));
-
 // //role admin
 router.use(isAdmin);
 router.delete('/delete/:id', asyncHandler(UserContactController.deleteContact));

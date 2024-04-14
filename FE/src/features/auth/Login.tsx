@@ -9,7 +9,6 @@ const Login = () => {
         <SingUp />
       </div>
       </div>
-      
     </div>
   );
 };

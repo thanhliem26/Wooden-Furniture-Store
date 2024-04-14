@@ -52,10 +52,20 @@ const Products = ({ dataProduct }: ProductProps) => {
 
   const handleAddOrderDetail = async (product) => {
     try {
+      if(!userId) {
+        Notification({
+          type: "error",
+          message: "Notification Error",
+          description: 'Vui lòng đăng nhập trước khi order!',
+        });
+
+        return;
+      }
+      
       if (product?.stock_quantity < 1) {
         Notification({
           type: "error",
-          message: "Notification Success",
+          message: "Notification Error",
           description: messageOrderTooLimit(product.stock_quantity, 1),
         });
 

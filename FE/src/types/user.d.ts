@@ -45,6 +45,7 @@ interface formDataSingUp {
     email: string,
     password: string,
     re_password: string,
+    is_active?: '0' | '1',
 }
 
 interface formDataSingIn {

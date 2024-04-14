@@ -66,6 +66,12 @@ axiosService.interceptors.response.use(
 						authUtil.setRefreshToken(tokens.refreshToken)
 						setHeader(HEADER.AUTHORIZATION, tokens.accessToken)
 						window.location.reload();
+					} else {
+						removeHeader(HEADER.AUTHORIZATION);
+						authUtil.removeToken()
+						authUtil.removeUser()
+						authUtil.removeRefreshToken();
+						window.location.href = "/login";
 					}
 				}
 
@@ -86,15 +92,7 @@ axiosService.interceptors.response.use(
 			case 500: {
 				const url = error.config?.url;
 
-				if (url === import.meta.env.VITE_API_REFRESH_TOKEN && errorData?.['message'] === 'jwt expired') {
-					removeHeader(HEADER.AUTHORIZATION);
-					authUtil.removeToken()
-					authUtil.removeUser()
-					authUtil.removeRefreshToken();
-					window.location.href = "/login";
-				}
-
-				if (errorData?.['message'] === 'invalid signature') {
+				if (url === import.meta.env.VITE_API_REFRESH_TOKEN) {
 					removeHeader(HEADER.AUTHORIZATION);
 					authUtil.removeToken()
 					authUtil.removeUser()

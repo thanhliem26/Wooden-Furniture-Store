@@ -42,10 +42,19 @@ const ProductItem = ({handleScrollPage}: Props) => {
 
   const handleAddOrderDetail = async (product) => {
     try {
+      if(!userId) {
+        Notification({
+          type: 'error',
+          message: "Notification Error",
+          description: 'Vui lòng login trước khi đăng nhập',
+        });
+
+        return;
+      }
       if (product?.stock_quantity < 1) {
         Notification({
           type: 'error',
-          message: "Notification Success",
+          message: "Notification Error",
           description: messageOrderTooLimit(product.stock_quantity, 1),
         });
   

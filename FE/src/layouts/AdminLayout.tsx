@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Layout } from "antd";
 import { Outlet, Navigate, useNavigate } from "react-router-dom";
-import { isUserLoggedIn } from "@/utils/index";
+import { isUserLoggedIn, getToken } from "@/utils/index";
 import SideBar from "@/components/sideBarComponent";
 import NavbarComponent from "@/components/navbarComponent";
 import { fetchUserInfo } from '@/store/user';
@@ -15,7 +15,10 @@ const AdminLayout: React.FC = () => {
   const userInfo = useAppSelector<UserState>((state) => state.user)
 
   useEffect(() => {
-    dispatch(fetchUserInfo())
+    const token = getToken();
+    if (token) {
+      dispatch(fetchUserInfo());
+    }
   }, [])
 
   useEffect(() => {

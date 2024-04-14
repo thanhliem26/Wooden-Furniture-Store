@@ -8,7 +8,6 @@ const { authentication, isAdmin } = require('../../auth/authUtils');
 
 //authentication token
 router.use(authentication);
-
 router.post('/create', asyncHandler(OrderDetailController.createOrderDetail));
 router.get('/get-orderDetail-byId', asyncHandler(OrderDetailController.getOrderDetailById));
 router.get('/get-orderDetail', asyncHandler(OrderDetailController.getListOrderDetailExcludePending));

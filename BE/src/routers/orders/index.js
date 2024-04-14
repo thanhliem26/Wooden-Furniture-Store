@@ -8,7 +8,6 @@ const { authentication, authenticationV2, isAdmin } = require('../../auth/authUt
 
 //authentication token
 router.use(authentication);
-
 router.post('/create-orders', asyncHandler(OrderController.createOrder));
 router.get('/list', asyncHandler(OrderController.searchOrder));
 router.put('/update', asyncHandler(OrderController.updateOrder));

@@ -1,5 +1,5 @@
-import { getToken, isUserLoggedIn } from "@/utils/index";
-import { Navigate, Outlet } from "react-router-dom";
+import { getToken } from "@/utils/index";
+import { Outlet } from "react-router-dom";
 import UserLayoutHeader from "@/components/userHeaderLayout";
 import { useEffect, lazy, Suspense } from "react";
 import { useAppDispatch } from "../store";
@@ -16,13 +16,10 @@ const PublicLayoutUser = () => {
     const token = getToken();
     if (token) {
       dispatch(fetchUserInfo());
-      dispatch(getActiveAboutUs());
     }
-  }, []);
 
-  if (!isUserLoggedIn()) {
-    return <Navigate to="/login" />;
-  }
+    dispatch(getActiveAboutUs());
+  }, []);
 
   return (
     <>

@@ -292,7 +292,7 @@ const ItemContent = ({ comment, product }: Props) => {
             </div>
             <div className="main__comment-reply">
               <div className="comment__reply-action">
-                <div className="main__comment-like">
+                {!!user.id && <div className="main__comment-like">
                   <button>
                     <span>Like</span>
                   </button>
@@ -308,7 +308,8 @@ const ItemContent = ({ comment, product }: Props) => {
                     <span>Trả lời</span>
                   </button>
                   .
-                </div>
+                </div>}
+                
                 <div className="main__comment-createdAt">
                   <span>{moment(comment.createdAt).fromNow(true)}</span>
                   {comment.user_id === user.id ? (

@@ -13,7 +13,7 @@ class UserContactController {
   createContact = async (req, res, next) => {
     new CREATED({
       message: "create a new contact success!",
-      metadata: await UserContactService.createContact({...req.body, user_id: req.user.user_id}),
+      metadata: await UserContactService.createContact({...req.body, user_id: req?.user?.user_id || null}),
     }).send(res);
   };
 

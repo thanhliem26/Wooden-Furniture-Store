@@ -43,7 +43,7 @@ const ProductSame = ({ product }: Props) => {
       if (product?.stock_quantity < 1) {
         Notification({
           type: "error",
-          message: "Notification Success",
+          message: "Notification Error",
           description: messageOrderTooLimit(product.stock_quantity, 1),
         });
 
@@ -87,6 +87,7 @@ const ProductSame = ({ product }: Props) => {
       const { rows } = metadata;
       setProductList(rows);
     } catch (error) {
+      console.log("🚀 ~ error:", error)
       NotificationError(error);
     }
   };

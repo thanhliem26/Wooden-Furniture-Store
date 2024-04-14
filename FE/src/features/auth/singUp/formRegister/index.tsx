@@ -28,21 +28,10 @@ const FormRegister = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: Required<FormData>) => {
     try {
       setLoading(true);
-
-      //@ts-ignore
       const result = await authApi.singUp({...data, is_active: '0'});
-      if (result?.["status"].toString() === "error") {
-        Notification({
-          type: "error",
-          message: "Notification Error",
-          description: result?.["message"],
-        });
-        return;
-      }
-
       Notification({
         message: "Notification Success",
         description: "Create new user success. Please check email to verify before login!",
@@ -50,10 +39,8 @@ const FormRegister = () => {
       });
 
       navigate("/verify-email");
-    } catch (error: unknown) {
-      if (error?.["response"]?.["data"]?.["status"] === "error") {
-        NotificationError(error)
-      }
+    } catch (error) {
+      NotificationError(error)
       throw error;
     } finally {
       setLoading(false);

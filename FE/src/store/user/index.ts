@@ -11,7 +11,11 @@ export const fetchUserInfo = createAsyncThunk(
     }
 )
 
-const initialState: UserState = {
+interface user_reducer_state extends UserState{
+    is_login?: boolean;
+}
+
+const initialState: user_reducer_state = {
     id: 0,
     fullName: '',
     email: '',
@@ -22,7 +26,8 @@ const initialState: UserState = {
     sex: '',
     deleteFlg: 0,
     avatar: '',
-    avatar_support: ''
+    avatar_support: '',
+    is_login: false,
 }
 
 export const userSlice = createSlice({
@@ -38,7 +43,7 @@ export const userSlice = createSlice({
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
         builder.addCase(fetchUserInfo.fulfilled, (state, action) => {
-            state = { ...state, ...action.payload }
+            state = { ...state, ...action.payload, is_login: true }
 
             return state;
         })

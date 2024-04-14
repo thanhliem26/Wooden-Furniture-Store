@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
           phone_number: Joi.string().required(),
           address: Joi.string().required(),
           content: Joi.string().required(),
-          user_id: Joi.number().required(),
+          user_id: Joi.number().allow(null).required(),
         }).unknown(true); // unknown(true): accepts payloads that are not within the defined schema
   
         try {

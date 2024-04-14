@@ -5,10 +5,12 @@ import { useAppSelector } from "@/store/index";
 import { useEffect, useMemo, useRef, useState } from "react";
 import orderDetailApi from "@/api/orderDetail";
 import { formatCurrency, NotificationError } from "@/utils/index";
+import { useNavigate } from "react-router-dom";
 
 const PayComponent = () => {
   const [dataOrder, setDataOrder] = useState<OrderDetailState[]>([]);
   const refChildren = useRef();
+  const navigate = useNavigate();
 
   const user_id = useAppSelector((state) => state.user.id);
   const order_id = useAppSelector((state) => state.order.id);
@@ -44,6 +46,12 @@ const PayComponent = () => {
     //@ts-ignore
     return refChildren.current?.['submit']();
   }
+
+  useEffect(() => {
+    if(!user_id) {
+      navigate('/Forbidden')
+    }
+  }, [user_id])
 
   useEffect(() => {
     if(user_id && order_id) {

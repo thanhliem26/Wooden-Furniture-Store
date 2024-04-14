@@ -25,14 +25,11 @@ const Stars = () => {
 
   const starTotal = useMemo(() => {
     const total = stars.reduce((current, next) => {
-      console.log("🚀 ~ next:", next)
       return current + next.count * next.value;
     }, 0);
-    console.log("🚀 ~ total:", total, count)
 
     return total ? (total / count).toFixed(2) : '0';
   }, [stars, count]);
-  console.log("🚀 ~ starTotal:", starTotal)
 
   const handleScrollPage = async (param = { pageSize: 10, current: 1 }) => {
     const optionQuery: any = {};

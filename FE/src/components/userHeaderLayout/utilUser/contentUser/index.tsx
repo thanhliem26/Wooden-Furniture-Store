@@ -54,6 +54,10 @@ const ContentUser = () => {
     navigate('/purchase')
   }
 
+  const handleLogin = () => {
+    navigate('/login')
+  }
+
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -94,6 +98,7 @@ const ContentUser = () => {
     },
     {
       key: "3",
+      className: !user.id && "hidden",
       label: (
         <div onClick={handleRedirect}>
           <ShoppingOutlined className="icon__dropdown"/>
@@ -103,10 +108,21 @@ const ContentUser = () => {
     },
     {
       key: "4",
+      className: !user.id && "hidden",
       label: (
         <div className="user__logOut" onClick={handleLogOut}>
           <LogoutOutlined className="icon__dropdown" />
           Logout
+        </div>
+      ),
+    },
+    {
+      key: "5",
+      className: !!user.id && "hidden",
+      label: (
+        <div className="user__logOut" onClick={handleLogin}>
+          <LogoutOutlined className="icon__dropdown" />
+          Login
         </div>
       ),
     },
