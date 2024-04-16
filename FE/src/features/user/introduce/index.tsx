@@ -18,7 +18,7 @@ const Introduce = () => {
   return (
     <div className={styled["introduce__main"]}>
       <div className="introduce__main-title">
-        <h1>Đồ Gỗ Thành Lành</h1>
+        <h1>{activeAbout?.name}</h1>
         <div className="divider"></div>
       </div>
       <div className="introduce__main-banner">

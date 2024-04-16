@@ -11,6 +11,7 @@ import { debounce } from "lodash";
 import { searchProduct } from "@/store/manageProducts";
 import { setPagination } from "@/store/manageProducts";
 import { useLocation, useNavigate } from "react-router-dom";
+import TEXT_COMMON from "@/constants/text";
 
 interface Props {
   sliderPrice: [number, number];
@@ -163,8 +164,8 @@ const ProductFilter = ({
               <div className="number__text-price">
                 <span>Giá: </span>
                 <p>
-                  {formatCurrency(sliderPrice[0])} ₫ -{" "}
-                  {formatCurrency(sliderPrice[1])} ₫
+                  {formatCurrency(sliderPrice[0])} {TEXT_COMMON.SHOW_TEXT.CURRENT_ENDPOINT} -{" "}
+                  {formatCurrency(sliderPrice[1])} {TEXT_COMMON.SHOW_TEXT.CURRENT_ENDPOINT}
                 </p>
               </div>
             </div>

@@ -1,3 +1,4 @@
+import TEXT_COMMON from "@/constants/text";
 import * as yup from "yup";
 
 export const schema = yup
@@ -7,8 +8,8 @@ export const schema = yup
             .required(),
         email: yup
             .string()
-            .email("email is not valid!")
-            .required("email is required"),
+            .email(TEXT_COMMON.VALIDATE_TEXT.VALID.EMAIL)
+            .required(TEXT_COMMON.VALIDATE_TEXT.REQUIRED.EMAIL),
         phone_number: yup
             .string().required(),
         address: yup

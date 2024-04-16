@@ -16,6 +16,7 @@ import ListComment from "./listComment";
 import { Spin } from "antd";
 import { WebSocketNewsContext } from "../constant";
 import { STATUS_WS, TYPE_WS } from "@/constants/index";
+import TEXT_COMMON from "@/constants/text";
 
 interface Props {
   news: NewsState;
@@ -84,12 +85,12 @@ const CommentNews = ({ news }: Props) => {
       <div className="news__comment-title">
         {loading ? (
           <h3>
-            <Spin /> hỏi đáp
+            <Spin /> {TEXT_COMMON.SHOW_TEXT.QA}
           </h3>
         ) : (
           <>
-            <h3>{total} hỏi đáp</h3>
-            <p>(Nếu thấy bình luận spam hãy report với admin nhé!)</p>
+            <h3>{total} {TEXT_COMMON.SHOW_TEXT.QA}</h3>
+            <p>({TEXT_COMMON.SHOW_TEXT.REPORT_SPAM_COMMENT})</p>
           </>
         )}
       </div>

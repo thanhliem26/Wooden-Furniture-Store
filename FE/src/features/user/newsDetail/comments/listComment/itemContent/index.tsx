@@ -27,6 +27,7 @@ import styled from "./index.module.scss";
 import { CommentContext } from "./constant";
 import ItemChildren from "./itemChildren";
 import { WebSocketNewsContext } from "../../../constant";
+import TEXT_COMMON from "@/constants/text";
 
 interface Props {
   comment: CommentStateReducer;
@@ -294,7 +295,7 @@ const ItemContent = ({ comment, news }: Props) => {
               {!!user.id &&   <div className="comment__reply-action">
                 <div className="main__comment-like">
                   <button>
-                    <span>Like</span>
+                    <span>{TEXT_COMMON.SHOW_TEXT.ACTION_LIKE_COMMENT}</span>
                   </button>
                   .
                   <button
@@ -305,7 +306,7 @@ const ItemContent = ({ comment, news }: Props) => {
                       })
                     }
                   >
-                    <span>Trả lời</span>
+                    <span>{TEXT_COMMON.SHOW_TEXT.ACTION_REPLY_COMMENT}</span>
                   </button>
                   .
                 </div>

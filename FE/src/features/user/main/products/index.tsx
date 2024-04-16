@@ -4,6 +4,7 @@ import lodash from "lodash";
 import {
   NotificationError,
   formatCurrency,
+  handleURL,
   messageOrderTooLimit,
 } from "@/utils/index";
 import { RootState, useAppDispatch, useAppSelector } from "@/store/index";
@@ -16,6 +17,7 @@ import { useEffect, useMemo } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { Link } from "react-router-dom";
+import TEXT_COMMON from "@/constants/text";
 
 interface ProductProps {
   dataProduct: topProductStatic;
@@ -24,8 +26,7 @@ interface ProductProps {
 const Products = ({ dataProduct }: ProductProps) => {
   const orderId = useAppSelector((state: RootState) => state.order.id);
   const userId = useAppSelector((state: RootState) => state.user.id);
-
-  const list_order = useAppSelector((state) => state.order.list_order);
+  const list_order = useAppSelector((state: RootState) => state.order.list_order);
 
   const productInOrder = useMemo(() => {
     return list_order.map((order) => {
@@ -35,28 +36,13 @@ const Products = ({ dataProduct }: ProductProps) => {
 
   const dispatch = useAppDispatch();
 
-  const handleURL = (images) => {
-    const imageList = images && JSON.parse(images);
-
-    if (!imageList || (Array.isArray(imageList) && lodash.isEmpty(imageList))) {
-      return {
-        url: Images.DefaultProduct,
-      };
-    }
-
-    const [imageFirst] = imageList;
-    if (Array.isArray(imageList) && imageFirst) {
-      return imageFirst;
-    }
-  };
-
   const handleAddOrderDetail = async (product) => {
     try {
       if(!userId) {
         Notification({
           type: "error",
-          message: "Notification Error",
-          description: 'Vui lòng đăng nhập trước khi order!',
+          message: TEXT_COMMON.ERROR_TEXT.NOTIFY_MESSAGE,
+          description: TEXT_COMMON.ERROR_TEXT.ORDER_AUTH,
         });
 
         return;
@@ -65,7 +51,7 @@ const Products = ({ dataProduct }: ProductProps) => {
       if (product?.stock_quantity < 1) {
         Notification({
           type: "error",
-          message: "Notification Error",
+          message: TEXT_COMMON.ERROR_TEXT.NOTIFY_MESSAGE,
           description: messageOrderTooLimit(product.stock_quantity, 1),
         });
 
@@ -86,7 +72,7 @@ const Products = ({ dataProduct }: ProductProps) => {
       });
       if (status === statusCode.CREATED || status === statusCode.UPDATED) {
         Notification({
-          message: "Notification Success",
+          message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
           description: message,
         });
 
@@ -166,7 +152,7 @@ const Products = ({ dataProduct }: ProductProps) => {
                   <img src={Images.StoreEmpty} alt="store empty" />
                 </div>
                 <div className="item__content-price">
-                  <p className="item__type">empty product</p>
+                  <p className="item__type">Empty product</p>
                 </div>
               </div>
             </Col>

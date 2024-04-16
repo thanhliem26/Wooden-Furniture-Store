@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import lodash from "lodash";
 import orderApi from "@/api/order";
 import { editItemInOrderAll, setOrderSelected } from "@/store/orderUser";
+import TEXT_COMMON from "@/constants/text";
 
 const FormCategory = () => {
   const orderSelected = useAppSelector((state: RootState) => state.order.orderSelected);
@@ -46,7 +47,7 @@ const FormCategory = () => {
       const { message } = await orderApi.updateOrder({ ...dataValue });
 
       Notification({
-        message: "Notify update succes",
+        message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
         description: message,
       });
       dispatch(editItemInOrderAll({ ...dataValue } as OrderState));

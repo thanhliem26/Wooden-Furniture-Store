@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import contactApi from "@/api/contact";
 import Notification from "@/components/notificationSend";
 import { updateRecordList } from "@/store/manageContact";
+import TEXT_COMMON from "@/constants/text";
 
 const FormCategory = () => {
   const contactSelected = useAppSelector(
@@ -24,7 +25,7 @@ const FormCategory = () => {
     try {
       const { message } = await contactApi.updateContact({...data, is_read: '1'});
       Notification({
-        message: "Notify success",
+        message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
         description: message,
       });
 

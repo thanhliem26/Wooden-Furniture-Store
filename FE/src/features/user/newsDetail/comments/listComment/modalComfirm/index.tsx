@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Modal from "@/components/modal";
 import styled from "./index.module.scss";
+import TEXT_COMMON from "@/constants/text";
 
 interface Props {
   content: any;
@@ -17,11 +18,11 @@ const ModalConfirm = ({ onClickDelete, ...props }: Props) => {
     <Modal
       footer={
         <div className="modal__footer">
-          <button className="btn__cancel" onClick={() => setIsModalOpen(false)}>Hủy bỏ</button>
+          <button className="btn__cancel" onClick={() => setIsModalOpen(false)}>{TEXT_COMMON.SHOW_TEXT.CANCEL_COMMENT}</button>
           <button className="btn__submit" onClick={() => {
             onClickDelete();
             setIsModalOpen(false)
-          }}>Đồng ý</button>
+          }}>{TEXT_COMMON.SHOW_TEXT.AGREE_COMMENT}</button>
         </div>
       }
       className={styled["modal__comment-delete"]}
@@ -31,7 +32,7 @@ const ModalConfirm = ({ onClickDelete, ...props }: Props) => {
       setIsModalOpen={setIsModalOpen}
       {...props}
     >
-      <p>Bạn có chắc chắn muốn xóa bình luận này</p>
+      <p>{TEXT_COMMON.SHOW_TEXT.CONFIRM_DELETE_COMMENT}y</p>
     </Modal>
   );
 };

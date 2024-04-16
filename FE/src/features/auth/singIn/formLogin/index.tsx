@@ -12,6 +12,8 @@ import Notification from "@/components/notificationSend";
 import { setToken, setUser, setRefreshToken, NotificationError } from "@/utils/index";
 import { setHeader } from "@/api/axiosService";
 import ButtonForeign from "./ButtonForeign";
+import TEXT_COMMON from "@/constants/text";
+import { HEADER } from "@/constants/index";
 
 const FormRegister = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -26,29 +28,24 @@ const FormRegister = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: Required<FormData>) => {
     try {
       setLoading(true);
-
-      //@ts-ignore
       const { metadata } = await authApi.login(data);
       const { tokens, user } = metadata;
 
       Notification({
-        message: "Notification Success",
-        description: "Login success",
+        message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
+        description: TEXT_COMMON.SUCCESS_TEXT.LOGIN_DESCRIPTION,
       });
       setUser(user)
       setToken(tokens.accessToken)
       setRefreshToken(tokens.refreshToken)
-      setHeader('Authorization', tokens.accessToken)
+      setHeader(HEADER.AUTHORIZATION, tokens.accessToken)
       navigate('/')
       window.location.reload();
     } catch (error: unknown) {
-      console.log("🚀 ~ error:", error);
-      if (error?.["response"]?.["data"]?.["status"] === "error") {
-        NotificationError(error)
-      }
+      NotificationError(error)
       throw error;
     } finally {
       setLoading(false);
@@ -59,12 +56,11 @@ const FormRegister = () => {
   };
   return (
     <div className="singIn__content-form">
-      <h2 className="form__title">Sign In</h2>
+      <h2 className="form__title">{TEXT_COMMON.SHOW_TEXT.SIGN_IN}</h2>
       <Form
         name="basic"
         onFinish={handleSubmit(onSubmit)}
         onFinishFailed={onFinishFailed}
-        // autoComplete="off"
       >
         <InputComponent
           name="email"
@@ -84,7 +80,6 @@ const FormRegister = () => {
           icon={<LockOutlined />}
         />
         <ButtonComponent
-          // wrapperCol={{ offset: 8, span: 16 }}
           htmlType="submit"
           label="Login"
           className="btn__submit"

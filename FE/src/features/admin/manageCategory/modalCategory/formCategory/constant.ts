@@ -1,6 +1,7 @@
 import categoryApi from "@/api/category";
 import Notification from "@/components/notificationSend";
 import { statusCode } from "@/constants/index";
+import TEXT_COMMON from "@/constants/text";
 import { addCategory, setCategoryList, setCategorySelected } from "@/store/manageCategories";
 import * as yup from "yup";
 
@@ -8,7 +9,7 @@ export const schema = yup
     .object({
         name: yup
             .string()
-            .required("Category name is required"),
+            .required(TEXT_COMMON.VALIDATE_TEXT.REQUIRED.CATEGORY),
         description: yup
             .string(),
         id: yup
@@ -28,7 +29,7 @@ export const handleSubmitCreate = async (data, dispatch, eventEmitter) => {
         eventEmitter.emit("submit_modal");
 
         Notification({
-            message: "Notify success",
+            message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
             description: message,
         });
     }
@@ -44,8 +45,8 @@ export const handleSubmitEdit = async (data, dispatch, eventEmitter) => {
         dispatch(setCategorySelected(null));
 
         Notification({
-            message: message,
-            description: "Update user success",
+            message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
+            description: message,
         });
     }
 }

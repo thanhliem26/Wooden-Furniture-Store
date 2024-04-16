@@ -17,6 +17,7 @@ import Images from "@/constants/images";
 import { Image } from "antd";
 import { CommentOutlined } from "@ant-design/icons";
 import ModalComment from "./comments";
+import TEXT_COMMON from "@/constants/text";
 
 interface Props {
   product: ProductState | null;
@@ -65,7 +66,7 @@ const ProductContent = ({ product }: Props) => {
       if (quantity > product?.stock_quantity) {
         Notification({
           type: "error",
-          message: "Notification Error",
+          message: TEXT_COMMON.ERROR_TEXT.NOTIFY_MESSAGE,
           description: messageOrderTooLimit(product.stock_quantity, quantity),
         });
 
@@ -79,7 +80,7 @@ const ProductContent = ({ product }: Props) => {
       });
       if (status === statusCode.CREATED || status === statusCode.UPDATED) {
         Notification({
-          message: "Notification Success",
+          message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
           description: message,
         });
 
@@ -96,8 +97,8 @@ const ProductContent = ({ product }: Props) => {
     if(!userId) {
       Notification({
         type: "error",
-        message: "Notification Error",
-        description: 'Vui lòng login trước khi order',
+        message: TEXT_COMMON.ERROR_TEXT.NOTIFY_MESSAGE,
+        description: TEXT_COMMON.ERROR_TEXT.ORDER_AUTH,
       });
 
       return;
@@ -116,7 +117,7 @@ const ProductContent = ({ product }: Props) => {
     if (totalQuantity > orderExist.stock_quantity) {
       Notification({
         type: "error",
-        message: "Notification Error",
+        message: TEXT_COMMON.ERROR_TEXT.NOTIFY_MESSAGE,
         description: messageOrderTooLimit(
           orderExist.stock_quantity,
           totalQuantity
@@ -133,7 +134,7 @@ const ProductContent = ({ product }: Props) => {
     });
     if (status === statusCode.CREATED || status === statusCode.UPDATED) {
       Notification({
-        message: "Notification Success",
+        message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
         description: message,
       });
 
@@ -181,7 +182,7 @@ const ProductContent = ({ product }: Props) => {
                 <h1>{product?.name}</h1>
               </div>
               <div className="item__info-price">
-                <span>{formatCurrency(product?.price)} ₫</span>
+                <span>{formatCurrency(product?.price)} {TEXT_COMMON.SHOW_TEXT.CURRENT_ENDPOINT}</span>
               </div>
               <div className="item__info-description">
                 <p>{product?.description}</p>
@@ -212,7 +213,6 @@ const ProductContent = ({ product }: Props) => {
               </div>
               <div className="item__info-comment">
                 <ModalComment
-                  // destroyOnClose={true}
                   width={800}
                   product={product}
                   content={

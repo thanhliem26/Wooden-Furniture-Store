@@ -17,6 +17,7 @@ import { statusCode } from "@/constants/index";
 import { searchOrder } from "@/store/orderUser";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import TEXT_COMMON from "@/constants/text";
 
 interface Props {
   product: ProductState | null;
@@ -43,7 +44,7 @@ const ProductSame = ({ product }: Props) => {
       if (product?.stock_quantity < 1) {
         Notification({
           type: "error",
-          message: "Notification Error",
+          message: TEXT_COMMON.ERROR_TEXT.NOTIFY_MESSAGE,
           description: messageOrderTooLimit(product.stock_quantity, 1),
         });
 
@@ -64,7 +65,7 @@ const ProductSame = ({ product }: Props) => {
       });
       if (status === statusCode.CREATED || status === statusCode.UPDATED) {
         Notification({
-          message: "Notification Success",
+          message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
           description: message,
         });
 
@@ -87,7 +88,6 @@ const ProductSame = ({ product }: Props) => {
       const { rows } = metadata;
       setProductList(rows);
     } catch (error) {
-      console.log("🚀 ~ error:", error)
       NotificationError(error);
     }
   };
@@ -125,7 +125,6 @@ const ProductSame = ({ product }: Props) => {
                 lg={6}
                 span={12}
                 key={index}
-                // data-aos="fade-right"
                 data-aos-delay={"200"}
               >
                 <div className="product_item-content">

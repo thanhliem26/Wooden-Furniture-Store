@@ -6,7 +6,7 @@ import {
   InputComponent,
   TextAreComponent,
 } from "@/components/form";
-import { eventEmitter } from "@/utils/index";
+import { eventEmitter, NotificationError } from "@/utils/index";
 import { useForm } from "react-hook-form";
 import { schema, FormData, handleSubmitEdit, handleSubmitCreate } from "./constant";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -46,8 +46,7 @@ const FormCategory = ({isEdit}: Props) => {
         ? handleSubmitEdit(data, dispatch, eventEmitter)
         : handleSubmitCreate(data, dispatch, eventEmitter);
     } catch (error: unknown) {
-      console.log("error", error);
-      throw error;
+      NotificationError(error);
     } finally {
       setLoading(false);
     }

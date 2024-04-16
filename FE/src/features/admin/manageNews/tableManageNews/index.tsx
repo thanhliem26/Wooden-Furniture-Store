@@ -12,6 +12,7 @@ import images from "@/constants/images";
 import { deleteNews, searchNews, setNewsSelected, setPagination } from "@/store/manageNews";
 import newsApi from "@/api/news";
 import { handlePrevImageS3 } from "@/components/modal/modalChangeInfoUser/content/constant";
+import TEXT_COMMON from "@/constants/text";
 
 interface Props {
   loading?: boolean;
@@ -43,7 +44,7 @@ const TableManageNews = ({
 
         Notification({
           message: message,
-          description: 'Notify delete success!',
+          description: TEXT_COMMON.SUCCESS_TEXT.DELETE_NOTIFY,
         });
       }
     } catch (e: unknown) {
@@ -130,7 +131,6 @@ const TableManageNews = ({
         />
       </div>
       <Table
-        // size="large"
         pagination={{
           ...pagination,
           total: total,

@@ -23,6 +23,7 @@ import staticApi from "@/api/static";
 import { statusCode } from "@/constants/index";
 import Notification from "@/components/notificationSend";
 import { NotificationError } from "@/utils/index";
+import TEXT_COMMON from "@/constants/text";
 
 const SettingStatic = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -72,7 +73,7 @@ const SettingStatic = () => {
         handleGetStatic();
 
         Notification({
-          message: "Notify create success",
+          message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
           description: message,
         });
       }

@@ -1,14 +1,15 @@
+import TEXT_COMMON from "@/constants/text";
 import * as yup from "yup";
 
 export const schema = yup
 .object({
   email: yup
     .string()
-    .email("email is not valid!")
-    .required("email is required"),
+    .email(TEXT_COMMON.VALIDATE_TEXT.VALID.EMAIL)
+    .required(TEXT_COMMON.VALIDATE_TEXT.REQUIRED.EMAIL),
   password: yup
     .string()
-    .required("Password is required"),
+    .required(TEXT_COMMON.VALIDATE_TEXT.REQUIRED.PASSWORD),
 })
 .required();
 

@@ -11,6 +11,7 @@ import { schema, FormData } from "./constant";
 import { NotificationError } from "@/utils/index";
 import contactApi from "@/api/contact";
 import Notification from "@/components/notificationSend";
+import TEXT_COMMON from "@/constants/text";
 
 const Contact = () => {
   const {
@@ -25,14 +26,12 @@ const Contact = () => {
   const onSubmit = async (data: FormData) => {
     try {
         const { message } = await contactApi.createContact(data);
-         
         Notification({
-          message: "Notify success",
+          message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
           description: message,
       });
 
       reset();
-
     } catch (error: unknown) {
       NotificationError(error)
     }

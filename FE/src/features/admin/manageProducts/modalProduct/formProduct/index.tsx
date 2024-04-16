@@ -7,7 +7,7 @@ import {
   SelectComponent,
   TextAreComponent,
 } from "@/components/form";
-import { eventEmitter } from "@/utils/index";
+import { eventEmitter, NotificationError } from "@/utils/index";
 import { useForm } from "react-hook-form";
 import {
   schema,
@@ -87,8 +87,7 @@ const FormProduct = ({ isEdit }: Props) => {
         ? handleSubmitEdit(dataValue, dispatch, eventEmitter)
         : handleSubmitCreate(dataValue, dispatch, eventEmitter);
     } catch (error: unknown) {
-      console.log("error", error);
-      throw error;
+      NotificationError(error)
     } finally {
       setLoading(false);
     }

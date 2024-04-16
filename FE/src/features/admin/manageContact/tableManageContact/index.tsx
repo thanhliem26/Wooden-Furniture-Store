@@ -16,6 +16,7 @@ import {
 import ModalContact from "../modalContact";
 import { searchContact } from "@/store/manageContact";
 import contactApi from "@/api/contact";
+import TEXT_COMMON from "@/constants/text";
 interface Props {
   loading?: boolean;
   contactList: ContactState[];
@@ -41,7 +42,7 @@ const TableManageContact = ({
         eventEmitter.emit("submit_modal");
 
         Notification({
-          message: "Notify success",
+          message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
           description: message,
         });
       }

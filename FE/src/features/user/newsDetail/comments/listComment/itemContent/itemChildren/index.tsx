@@ -9,6 +9,7 @@ import PopoverContent from "../../popoverContent";
 import InputContent from "../../../inputContent";
 import { CommentContext } from "../constant";
 import InfiniteScroll from "@/hoc/infiniteScroll";
+import TEXT_COMMON from "@/constants/text";
 
 interface Props {
   comment: CommentStateReducer;
@@ -31,7 +32,7 @@ const ItemChildren = ({ comment }: Props) => {
               })
             }
           >
-            Xem thêm {comment.countChild_total} câu trả lời{" "}
+            {TEXT_COMMON.SHOW_TEXT.SEE_MORE_COMMENT(comment.countChild_total)}
             {commentContext.idSelected === comment.id ? (
               <Spin />
             ) : (
@@ -49,7 +50,7 @@ const ItemChildren = ({ comment }: Props) => {
               );
             }}
           >
-            Ẩn câu trả lời <UpOutlined />
+            {TEXT_COMMON.SHOW_TEXT.HIDDEN_COMMENT} <UpOutlined />
           </span>
         )}
       </div>
@@ -99,7 +100,7 @@ const ItemChildren = ({ comment }: Props) => {
                               <div className="comment__reply-action">
                                 <div className="main__comment-like">
                                   <button>
-                                    <span>Like</span>
+                                    <span>{TEXT_COMMON.SHOW_TEXT.ACTION_LIKE_COMMENT}</span>
                                   </button>
                                   .
                                   <button
@@ -110,7 +111,7 @@ const ItemChildren = ({ comment }: Props) => {
                                       })
                                     }
                                   >
-                                    <span>Trả lời</span>
+                                    <span>{TEXT_COMMON.SHOW_TEXT.ACTION_REPLY_COMMENT}</span>
                                   </button>
                                   .
                                 </div>
@@ -157,8 +158,8 @@ const ItemChildren = ({ comment }: Props) => {
                                       commentContext.getItemReply(
                                         commentChildren.id
                                       )?.type === TYPE_REPLY_COMMENT.UPDATE
-                                        ? "Sửa"
-                                        : "Trả lời"
+                                        ? TEXT_COMMON.SHOW_TEXT.EDIT
+                                        : TEXT_COMMON.SHOW_TEXT.ACTION_REPLY_COMMENT
                                     }
                                     avatar={commentContext.avatar}
                                     handleCancel={() =>
@@ -173,7 +174,6 @@ const ItemChildren = ({ comment }: Props) => {
                                         type: commentContext.getItemReply(
                                           commentChildren.id
                                         )?.type,
-                                        //@ts-ignore
                                         parent_id: comment.id,
                                       })
                                     }

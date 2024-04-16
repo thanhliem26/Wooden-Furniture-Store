@@ -17,6 +17,7 @@ import productApi from "@/api/product";
 import { ProductContext } from "../constant";
 import { useContext } from "react";
 import { handlePrevImageS3 } from "@/components/modal/modalChangeInfoUser/content/constant";
+import TEXT_COMMON from "@/constants/text";
 
 interface Props {
   loading?: boolean;
@@ -57,7 +58,7 @@ const TableManageProduct = ({
 
         Notification({
           message: message,
-          description: 'Notify delete succes',
+          description: TEXT_COMMON.SUCCESS_TEXT.DELETE_NOTIFY,
         });
       }
     } catch (e: unknown) {

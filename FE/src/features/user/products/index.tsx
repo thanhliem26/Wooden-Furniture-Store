@@ -8,6 +8,7 @@ import { RootState, useAppDispatch, useAppSelector } from "@/store/index";
 import { pushListProduct } from "@/store/manageProducts";
 import productApi from "@/api/product";
 import { NotificationError } from "@/utils/index";
+import TEXT_COMMON from "@/constants/text";
 
 const Products = () => {
   const [sliderPrice, setSliderPrice] = useState<[number, number]>([0, 0]);
@@ -50,11 +51,11 @@ const Products = () => {
         <div className="product__container-main">
           <div className="container__main-text">
             <span>
-              <Link to="/">Trang chủ</Link>{" "}
+              <Link to="/">{TEXT_COMMON.SHOW_TEXT.HOME_PAGE}</Link>{" "}
             </span>{" "}
-            <span> &gt; </span> <span> Cửa hàng</span>
+            <span> &gt; </span> <span> {TEXT_COMMON.SHOW_TEXT.STORE_PAGE}</span>
           </div>
-          <div className="container__main-title">Cửa hàng</div>
+          <div className="container__main-title">{TEXT_COMMON.SHOW_TEXT.STORE_PAGE}</div>
         </div>
         <Row gutter={[16, 16]} className="product__content">
           <Col span={24} md={6} className="product__content-filter">

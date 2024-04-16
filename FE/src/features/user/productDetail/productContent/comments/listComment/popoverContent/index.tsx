@@ -3,6 +3,7 @@ import styled from "./index.module.scss";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Popover } from "antd";
 import ModalConfirm from "../modalComfirm";
+import TEXT_COMMON from "@/constants/text";
 
 interface Props {
   onClickUpdate: any;
@@ -32,7 +33,7 @@ const PopoverContent = ({ onClickUpdate, onClickDelete }: Props) => {
                 hide();
               }}
             >
-              <EditOutlined /> <p>Sửa bình luận</p>
+              <EditOutlined /> <p>{TEXT_COMMON.SHOW_TEXT.EDIT_COMMENT}</p>
             </li>
             <ModalConfirm
               destroyOnClose={true}
@@ -44,7 +45,7 @@ const PopoverContent = ({ onClickUpdate, onClickDelete }: Props) => {
                     hide();
                   }}
                 >
-                  <DeleteOutlined /> <p>Xóa bình luận</p>
+                  <DeleteOutlined /> <p>{TEXT_COMMON.SHOW_TEXT.DELETE_COMMENT}</p>
                 </li>
               }
             />

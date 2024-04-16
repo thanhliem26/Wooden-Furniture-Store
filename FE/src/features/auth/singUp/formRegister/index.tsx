@@ -14,6 +14,7 @@ import authApi from "@/api/auth";
 import Notification from "@/components/notificationSend";
 import { useNavigate } from "react-router-dom";
 import { NotificationError } from "@/utils/index";
+import TEXT_COMMON from "@/constants/text";
 
 const FormRegister = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -31,10 +32,10 @@ const FormRegister = () => {
   const onSubmit = async (data: Required<FormData>) => {
     try {
       setLoading(true);
-      const result = await authApi.singUp({...data, is_active: '0'});
+      await authApi.singUp({...data, is_active: '0'});
       Notification({
-        message: "Notification Success",
-        description: "Create new user success. Please check email to verify before login!",
+        message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
+        description: TEXT_COMMON.SUCCESS_TEXT.CREATE_USER_DESCRIPTION,
         duration: 10,
       });
 
@@ -52,12 +53,11 @@ const FormRegister = () => {
 
   return (
     <div className="singUp__content-form">
-      <h2 className="form__title">Sign up</h2>
+      <h2 className="form__title">{TEXT_COMMON.SHOW_TEXT.SIGN_UP}</h2>
       <Form
         name="basic"
         onFinish={handleSubmit(onSubmit)}
         onFinishFailed={onFinishFailed}
-        // autoComplete="off"
       >
         <InputComponent
           name="fullName"

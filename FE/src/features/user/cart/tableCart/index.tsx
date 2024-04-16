@@ -8,6 +8,7 @@ import { NotificationError, formatCurrency } from "@/utils/index";
 import { TYPE_ADD_MINUS } from "@/constants/index";
 import lodash from "lodash";
 import { searchOrder } from "@/store/orderUser";
+import TEXT_COMMON from "@/constants/text";
 
 interface Props {
   dataOrder: OrderDetailState[],
@@ -119,7 +120,7 @@ const TableCart = ({dataOrder, setDataOrder}: Props) => {
       dataIndex: "price",
       key: "price",
       render: (_, row) => {
-        return <span className="span__price">{formatCurrency(row.product_data.price)} ₫</span>;
+        return <span className="span__price">{formatCurrency(row.product_data.price)} {TEXT_COMMON.SHOW_TEXT.CURRENT_ENDPOINT}</span>;
       },
     },
     {
@@ -151,7 +152,7 @@ const TableCart = ({dataOrder, setDataOrder}: Props) => {
       key: "subTotal",
       dataIndex: "subTotal",
       render: (_, row) => {
-        return <span className="span__price">{formatCurrency(row.product_data.price * row.quantity)} ₫</span>;
+        return <span className="span__price">{formatCurrency(row.product_data.price * row.quantity)} {TEXT_COMMON.SHOW_TEXT.CURRENT_ENDPOINT}</span>;
       },
     },
   ];

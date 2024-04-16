@@ -15,6 +15,7 @@ import {
   deleteComment,
   updateComment,
 } from "@/store/comments";
+import TEXT_COMMON from "@/constants/text";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -142,8 +143,8 @@ const ProductDetail = () => {
       <div className={styled["product__detail"]}>
         <div className="product__detail-container">
           <div className="product__detail-title">
-            <Link to="/">Trang chủ / </Link>{" "}
-            <Link to="/product/">Sản Phẩm / </Link>
+            <Link to="/">{TEXT_COMMON.SHOW_TEXT.HOME_PAGE} / </Link>
+            <Link to="/product/">{TEXT_COMMON.SHOW_TEXT.PRODUCT_PAGE} / </Link>
             {product?.name}
           </div>
           <div className="product__detail-content">

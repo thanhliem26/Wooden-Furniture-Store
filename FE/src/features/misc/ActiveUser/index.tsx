@@ -4,6 +4,7 @@ import queryString from "query-string";
 import authApi from "@/api/auth";
 import { NotificationError } from "@/utils/index";
 import Notification from "@/components/notificationSend";
+import TEXT_COMMON from "@/constants/text";
 
 const ActiveUser = () => {
   const location = useLocation();
@@ -12,11 +13,10 @@ const ActiveUser = () => {
   const handleActiveUser = async (data) => {
     try {
       const { metadata } = await authApi.activeUser(data);
-
       if (metadata.user_active) {
         Notification({
-          message: "Notification Success",
-          description: "Successful active user. You can login, now!",
+          message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
+          description: TEXT_COMMON.SUCCESS_TEXT.ACTIVE_USER_DESCRIPTION,
           duration: 10,
         });
 

@@ -1,18 +1,19 @@
+import TEXT_COMMON from "@/constants/text";
 import * as yup from "yup";
 
 export const schema = yup
 .object({
-  fullName: yup.string().required("username is required"),
+  fullName: yup.string().required(TEXT_COMMON.VALIDATE_TEXT.REQUIRED.FULL_NAME),
   email: yup
     .string()
-    .email("email is not valid!")
-    .required("email is required"),
+    .email(TEXT_COMMON.VALIDATE_TEXT.VALID.EMAIL)
+    .required(TEXT_COMMON.VALIDATE_TEXT.REQUIRED.EMAIL),
   password: yup
     .string()
-    .min(8, "Minimum password needs 8 characters ")
+    .min(8, TEXT_COMMON.VALIDATE_TEXT.VALID.MINIUM_LENGTH('password', 8))
     .test(
       "contains-number-and-character",
-      "Password must contain both numbers and characters",
+      TEXT_COMMON.VALIDATE_TEXT.VALID.BOTH_NUMBER_CHARACTER,
       (value) => {
         if (!value) return false; // Return false if the value is empty
 
@@ -22,12 +23,12 @@ export const schema = yup
         return containsCharacterAndNumber;
       }
     )
-    .required("Password is required"),
+    .required(TEXT_COMMON.VALIDATE_TEXT.REQUIRED.PASSWORD),
   re_password: yup
     .string()
     .test(
       "repeat-password",
-      "Repeat Password must match password",
+      TEXT_COMMON.VALIDATE_TEXT.VALID.REPEAT_PASSWORD_EQUAL,
       (value, schema: any) => {
         const { password } = schema["from"][0]["value"];
         if (!value) return false; // Return false if the value is empty
@@ -35,7 +36,7 @@ export const schema = yup
         return value === password;
       }
     )
-    .required("Repeat Password is required"),
+    .required(TEXT_COMMON.VALIDATE_TEXT.REQUIRED.REPEAT_PASSWORD),
 })
 
 export type FormData = yup.InferType<typeof schema>;

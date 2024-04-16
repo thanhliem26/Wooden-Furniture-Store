@@ -11,6 +11,7 @@ import orderApi from "@/api/order";
 import { isEmpty } from "lodash";
 import { useAppDispatch, useAppSelector } from "@/store/index";
 import { resetOrderList } from "@/store/orderUser";
+import TEXT_COMMON from "@/constants/text";
 
 interface Props {
   order_id: number;
@@ -36,8 +37,9 @@ const FormPay = ({ order_id, dataOrder }: Props, ref) => {
     try {
       if (!dataOrder || isEmpty(dataOrder)) {
         Notification({
-          message: "Notify warning",
-          description: "Bạn vui lòng order trước khi đặt hàng!",
+          type: "warning",
+          message: TEXT_COMMON.ERROR_TEXT.NOTIFY_WARNING_MESSAGE,
+          description: TEXT_COMMON.ERROR_TEXT.WARNING_PRE_ORDER,
         });
 
         return;
@@ -50,7 +52,7 @@ const FormPay = ({ order_id, dataOrder }: Props, ref) => {
       });
 
       Notification({
-        message: "Notify success",
+        message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
         description: message,
       });
 

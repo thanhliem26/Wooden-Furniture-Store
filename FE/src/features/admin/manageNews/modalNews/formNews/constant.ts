@@ -1,6 +1,7 @@
 import newsApi from "@/api/news";
 import Notification from "@/components/notificationSend";
 import { statusCode } from "@/constants/index";
+import TEXT_COMMON from "@/constants/text";
 import { addNews, setNewsList, setNewsSelected } from "@/store/manageNews";
 import * as yup from "yup";
 
@@ -8,12 +9,12 @@ export const schema = yup
     .object({
         name: yup
             .string()
-            .required("Category name is required"),
+            .required(TEXT_COMMON.VALIDATE_TEXT.REQUIRED.CATEGORY),
         id: yup
             .number(),
         image: yup
             .array()
-            .min(1, 'image is not empty')
+            .min(1, TEXT_COMMON.VALIDATE_TEXT.REQUIRED.IMAGE)
             .required(),
     })
     .required();
@@ -30,7 +31,7 @@ export const handleSubmitCreate = async (data, dispatch, eventEmitter) => {
         eventEmitter.emit("submit_modal");
 
         Notification({
-            message: "Notify create success",
+            message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
             description: message,
         });
     }
@@ -46,7 +47,7 @@ export const handleSubmitEdit = async (data, dispatch, eventEmitter) => {
         dispatch(setNewsSelected(null));
 
         Notification({
-            message: 'Notify update succes',
+            message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
             description: message,
         });
     }

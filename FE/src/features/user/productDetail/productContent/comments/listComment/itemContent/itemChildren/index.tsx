@@ -9,6 +9,7 @@ import PopoverContent from "../../popoverContent";
 import InputContent from "../../../inputContent";
 import { CommentContext } from "../constant";
 import InfiniteScroll from "@/hoc/infiniteScroll";
+import TEXT_COMMON from "@/constants/text";
 
 interface Props {
   comment: CommentStateReducer;
@@ -27,7 +28,7 @@ Props) => {
       <div className="comment__children-title">
         {!comment.openChildren ? (
           <span onClick={() => commentContext.handleGetListChildren(comment, {page: 1, limit: 10})}>
-            Xem thêm {comment.countChild_total} câu trả lời{" "}
+            {TEXT_COMMON.SHOW_TEXT.SEE_MORE_COMMENT(comment.countChild_total)}
             {commentContext.idSelected === comment.id ? (
               <Spin />
             ) : (
@@ -45,7 +46,7 @@ Props) => {
               );
             }}
           >
-            Ẩn câu trả lời <UpOutlined />
+            {TEXT_COMMON.SHOW_TEXT.HIDDEN_COMMENT} <UpOutlined />
           </span>
         )}
       </div>
@@ -85,7 +86,7 @@ Props) => {
                           <div className="comment__reply-action">
                             <div className="main__comment-like">
                               <button>
-                                <span>Like</span>
+                                <span>{TEXT_COMMON.SHOW_TEXT.EDIT}</span>
                               </button>
                               .
                               <button
@@ -96,7 +97,7 @@ Props) => {
                                   })
                                 }
                               >
-                                <span>Trả lời</span>
+                                <span>{TEXT_COMMON.SHOW_TEXT.ACTION_REPLY_COMMENT}</span>
                               </button>
                               .
                             </div>
@@ -141,8 +142,8 @@ Props) => {
                                     commentContext.getItemReply(
                                       commentChildren.id
                                     )?.type === TYPE_REPLY_COMMENT.UPDATE
-                                      ? "Sửa"
-                                      : "Trả lời"
+                                      ? TEXT_COMMON.SHOW_TEXT.EDIT
+                                      : TEXT_COMMON.SHOW_TEXT.ACTION_REPLY_COMMENT
                                   }
                                   avatar={commentContext.avatar}
                                   handleCancel={() =>
@@ -157,7 +158,6 @@ Props) => {
                                       type: commentContext.getItemReply(
                                         commentChildren.id
                                       )?.type,
-                                      //@ts-ignore
                                       parent_id: comment.id,
                                     })
                                   }

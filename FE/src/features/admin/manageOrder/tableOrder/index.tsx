@@ -157,7 +157,6 @@ const TableManageNews = ({
         />
       </div>
       <Table
-        // size="large"
         pagination={{
           ...pagination,
           total: total,

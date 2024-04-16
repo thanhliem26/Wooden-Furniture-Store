@@ -1,7 +1,7 @@
 import authApi from "@/api/auth";
 import styled from "./index.module.scss";
 import Images from "@/constants/images";
-import { TYPE_PROVIDER_LOGIN } from "@/constants/index";
+import { HEADER, TYPE_PROVIDER_LOGIN } from "@/constants/index";
 import {
   authentication,
   providerGoogle,
@@ -17,6 +17,7 @@ import {
 import Notification from "@/components/notificationSend";
 import { setHeader } from "@/api/axiosService";
 import { useNavigate } from "react-router-dom";
+import TEXT_COMMON from "@/constants/text";
 
 const ButtonForeign = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const ButtonForeign = () => {
         const avatar = {
           url: user.photoURL,
           name: "avatar google",
-          origin: "google",
+          origin: TYPE_PROVIDER_LOGIN.GOOGLE,
         };
 
         const body = {
@@ -47,13 +48,13 @@ const ButtonForeign = () => {
         const { tokens, user } = response.metadata;
 
         Notification({
-          message: "Notification Success",
-          description: "Login success",
+          message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
+          description: TEXT_COMMON.SUCCESS_TEXT.LOGIN_DESCRIPTION,
         });
         setUser(user);
         setToken(tokens.accessToken);
         setRefreshToken(tokens.refreshToken);
-        setHeader("Authorization", tokens.accessToken);
+        setHeader(HEADER.AUTHORIZATION, tokens.accessToken);
         navigate("/");
         window.location.reload();
       })
@@ -65,13 +66,12 @@ const ButtonForeign = () => {
   const handleLoginFacebook = async () => {
     signInWithPopup(authentication, providerFacebook)
       .then((data: UserCredential) => {
-        //@ts-ignore
         const { user, _tokenResponse } = data;
 
         const avatar = {
           url: JSON.parse(_tokenResponse.rawUserInfo).picture.data.url,
           name: "avatar facebook",
-          origin: "facebook",
+          origin: TYPE_PROVIDER_LOGIN.FACEBOOK,
         };
 
         const body = {
@@ -87,21 +87,19 @@ const ButtonForeign = () => {
       })
       .then((response) => {
         const { tokens, user } = response.metadata;
-        console.log("🚀 ~ user:", user);
 
         Notification({
-          message: "Notification Success",
-          description: "Login success",
+          message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
+          description: TEXT_COMMON.SUCCESS_TEXT.LOGIN_DESCRIPTION,
         });
         setUser(user);
         setToken(tokens.accessToken);
         setRefreshToken(tokens.refreshToken);
-        setHeader("Authorization", tokens.accessToken);
+        setHeader(HEADER.AUTHORIZATION, tokens.accessToken);
         navigate("/");
         window.location.reload();
       })
       .catch((error) => {
-        console.log("error", error);
         NotificationError(error);
       });
   };
@@ -111,12 +109,13 @@ const ButtonForeign = () => {
       <div className="btn btn__facebook">
         <button type="button" onClick={handleLoginFacebook}>
           <img src={Images.Facebook} alt="image facebook" />
-          <span>Facebook</span>
+          <span>{TEXT_COMMON.SHOW_TEXT.FACE_BOOK}</span>
         </button>
       </div>
       <div className="btn btn__google">
         <button type="button" onClick={handleLoginGoogle}>
-          <img src={Images.Google} alt="image facebook" /> <span>Google</span>
+          <img src={Images.Google} alt="image facebook" />{" "}
+          <span>{TEXT_COMMON.SHOW_TEXT.GOOGLE}</span>
         </button>
       </div>
     </div>

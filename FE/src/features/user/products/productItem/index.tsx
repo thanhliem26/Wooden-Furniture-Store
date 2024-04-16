@@ -15,6 +15,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
+import TEXT_COMMON from "@/constants/text";
 
 interface Props {
   handleScrollPage: any;
@@ -45,8 +46,8 @@ const ProductItem = ({handleScrollPage}: Props) => {
       if(!userId) {
         Notification({
           type: 'error',
-          message: "Notification Error",
-          description: 'Vui lòng login trước khi đăng nhập',
+          message: TEXT_COMMON.ERROR_TEXT.NOTIFY_MESSAGE,
+          description: TEXT_COMMON.ERROR_TEXT.ORDER_AUTH,
         });
 
         return;
@@ -54,7 +55,7 @@ const ProductItem = ({handleScrollPage}: Props) => {
       if (product?.stock_quantity < 1) {
         Notification({
           type: 'error',
-          message: "Notification Error",
+          message: TEXT_COMMON.ERROR_TEXT.NOTIFY_MESSAGE,
           description: messageOrderTooLimit(product.stock_quantity, 1),
         });
   
@@ -75,7 +76,7 @@ const ProductItem = ({handleScrollPage}: Props) => {
       });
       if (status === statusCode.CREATED || status === statusCode.UPDATED) {
         Notification({
-          message: "Notification Success",
+          message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
           description: message,
         });
 

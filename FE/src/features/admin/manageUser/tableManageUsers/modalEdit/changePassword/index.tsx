@@ -10,6 +10,7 @@ import styled from './index.module.scss';
 import userApi from "@/api/user";
 import { RootState, useAppSelector } from "@/store/index";
 import { statusCode } from "@/constants/index";
+import TEXT_COMMON from "@/constants/text";
 
 const ChangePassword = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -47,7 +48,7 @@ const ChangePassword = () => {
         eventEmitter.emit("submit_modal");
 
         Notification({
-          message: 'Notify Success',
+          message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
           description: message,
         });
       }

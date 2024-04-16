@@ -1,6 +1,7 @@
 import productApi from "@/api/product";
 import Notification from "@/components/notificationSend";
 import { statusCode } from "@/constants/index";
+import TEXT_COMMON from "@/constants/text";
 import { addProduct, setProductList, setProductSelected } from "@/store/manageProducts";
 import * as yup from "yup";
 
@@ -8,23 +9,23 @@ export const schema = yup
     .object({
         name: yup
             .string()
-            .required("Category name is required"),
+            .required(TEXT_COMMON.VALIDATE_TEXT.REQUIRED.CATEGORY),
         description: yup
             .string(),
         id: yup
             .number(),
         price: yup
-            .number().positive('value is a number integer').integer('value is a number integer')
+            .number().positive(TEXT_COMMON.VALIDATE_TEXT.VALID.POSITIVE_NUMBER).integer()
             .required(),
         stock_quantity: yup
-            .number().positive('value is a number integer').integer('value is a number integer')
+            .number().positive(TEXT_COMMON.VALIDATE_TEXT.VALID.POSITIVE_NUMBER).integer()
             .required(),
         category_id: yup
             .number()
             .required(),
         images: yup
             .array()
-            .min(1, 'image is not empty')
+            .min(1, TEXT_COMMON.VALIDATE_TEXT.REQUIRED.IMAGE)
             .required(),
     })
     .required();
@@ -41,7 +42,7 @@ export const handleSubmitCreate = async (data, dispatch, eventEmitter) => {
         eventEmitter.emit("submit_modal");
 
         Notification({
-            message: "Notify create success",
+            message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
             description: message,
         });
     }
@@ -57,7 +58,7 @@ export const handleSubmitEdit = async (data, dispatch, eventEmitter) => {
         dispatch(setProductSelected(null));
 
         Notification({
-            message: 'Notify update succes',
+            message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
             description: message,
         });
     }

@@ -16,6 +16,7 @@ import {
 } from "@/store/manageCategories";
 import ModalCategory from "../modalCategory";
 import categoryApi from "@/api/category";
+import TEXT_COMMON from "@/constants/text";
 interface Props {
   loading?: boolean;
   categoryList: CategoryState[];
@@ -41,7 +42,7 @@ const TableManageCategory = ({
         eventEmitter.emit("submit_modal");
 
         Notification({
-          message: 'Notify success',
+          message: TEXT_COMMON.SUCCESS_TEXT.NOTIFY_MESSAGE,
           description: message,
         });
       }
@@ -143,7 +144,6 @@ const TableManageCategory = ({
         />
       </div>
       <Table
-        // size="large"
         pagination={{
           ...pagination,
           total: total,

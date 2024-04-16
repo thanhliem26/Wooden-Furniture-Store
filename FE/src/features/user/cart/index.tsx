@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Col, Row } from "antd";
 import TableCart from "./tableCart";
 import TotalCart from "./TotalCart";
+import TEXT_COMMON from "@/constants/text";
 
 const CartOrder = () => {
   const [dataOrder, setDataOrder] = useState<OrderDetailState[]>([]);
@@ -13,10 +14,10 @@ const CartOrder = () => {
       <div className="cart__main-container">
       <div className="cart__main-title cart__order">
         <div className="main__title-link">
-          <Link to="/">Trang chủ</Link>
-          <span>&gt;</span>Giỏ hàng
+          <Link to="/">{TEXT_COMMON.SHOW_TEXT.HOME_PAGE}</Link>
+          <span>&gt;</span>{TEXT_COMMON.SHOW_TEXT.CART}
         </div>
-        <div className="main__title-text">Giỏ Hàng</div>
+        <div className="main__title-text">{TEXT_COMMON.SHOW_TEXT.CART}</div>
       </div>
       <div className="cart__main-content  cart__order">
         <Row gutter={[16, 16]}>
@@ -29,7 +30,6 @@ const CartOrder = () => {
         </Row>
       </div>
       </div>
-      
     </div>
   );
 };
