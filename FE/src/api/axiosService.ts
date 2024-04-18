@@ -6,7 +6,7 @@ import authApi from "./auth";
 // Set up default config for http requests here
 
 const axiosService = axios.create({
-	baseURL: process.env.VITE_API_URL,
+	baseURL: import.meta.env.VITE_API_URL,
 	timeout: 5000,
 	headers: {
 		"content-type": "application/json",
@@ -88,7 +88,7 @@ axiosService.interceptors.response.use(
 			case 500: {
 				const url = error.config?.url;
 
-				if (url === process.env.VITE_API_REFRESH_TOKEN) {
+				if (url === import.meta.env.VITE_API_REFRESH_TOKEN) {
 					removeHeader(HEADER.AUTHORIZATION);
 					authUtil.removeToken()
 					authUtil.removeUser()

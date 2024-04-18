@@ -29,7 +29,7 @@ export default defineConfig(({ command, mode }) => {
     define: {
       ...Object.entries(env).reduce((obj, [key, value]) => ({
         ...obj,
-        [`process.env.${key}`]: JSON.stringify(value)}
+        [`import.meta.env.${key}`]: JSON.stringify(value)}
       ), {})
     },
     server: {

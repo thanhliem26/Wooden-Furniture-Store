@@ -44,7 +44,7 @@ const ProductDetail = () => {
   //
   useEffect(() => {
     // URL server websocket
-    const wsUrl = process.env.VITE_API_URL_WS;
+    const wsUrl = import.meta.env.VITE_API_URL_WS;
     // create a connect server websocket
     ws.current = new WebSocket(wsUrl);
     //connect success

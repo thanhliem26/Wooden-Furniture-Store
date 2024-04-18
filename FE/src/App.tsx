@@ -5,11 +5,6 @@ import "@/assets/styles/index.css";
 import { useEffect } from "react";
 
 function App() {
-
- useEffect(() => {
-  console.log("process", process.env)
- }, [])
-
   return (
     <div className="root_component">
       <Provider store={store}>
