@@ -1,8 +1,4 @@
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
-// import { 
-// 	getToken, 
-// 	getUser, 
-// 	getRefreshToken, setToken, setRefreshToken, setUser, removeUser, removeRefreshToken, removeToken } from "@/utils/index";
 import * as authUtil from '@/utils/index';
 import Notification from "@/components/notificationSend";
 import { HEADER } from '@/constants/index';
@@ -10,7 +6,7 @@ import authApi from "./auth";
 // Set up default config for http requests here
 
 const axiosService = axios.create({
-	baseURL: import.meta.env.VITE_API_URL,
+	baseURL: process.env.VITE_API_URL,
 	timeout: 5000,
 	headers: {
 		"content-type": "application/json",
@@ -92,7 +88,7 @@ axiosService.interceptors.response.use(
 			case 500: {
 				const url = error.config?.url;
 
-				if (url === import.meta.env.VITE_API_REFRESH_TOKEN) {
+				if (url === process.env.VITE_API_REFRESH_TOKEN) {
 					removeHeader(HEADER.AUTHORIZATION);
 					authUtil.removeToken()
 					authUtil.removeUser()

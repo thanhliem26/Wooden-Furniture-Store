@@ -97,8 +97,6 @@ export const manageCommentSlice = createSlice({
       const id = action.payload;
 
       let totalDelete = 1;
-
-      //@ts-ignore
       state.commentList = state.commentList.reduce((acc, comment) => {
         if (comment.id === id) {
           totalDelete = comment.countChild_total + 1;

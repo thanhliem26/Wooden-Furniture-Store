@@ -55,7 +55,6 @@ const ModalPreview = ({
       isModalOpen={isModalOpen}
       setIsModalOpen={setIsModalOpen}
       onSuccessModal={handleSubmit}
-      //   footer={[]}
       {...props}
     >
       <div className={styled["preview__image"]}>
@@ -75,7 +74,6 @@ const ModalPreview = ({
                 e.target.value,
                 ({ quality, filterBlob }) => {
                   if (imgRef.current) {
-                    //@ts-ignore
                     imgRef.current.src = URL.createObjectURL(filterBlob);
                   }
                   setQuality(quality);

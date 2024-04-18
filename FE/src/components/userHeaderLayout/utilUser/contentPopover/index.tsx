@@ -51,11 +51,8 @@ const ContentPopover = () => {
   }
 
   useEffect(() => {
-    //@ts-ignore
     if (popoverRef?.current?.clientHeight >= 300) {
-      //@ts-ignore
       popoverRef.current.classList.add('overFlow_scroll')
-
     }
   }, []);
 

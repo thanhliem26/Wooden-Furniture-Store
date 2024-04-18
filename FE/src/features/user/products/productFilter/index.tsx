@@ -36,7 +36,7 @@ const ProductFilter = ({
     (state: RootState) => state.manageCategory.categoryList
   );
   const location = useLocation();
-  const inputRef = useRef();
+  const inputRef = useRef<HTMLInputElement>();
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -90,8 +90,7 @@ const ProductFilter = ({
 
   useEffect(() => {
     if (location.state?.name) {
-      //@ts-ignore
-      inputRef.current.value = location.state.name;
+      if(inputRef.current) inputRef.current.value = location.state.name;
       navigate(location.pathname, { replace: true, state: {} }); //remove state when component mounted
       setNameProduct(location.state.name)
     }

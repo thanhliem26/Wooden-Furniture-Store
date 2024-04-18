@@ -34,7 +34,7 @@ const DetailContent = ({ news }: Props) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const wsUrl = import.meta.env.VITE_API_URL_WS;
+    const wsUrl = process.env.VITE_API_URL_WS;
     ws.current = new WebSocket(wsUrl);
     ws.current.onopen = () => {
       console.log("Connected to WebSocket server");

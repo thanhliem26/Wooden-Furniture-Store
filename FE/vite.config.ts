@@ -1,12 +1,11 @@
-import { defineConfig, loadEnv  } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import path from "path";
 
 // https://vitejs.dev/config/
 /* eslint-disable */
 // @ts-ignore
-export default defineConfig(({command, mode}) => {
-
+export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
   return {
@@ -24,6 +23,14 @@ export default defineConfig(({command, mode}) => {
         "@/routers": path.resolve(__dirname, "./src/routers"),
         "@/hoc": path.resolve(__dirname, "./src/hoc"),
       },
+      dedupe: ['react', 'react-dom'],
+    },
+    base: '/',
+    define: {
+      ...Object.entries(env).reduce((obj, [key, value]) => ({
+        ...obj,
+        [`process.env.${key}`]: JSON.stringify(value)}
+      ), {})
     },
     server: {
       hmr: {
@@ -31,8 +38,10 @@ export default defineConfig(({command, mode}) => {
       },
       port: env.PORT || 5173,
     },
-    // build: {
-    //   sourcemap: true, 
-    // },
+    build: {
+      esnext: 'esnext',
+      // outDir: 'build',
+      // sourcemap: true, 
+    },
   }
 })

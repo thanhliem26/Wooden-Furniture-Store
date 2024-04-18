@@ -85,7 +85,6 @@ const ContentInfoChange = ({
     },
   });
 
-  //@ts-ignore
   const showPassword = useWatch({
     control,
     name: "show",

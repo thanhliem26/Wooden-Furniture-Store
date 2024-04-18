@@ -29,6 +29,9 @@ const sendMailOauth2 = async () => {
         refreshToken: REFRESH_TOKEN,
         accessToken: accessToken,
       },
+      tls: {
+        rejectUnauthorized: false
+      }
     });
 
     return transporter;
@@ -36,7 +39,7 @@ const sendMailOauth2 = async () => {
     console.log("error send Mail", error);
   }
 };
-
+sendMailOauth2()
 export const sendMailSingUP = async ({ data, token }) => {
   // send mail with defined transport object
   try {

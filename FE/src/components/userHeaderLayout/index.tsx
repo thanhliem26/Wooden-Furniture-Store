@@ -22,7 +22,7 @@ const UserLayoutHeader = () => {
   const idUser = useAppSelector((state: RootState) => state.user.id);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const inputRef = useRef();
+  const inputRef = useRef<HTMLInputElement>();
 
   const activeAbout = useAppSelector((state) => state.aboutUs.aboutUsSelected);
 
@@ -34,8 +34,11 @@ const UserLayoutHeader = () => {
 
   const handleSetSearch = (e) => {
     const name_search = e.target.value;
-    //@ts-ignore
-    inputRef.current.value = '';
+
+    if(inputRef.current) {
+      inputRef.current.value = '';
+    }
+  
     navigate('/product', {state: {name: name_search}})
   };
 

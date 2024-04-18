@@ -13,5 +13,4 @@ interface CommentContext {
     handleReplyComment: any;
 }
 
-//@ts-ignore
-export const CommentContext = createContext<CommentContext>({ });
+export const CommentContext = createContext<Partial<CommentContext>>({ });
