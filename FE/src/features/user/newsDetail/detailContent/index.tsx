@@ -3,7 +3,6 @@ import styled from "./index.module.scss";
 import moment from "moment";
 import { destroyWS, handleURL, sendingWS } from "@/utils/index";
 import { useEffect, useMemo, useRef } from "react";
-import Markdown from "react-markdown";
 import CommentNews from "../comments";
 import { WebSocketNewsContext } from "../constant";
 import { STATUS_WS, TYPE_WS } from "@/constants/index";
@@ -14,6 +13,7 @@ import {
   deleteComment,
   updateComment,
 } from "@/store/comments";
+import { renderDescription } from "@/utils/renderText";
 
 interface Props {
   news: NewsState;
@@ -158,7 +158,7 @@ const DetailContent = ({ news }: Props) => {
           </div>
         </div>
         <div className="detail__content-markdown">
-          <Markdown children={news?.contentMarkdown} />
+          {renderDescription(news?.contentMarkdown)}
         </div>
         <div className="detail__content-comments">
           <CommentNews news={news} />

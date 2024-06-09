@@ -1,12 +1,11 @@
-import Markdown from "react-markdown";
-// import "react-markdown-editor-lite/lib/index.css";
+import { renderDescription } from "@/utils/renderText";
 
 interface Props {
   product: ProductState | null;
 }
 
 const Description = ({ product }: Props) => {
-  return <Markdown children={product?.contentMarkdown} />;
+  return renderDescription(product?.contentMarkdown)
 };
 
 export default Description;

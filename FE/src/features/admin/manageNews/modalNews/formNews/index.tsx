@@ -17,9 +17,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { RootState, useAppSelector } from "@/store/index";
 import UploadComponent from "@/components/form/uploadComponent";
 import lodash from "lodash";
-import { handleMultiPrevImageS3 } from "@/components/modal/modalChangeInfoUser/content/constant";
-import MarkdownProduct from "../markdown";
 import markDownApi from "@/api/markdown";
+import EditorBox from "@/components/form/tinyComponent";
+import { handleMultiPrevImageS3 } from "@/components/modal/modalChangeInfoUser/content/constant";
 
 interface Props {
   isEdit: boolean;
@@ -34,8 +34,7 @@ const FormNews = ({ isEdit }: Props) => {
   );
 
   const [imageDefault, setImageDefault] = useState([]);
-  const [markdown, setMarkDown] = useState({ html: "", text: "" });
-  const [showMarkDown, setShowMarkdown] = useState(false);
+  const [editor, setEditor] = useState<string>('');
 
   const {
     handleSubmit,
@@ -67,8 +66,8 @@ const FormNews = ({ isEdit }: Props) => {
           : JSON.stringify(imagesUpload);
 
       const { metadata } = await markDownApi.createMarkdown({
-        contentHTML: markdown.html,
-        contentMarkdown: markdown.text,
+        contentHTML: editor,
+        contentMarkdown: editor,
         id:
           isEdit && newsSelected?.markdown_id
             ? newsSelected?.markdown_id
@@ -77,8 +76,8 @@ const FormNews = ({ isEdit }: Props) => {
 
       const { id } = metadata;
       dataValue.markdown_id = id;
-      dataValue.contentHTML = markdown.html;
-      dataValue.contentMarkdown = markdown.text;
+      dataValue.contentHTML = editor;
+      dataValue.contentMarkdown = editor;
 
       isEdit
         ? handleSubmitEdit(dataValue, dispatch, eventEmitter)
@@ -90,12 +89,6 @@ const FormNews = ({ isEdit }: Props) => {
     }
   };
 
-  const handleEditorChange = ({ html, text }) => {
-    setMarkDown({ html, text });
-  };
-
-  const debounceEditor = lodash.debounce(handleEditorChange, 300);
-
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
@@ -104,18 +97,16 @@ const FormNews = ({ isEdit }: Props) => {
     eventEmitter.emit("cancel_modal");
   };
 
+  const handleEditorTiny = (value) => {
+    setEditor(value)
+  }
+
   useEffect(() => {
     const imageShow = newsSelected?.image
       ? JSON.parse(newsSelected?.image)
       : [];
     setImageDefault(imageShow);
-
-    handleEditorChange({
-      html: newsSelected?.contentHTML || "",
-      text: newsSelected?.contentMarkdown || "",
-    });
-
-    setShowMarkdown(true);
+    handleEditorTiny(newsSelected?.contentHTML || '')
   }, [newsSelected]);
 
   return (
@@ -156,11 +147,11 @@ const FormNews = ({ isEdit }: Props) => {
             Markdown <span className="required">*</span>
           </Col>
           <Col md={24} span={24}>
-            <MarkdownProduct
-              showMarkDown={showMarkDown}
-              handleEditorChange={debounceEditor}
-              markdown={markdown}
-            />
+              <EditorBox
+            value={editor}
+            onEditorChange={(value) => {
+              setEditor(value);
+            }}/>
           </Col>
         </Row>
         <div className="button__footer">

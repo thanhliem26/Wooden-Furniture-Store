@@ -33,7 +33,7 @@ const ManageCategory = () => {
         <div className="add__product">
           <ModalProduct
             destroyOnClose={true}
-            width={800}
+            width={1000}
             content={
               <ButtonComponent
                 className="btn__add-add__product"

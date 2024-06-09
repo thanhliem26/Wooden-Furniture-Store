@@ -91,7 +91,7 @@ const TableManageNews = ({
           <ModalProduct
             destroyOnClose={true}
             title="Edit Category"
-            width={800}
+            width={1000}
             isEdit={true}
             content={
               <Tag

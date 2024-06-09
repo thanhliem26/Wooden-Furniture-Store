@@ -39,7 +39,7 @@ const sendMailOauth2 = async () => {
     console.log("error send Mail", error);
   }
 };
-sendMailOauth2()
+// sendMailOauth2()
 export const sendMailSingUP = async ({ data, token }) => {
   // send mail with defined transport object
   try {

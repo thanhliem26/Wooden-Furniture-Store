@@ -8,6 +8,8 @@ import authApi from "./auth";
 const axiosService = axios.create({
 	baseURL: import.meta.env.VITE_API_URL,
 	timeout: 5000,
+	maxContentLength: Infinity,
+	maxBodyLength: Infinity,
 	headers: {
 		"content-type": "application/json",
 	},

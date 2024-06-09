@@ -29,6 +29,7 @@ class MarkdownController {
     // }
 
     createNewProduct = async (req, res, next) => {
+        console.log("create markdown:::::::::::::")
         new CREATED({
             message: 'create a new markdown success!',
             metadata: await MarkdownService.createMarkdown(req.body),
