@@ -28,7 +28,7 @@ export default function EditorBox({
   return (
     <div className={styled['text_editor']}>
       <Editor
-        apiKey={'kn1rpok46ehs4talvhuhbz9mn9sm0rjn3lom5dr5sp3k8l80'}
+        apiKey={import.meta.env.TINY_API_KEY}
         value={value}
         //@ts-ignore
         onInit={(_evt, editor) => (editorRef.current = editor)}
